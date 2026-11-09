@@ -1,0 +1,129 @@
+// Prisma Schema for Sistema de Inscripciones
+// Database: PostgreSQL 18
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  fullName     String    @map("full_name")
+  role         String    @default("ADMIN") // ADMIN, SPEAKER, STAFF
+  events       Event[]
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@map("users")
+}
+
+model Event {
+  id            String          @id @default(uuid())
+  title         String
+  slug          String          @unique
+  description   String          @db.Text
+  syllabus      String?         @db.Text
+  requirements  String?         @db.Text
+  eventType     String          @default("WORKSHOP") @map("event_type") // WORKSHOP, CONFERENCE, BOOTCAMP
+  modality      String          @default("VIRTUAL") // VIRTUAL, PRESENTIAL, HYBRID
+  locationOrUrl String?         @map("location_or_url")
+  startDate     DateTime        @map("start_date")
+  endDate       DateTime        @map("end_date")
+  maxCapacity   Int             @map("max_capacity")
+  price         Decimal         @default(0) @db.Decimal(10, 2)
+  currency      String          @default("BOB")
+  academicHours Int             @default(4) @map("academic_hours")
+  status        String          @default("OPEN") // OPEN, SOLD_OUT, COMPLETED, CANCELLED
+  speakerId     String?         @map("speaker_id")
+  speaker       User?           @relation(fields: [speakerId], references: [id], onDelete: SetNull)
+  registrations Registration[]
+  resources     EventResource[]
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at")
+
+  @@index([status])
+  @@index([startDate])
+  @@map("events")
+}
+
+model EventResource {
+  id           String   @id @default(uuid())
+  eventId      String   @map("event_id")
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  title        String
+  url          String
+  resourceType String   @default("GITHUB") @map("resource_type") // GITHUB, SLIDES, SOFTWARE
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("event_resources")
+}
+
+model Registration {
+  id                   String       @id @default(uuid())
+  eventId              String       @map("event_id")
+  event                Event        @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  attendeeName         String       @map("attendee_name")
+  attendeeEmail        String       @map("attendee_email")
+  attendeePhone        String       @map("attendee_phone")
+  attendeeOccupation   String       @map("attendee_occupation")
+  attendeeOrganization String?      @map("attendee_organization")
+  status               String       @default("CONFIRMED") // PENDING_PAYMENT, CONFIRMED, ATTENDED, CANCELLED
+  attendedAt           DateTime?    @map("attended_at")
+  ticket               Ticket?
+  payment              Payment?
+  certificate          Certificate?
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+  deletedAt            DateTime?    @map("deleted_at")
+
+  @@unique([eventId, attendeeEmail])
+  @@index([attendeeEmail])
+  @@index([status])
+  @@map("registrations")
+}
+
+model Ticket {
+  id             String       @id @default(uuid())
+  registrationId String       @unique @map("registration_id")
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  ticketCode     String       @unique @map("ticket_code")
+  qrHash         String       @unique @map("qr_hash")
+  issuedAt       DateTime     @default(now()) @map("issued_at")
+
+  @@index([qrHash])
+  @@map("tickets")
+}
+
+model Payment {
+  id             String       @id @default(uuid())
+  registrationId String       @unique @map("registration_id")
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  amount         Decimal      @db.Decimal(10, 2)
+  proofFileUrl   String?      @map("proof_file_url")
+  status         String       @default("PENDING") // PENDING, APPROVED, REJECTED
+  verifiedAt     DateTime?    @map("verified_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  @@map("payments")
+}
+
+model Certificate {
+  id              String       @id @default(uuid())
+  registrationId  String       @unique @map("registration_id")
+  registration    Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  certificateCode String       @unique @map("certificate_code")
+  pdfUrl          String?      @map("pdf_url")
+  issuedAt        DateTime     @default(now()) @map("issued_at")
+
+  @@index([certificateCode])
+  @@map("certificates")
+}
