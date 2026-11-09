@@ -223,10 +223,10 @@ export function QRScanner() {
               <div className="space-y-2 flex-1">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider block">
                   {scanResult.success
-                    ? "✓ Ingreso Autorizado"
+                    ? "Ingreso Autorizado"
                     : scanResult.alreadyAttended
-                    ? "⚠️ Alerta de Ticket Usado"
-                    : "✕ Ticket Denegado"}
+                    ? "Alerta: Ticket Ya Utilizado"
+                    : "Acceso Denegado: Ticket Inválido"}
                 </span>
 
                 <h3 className="text-2xl font-black text-slate-100">
