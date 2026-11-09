@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { EventCard } from "@/components/EventCard";
+import { EventCatalog } from "@/components/EventCatalog";
 import {
   Terminal,
   Cpu,
