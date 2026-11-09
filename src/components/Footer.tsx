@@ -91,7 +91,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-        <p>© {new Date().getFullYear()} Ing. Alex Martínez - Todos los derechos reservados.</p>
+        <p>© 2026 Ing. Alex Martínez - Todos los derechos reservados.</p>
         <p className="font-mono text-slate-400">
           Powered by Clean Architecture & Spec-Driven Development (SDD)
         </p>
