@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Iniciando seed de base de datos...");
+  console.log("[SEED] Iniciando seed de base de datos...");
 
   // 1. Limpiar base de datos para ambiente limpio de desarrollo
   await prisma.certificate.deleteMany();
@@ -29,7 +29,7 @@ async function main() {
     },
   });
 
-  console.log(`👤 Usuario Administrador creado: ${admin.email}`);
+  console.log(`[USER] Usuario Administrador creado: ${admin.email}`);
 
   // Fechas relativas dinámicas
   const now = new Date();
@@ -195,13 +195,13 @@ async function main() {
     },
   });
 
-  console.log(`🎟️ Registro y Ticket de prueba generado para: ${sampleRegistration.attendeeName} (Código: ${sampleRegistration.ticket?.ticketCode})`);
-  console.log("✅ Seed completado con éxito con 3 eventos y datos iniciales.");
+  console.log(`[TICKET] Registro y Ticket de prueba generado para: ${sampleRegistration.attendeeName} (Código: ${sampleRegistration.ticket?.ticketCode})`);
+  console.log("[OK] Seed completado con éxito con 3 eventos y datos iniciales.");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Error ejecutando seed:", e);
+    console.error("[ERROR] Error ejecutando seed:", e);
     process.exit(1);
   })
   .finally(async () => {

@@ -164,23 +164,7 @@ export default async function HomePage() {
           </p>
         </div>
 
-        {events.length === 0 ? (
-          <div className="glass-panel rounded-2xl p-12 text-center max-w-lg mx-auto">
-            <Cpu className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-200 mb-2">
-              Próximamente nuevas fechas
-            </h3>
-            <p className="text-sm text-slate-400">
-              Estamos preparando nuevos talleres y masterclasses. Regresa pronto.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        )}
+        <EventCatalog initialEvents={events} />
       </section>
     </div>
   );

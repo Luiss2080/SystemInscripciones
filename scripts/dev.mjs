@@ -27,9 +27,9 @@ async function start() {
   const port = await getAvailablePort(initialPort);
 
   console.log(`\n======================================================`);
-  console.log(`🔍 Puerto dinámico asignado: ${port}`);
-  console.log(`🚀 Acceso a la aplicación: http://localhost:${port}`);
-  console.log(`🛡️ Panel de Administración: http://localhost:${port}/admin`);
+  console.log(`[PORT] Puerto dinámico asignado: ${port}`);
+  console.log(`[WEB]  Acceso a la aplicación: http://localhost:${port}`);
+  console.log(`[AUTH] Panel de Administración: http://localhost:${port}/admin`);
   console.log(`======================================================\n`);
 
   const nextDev = spawn("npx", ["next", "dev", "-p", port.toString()], {
