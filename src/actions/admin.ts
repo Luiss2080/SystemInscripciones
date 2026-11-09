@@ -114,6 +114,39 @@ export async function manualCheckin(registrationId: string) {
   }
 }
 
+export async function approvePayment(registrationId: string) {
+  const session = await getAdminSession();
+  if (!session) {
+    return { success: false, message: "Acceso no autorizado." };
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.payment.updateMany({
+        where: { registrationId },
+        data: {
+          status: "APPROVED",
+          verifiedAt: new Date(),
+        },
+      });
+
+      await tx.registration.update({
+        where: { id: registrationId },
+        data: {
+          status: "CONFIRMED",
+        },
+      });
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/asistentes");
+
+    return { success: true, message: "Pago aprobado y ticket activado." };
+  } catch (err: any) {
+    return { success: false, message: err?.message || "Error al aprobar pago." };
+  }
+}
+
 export async function issueCertificate(registrationId: string) {
   const session = await getAdminSession();
   if (!session) {
@@ -221,4 +254,3 @@ export async function createNewEvent(formData: FormData) {
     return { success: false, message: err?.message || "Error al crear evento." };
   }
 }
-

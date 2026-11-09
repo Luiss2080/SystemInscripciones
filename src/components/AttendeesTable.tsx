@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { manualCheckin } from "@/actions/admin";
+import { manualCheckin, approvePayment } from "@/actions/admin";
 import {
   Search,
   Download,
@@ -10,6 +10,7 @@ import {
   Clock,
   Loader2,
   ExternalLink,
+  CreditCard,
 } from "lucide-react";
 import Link from "next/link";
 
