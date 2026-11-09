@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, Clock, MapPin, Users, Award, ArrowRight } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Award, ArrowRight, Globe, Zap } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface EventCardProps {
@@ -55,13 +55,24 @@ export function EventCard({ event }: EventCardProps) {
               {eventTypeLabel}
             </span>
             <span
-              className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${modalityBadgeColor}`}
+              className={`text-[11px] font-medium px-2 py-0.5 rounded-full border inline-flex items-center gap-1 ${modalityBadgeColor}`}
             >
-              {event.modality === "VIRTUAL"
-                ? "🌐 Virtual"
-                : event.modality === "PRESENTIAL"
-                ? "📍 Presencial"
-                : "⚡ Híbrido"}
+              {event.modality === "VIRTUAL" ? (
+                <>
+                  <Globe className="w-3 h-3" />
+                  <span>Virtual</span>
+                </>
+              ) : event.modality === "PRESENTIAL" ? (
+                <>
+                  <MapPin className="w-3 h-3" />
+                  <span>Presencial</span>
+                </>
+              ) : (
+                <>
+                  <Zap className="w-3 h-3" />
+                  <span>Híbrido</span>
+                </>
+              )}
             </span>
           </div>
 

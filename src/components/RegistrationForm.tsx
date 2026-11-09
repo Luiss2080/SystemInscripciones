@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerAttendee } from "@/actions/registration";
-import { CheckCircle2, AlertCircle, Loader2, Ticket, ArrowRight, User, Mail, Phone, Briefcase, Building } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2, Ticket, ArrowRight, User, Mail, Phone, Briefcase, Building, Info } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface RegistrationFormProps {
@@ -252,8 +252,11 @@ export function RegistrationForm({
         </div>
 
         {price > 0 && (
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs leading-relaxed">
-            💡 Este taller tiene un costo de <strong>{price.toFixed(2)} {currency}</strong>. Al enviar el formulario, tu ticket quedará pre-registrado y te indicaremos las opciones para validar tu transferencia.
+          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs leading-relaxed flex items-start gap-2">
+            <Info className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+            <span>
+              Este taller tiene un costo de <strong>{price.toFixed(2)} {currency}</strong>. Al enviar el formulario, tu ticket quedará pre-registrado y te indicaremos las opciones para validar tu transferencia.
+            </span>
           </div>
         )}
 
