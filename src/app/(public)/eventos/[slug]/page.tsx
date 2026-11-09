@@ -75,8 +75,18 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800">
                 {event.eventType === "WORKSHOP" ? "Taller Práctico" : "Conferencia Magistral"}
               </span>
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
-                {event.modality === "VIRTUAL" ? "🌐 Modalidad Virtual" : "📍 Modalidad Presencial / Híbrida"}
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800 inline-flex items-center gap-1.5">
+                {event.modality === "VIRTUAL" ? (
+                  <>
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Modalidad Virtual</span>
+                  </>
+                ) : (
+                  <>
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>Modalidad Presencial / Híbrida</span>
+                  </>
+                )}
               </span>
               <span
                 className={`text-xs font-semibold px-3 py-1 rounded-full ${
