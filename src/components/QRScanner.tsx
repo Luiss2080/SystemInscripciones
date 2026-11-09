@@ -26,7 +26,7 @@ export function QRScanner() {
     message: string;
     attendeeName?: string;
     eventTitle?: string;
-    attendedAt?: Date | string;
+    attendedAt?: Date | string | null;
     ticketCode?: string;
   } | null>(null);
 
