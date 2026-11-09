@@ -14,6 +14,7 @@ import {
   Code2,
   AlertTriangle,
   ArrowLeft,
+  Globe,
 } from "lucide-react";
 import Link from "next/link";
 
