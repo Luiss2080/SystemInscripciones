@@ -240,7 +240,20 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
                       </span>
                     </td>
                     <td className="py-3.5 px-3">
-                      {a.status !== "ATTENDED" ? (
+                      {a.status === "PENDING_PAYMENT" ? (
+                        <button
+                          onClick={() => handleApprovePayment(a.id)}
+                          disabled={approvingId === a.id}
+                          className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all cursor-pointer flex items-center gap-1 disabled:opacity-50"
+                        >
+                          {approvingId === a.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <CreditCard className="w-3.5 h-3.5" />
+                          )}
+                          <span>Aprobar Pago</span>
+                        </button>
+                      ) : a.status === "CONFIRMED" ? (
                         <button
                           onClick={() => handleManualCheckin(a.id)}
                           disabled={checkingInId === a.id}
@@ -254,7 +267,7 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
                           <span>Check-in Manual</span>
                         </button>
                       ) : (
-                        <span className="text-xs text-slate-500 font-mono">
+                        <span className="text-xs text-slate-400 font-mono">
                           {a.attendedAt
                             ? new Date(a.attendedAt).toLocaleTimeString([], {
                                 hour: "2-digit",
