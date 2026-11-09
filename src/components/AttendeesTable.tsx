@@ -11,6 +11,7 @@ import {
   Loader2,
   ExternalLink,
   CreditCard,
+  Check,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -224,7 +225,7 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
                     </td>
                     <td className="py-3.5 px-3">
                       <span
-                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${
                           a.status === "ATTENDED"
                             ? "bg-purple-950 text-purple-300 border border-purple-800"
                             : a.status === "CONFIRMED"
@@ -232,11 +233,22 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
                             : "bg-amber-950 text-amber-300 border border-amber-800"
                         }`}
                       >
-                        {a.status === "ATTENDED"
-                          ? "✓ Asistió"
-                          : a.status === "CONFIRMED"
-                          ? "● Confirmado"
-                          : "⏳ Pago Pendiente"}
+                        {a.status === "ATTENDED" ? (
+                          <>
+                            <CheckCircle2 className="w-3 h-3 text-purple-400" />
+                            <span>Asistió</span>
+                          </>
+                        ) : a.status === "CONFIRMED" ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-400" />
+                            <span>Confirmado</span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="w-3 h-3 text-amber-400" />
+                            <span>Pago Pendiente</span>
+                          </>
+                        )}
                       </span>
                     </td>
                     <td className="py-3.5 px-3">
