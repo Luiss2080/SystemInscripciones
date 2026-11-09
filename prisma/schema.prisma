@@ -127,3 +127,4 @@ model Certificate {
   @@index([certificateCode])
   @@map("certificates")
 }
+

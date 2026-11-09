@@ -21,3 +21,4 @@ export function formatCurrency(amount: number | string, currency = "BOB") {
   if (num === 0) return "Gratuito";
   return `${num.toFixed(2)} ${currency}`;
 }
+
