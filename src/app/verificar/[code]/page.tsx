@@ -12,6 +12,7 @@ import {
   Terminal,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { PrintCertificateButton } from "@/components/PrintCertificateButton";
 
 interface VerifyPageProps {
   params: Promise<{
@@ -73,7 +74,8 @@ export default async function VerifyResultPage({ params }: VerifyPageProps) {
           <span>Nueva búsqueda</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <PrintCertificateButton />
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
             <CheckCircle2 className="w-4 h-4" />
             Certificado Oficial y Auténtico
