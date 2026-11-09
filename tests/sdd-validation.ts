@@ -69,8 +69,10 @@ async function runTests() {
     });
 
     assert(
-      regDuplicate.success === false &&
-        regDuplicate.message?.includes("Ya te encuentras registrado"),
+      Boolean(
+        regDuplicate.success === false &&
+          regDuplicate.message?.includes("Ya te encuentras registrado")
+      ),
       "RF-05: Rechazo de inscripción duplicada con el mismo email"
     );
 
@@ -97,9 +99,11 @@ async function runTests() {
     });
 
     assert(
-      regOverCapacity.success === false &&
-        (regOverCapacity.message?.includes("agotados") ||
-          regOverCapacity.message?.includes("cerradas")),
+      Boolean(
+        regOverCapacity.success === false &&
+          (regOverCapacity.message?.includes("agotados") ||
+            regOverCapacity.message?.includes("cerradas"))
+      ),
       "RF-03b: Bloqueo automático ante cupos agotados (sin sobreventa)",
       regOverCapacity.message
     );
