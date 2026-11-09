@@ -40,6 +40,7 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [checkingInId, setCheckingInId] = useState<string | null>(null);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
 
   const filteredAttendees = attendees.filter((a) => {
     const matchesSearch =
@@ -69,6 +70,22 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
       }
     } finally {
       setCheckingInId(null);
+    }
+  };
+
+  const handleApprovePayment = async (id: string) => {
+    setApprovingId(id);
+    try {
+      const res = await approvePayment(id);
+      if (res.success) {
+        setAttendees((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, status: "CONFIRMED" } : item
+          )
+        );
+      }
+    } finally {
+      setApprovingId(null);
     }
   };
 
