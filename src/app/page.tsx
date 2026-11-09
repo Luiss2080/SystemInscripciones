@@ -13,9 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-// Server Component (RSC) con revalidación dinámica
-export const dynamic = "force-dynamic";
-
+// Server Component (RSC)
 export default async function HomePage() {
   const events = await prisma.event.findMany({
     where: {

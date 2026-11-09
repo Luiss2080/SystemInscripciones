@@ -1,4 +1,4 @@
-import { Terminal, Github, Linkedin, ShieldCheck, Mail } from "lucide-react";
+import { Terminal, ShieldCheck, Mail, Globe, Share2 } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -24,20 +24,23 @@ export function Footer() {
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+              title="GitHub"
             >
-              <Github className="w-4 h-4" />
+              <Globe className="w-4 h-4" />
             </a>
             <a
               href="https://linkedin.com"
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+              title="LinkedIn"
             >
-              <Linkedin className="w-4 h-4" />
+              <Share2 className="w-4 h-4" />
             </a>
             <a
               href="mailto:contacto@ingeniero.tech"
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors"
+              title="Contacto"
             >
               <Mail className="w-4 h-4" />
             </a>
@@ -81,7 +84,7 @@ export function Footer() {
               <span>Certificados verificables online</span>
             </li>
             <li className="text-xs text-slate-500 pt-2">
-              Construido con Next.js 15, PostgreSQL & Spec-Driven Development.
+              Construido con Next.js 16, PostgreSQL & Spec-Driven Development.
             </li>
           </ul>
         </div>

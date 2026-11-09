@@ -11,13 +11,11 @@ import {
   BookOpen,
   CheckCircle,
   ExternalLink,
-  Github,
+  Code2,
   AlertTriangle,
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
-
-export const dynamic = "force-dynamic";
 
 interface EventPageProps {
   params: Promise<{
@@ -166,7 +164,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           {event.resources.length > 0 && (
             <div className="glass-panel rounded-2xl p-6 space-y-4">
               <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Github className="w-5 h-5 text-cyan-400" />
+                <Code2 className="w-5 h-5 text-cyan-400" />
                 <span>Recursos y Material Preparatorio</span>
               </h3>
               <div className="space-y-2">

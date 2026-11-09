@@ -4,8 +4,6 @@ import { TicketView } from "@/components/TicketView";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-
 interface TicketPageProps {
   params: Promise<{
     code: string;
