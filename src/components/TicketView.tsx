@@ -240,3 +240,4 @@ export function TicketView({ ticket }: TicketViewProps) {
     </div>
   );
 }
+

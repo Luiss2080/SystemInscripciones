@@ -256,3 +256,4 @@ export function AttendeesTable({ initialAttendees }: AttendeesTableProps) {
     </div>
   );
 }
+

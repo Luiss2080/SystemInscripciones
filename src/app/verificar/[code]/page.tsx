@@ -151,3 +151,4 @@ export default async function VerifyResultPage({ params }: VerifyPageProps) {
     </div>
   );
 }
+
