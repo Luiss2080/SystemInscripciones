@@ -82,3 +82,4 @@ export function EventCatalog({ initialEvents }: EventCatalogProps) {
     </div>
   );
 }
+
