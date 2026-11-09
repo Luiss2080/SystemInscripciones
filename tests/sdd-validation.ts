@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 async function runTests() {
   console.log("====================================================");
-  console.log("🧪 INICIANDO VALIDACIÓN AUTOMATIZADA SDD (FASE 5)");
+  console.log("[INFO] INICIANDO VALIDACIÓN AUTOMATIZADA SDD (FASE 5)");
   console.log("====================================================");
 
   let passed = 0;
@@ -13,10 +13,10 @@ async function runTests() {
 
   function assert(condition: boolean, testName: string, detail?: string) {
     if (condition) {
-      console.log(`  ✅ [PASS] ${testName}`);
+      console.log(`  [PASS] ${testName}`);
       passed++;
     } else {
-      console.error(`  ❌ [FAIL] ${testName} ${detail ? `-> ${detail}` : ""}`);
+      console.error(`  [FAIL] ${testName} ${detail ? `-> ${detail}` : ""}`);
       failed++;
     }
   }
