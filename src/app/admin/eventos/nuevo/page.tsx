@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createNewEvent } from "@/actions/admin";
-import { AdminNav } from "@/components/AdminNav";
 import { PlusCircle, Loader2, AlertCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -31,10 +30,8 @@ export default function NewEventPage() {
   };
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-      <AdminNav />
-
-      <div className="mb-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div>
         <Link
           href="/admin/eventos"
           className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-cyan-400 mb-4"
