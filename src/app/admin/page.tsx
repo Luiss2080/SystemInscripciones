@@ -1,7 +1,6 @@
 import { getAdminSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { AdminNav } from "@/components/AdminNav";
 import {
   Calendar,
   Users,
