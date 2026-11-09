@@ -46,3 +46,4 @@ start().catch((err) => {
   console.error("Error al buscar puerto dinámico:", err);
   process.exit(1);
 });
+
