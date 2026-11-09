@@ -54,17 +54,18 @@ export async function registerAttendee(formData: unknown): Promise<ActionRespons
         throw new Error("El evento seleccionado no existe o fue cancelado.");
       }
 
-      if (event.status !== "OPEN") {
-        throw new Error("Las inscripciones para este evento están cerradas.");
+      if (event.status === "SOLD_OUT" || event._count.registrations >= event.maxCapacity) {
+        if (event.status !== "SOLD_OUT") {
+          await tx.event.update({
+            where: { id: eventId },
+            data: { status: "SOLD_OUT" },
+          });
+        }
+        throw new Error("Lo sentimos, los cupos para este evento están agotados.");
       }
 
-      if (event._count.registrations >= event.maxCapacity) {
-        // Auto-actualizar estado del evento a SOLD_OUT
-        await tx.event.update({
-          where: { id: eventId },
-          data: { status: "SOLD_OUT" },
-        });
-        throw new Error("Lo sentimos, los cupos para este evento acaban de agotarse.");
+      if (event.status !== "OPEN") {
+        throw new Error("Las inscripciones para este evento están cerradas.");
       }
 
       // 2. Verificar duplicidad por email

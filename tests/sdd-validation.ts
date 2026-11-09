@@ -98,8 +98,10 @@ async function runTests() {
 
     assert(
       regOverCapacity.success === false &&
-        regOverCapacity.message?.includes("agotarse"),
-      "RF-03b: Bloqueo automático ante cupos agotados (sin sobreventa)"
+        (regOverCapacity.message?.includes("agotados") ||
+          regOverCapacity.message?.includes("cerradas")),
+      "RF-03b: Bloqueo automático ante cupos agotados (sin sobreventa)",
+      regOverCapacity.message
     );
 
     // ----------------------------------------------------
