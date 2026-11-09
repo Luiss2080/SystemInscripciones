@@ -12,6 +12,9 @@ import {
   Award,
   Terminal,
   ExternalLink,
+  CheckCircle2,
+  Check,
+  Globe,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -75,7 +78,7 @@ export function TicketView({ ticket }: TicketViewProps) {
       <div className="flex items-center justify-between no-print">
         <div className="flex items-center gap-2">
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold border ${
+            className={`px-3 py-1 rounded-full text-xs font-bold border inline-flex items-center gap-1.5 ${
               isAttended
                 ? "bg-purple-950 text-purple-300 border-purple-800"
                 : isConfirmed
@@ -83,11 +86,22 @@ export function TicketView({ ticket }: TicketViewProps) {
                 : "bg-amber-950 text-amber-300 border-amber-800"
             }`}
           >
-            {isAttended
-              ? "✓ Asistencia Acreditada"
-              : isConfirmed
-              ? "● Pase Confirmado"
-              : "⏳ Pendiente de Pago"}
+            {isAttended ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Asistencia Acreditada</span>
+              </>
+            ) : isConfirmed ? (
+              <>
+                <Check className="w-3.5 h-3.5" />
+                <span>Pase Confirmado</span>
+              </>
+            ) : (
+              <>
+                <Clock className="w-3.5 h-3.5" />
+                <span>Pendiente de Pago</span>
+              </>
+            )}
           </span>
         </div>
 
