@@ -171,8 +171,18 @@ export function TicketView({ ticket }: TicketViewProps) {
                 <MapPin className="w-3.5 h-3.5 text-cyan-400" />
                 Modalidad / Ubicación
               </span>
-              <p className="font-medium text-slate-200">
-                {event.modality === "VIRTUAL" ? "🌐 Enlace Virtual" : "📍 " + (event.locationOrUrl || "Presencial")}
+              <p className="font-medium text-slate-200 flex items-center gap-1.5">
+                {event.modality === "VIRTUAL" ? (
+                  <>
+                    <Globe className="w-4 h-4 text-cyan-400" />
+                    <span>Enlace Virtual</span>
+                  </>
+                ) : (
+                  <>
+                    <MapPin className="w-4 h-4 text-cyan-400" />
+                    <span>{event.locationOrUrl || "Presencial"}</span>
+                  </>
+                )}
               </p>
             </div>
           </div>
