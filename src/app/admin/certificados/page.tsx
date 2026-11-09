@@ -1,7 +1,6 @@
 import { getAdminSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { AdminNav } from "@/components/AdminNav";
 import { CertificatesTable } from "@/components/CertificatesTable";
 
 export default async function AdminCertificatesPage() {
@@ -23,10 +22,8 @@ export default async function AdminCertificatesPage() {
   });
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <AdminNav />
-
-      <div className="mb-8">
+    <div className="space-y-8">
+      <div className="mb-6">
         <span className="text-xs font-mono uppercase text-cyan-400 font-bold block mb-1">
           Acreditación & Validez Oficial
         </span>
