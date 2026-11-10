@@ -60,6 +60,26 @@ body {
   background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
 }
 
+/* Infinite Marquee Animation for Conference Ribbon */
+@keyframes continuous-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-smooth {
+  display: flex;
+  width: max-content;
+  animation: continuous-marquee 32s linear infinite;
+}
+
+.animate-marquee-smooth:hover {
+  animation-play-state: paused;
+}
+
 /* Print Styles for Tickets & Official Certificates */
 @media print {
   @page {
