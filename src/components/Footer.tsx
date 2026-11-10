@@ -136,8 +136,8 @@ export function Footer() {
           </h4>
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#8b1524]/20 border border-[#8b1524]/40 flex items-center justify-center shrink-0 mt-0.5">
-                <MapPin className="w-3 h-3 text-[#e11d48]" />
+              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
+                <MapPin className="w-3 h-3 text-[#f43f5e]" />
               </span>
               <div>
                 <strong className="block text-slate-200">Ubicación</strong>
@@ -146,8 +146,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#8b1524]/20 border border-[#8b1524]/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Mail className="w-3 h-3 text-[#e11d48]" />
+              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
+                <Mail className="w-3 h-3 text-[#f43f5e]" />
               </span>
               <div>
                 <strong className="block text-slate-200">Email Oficial</strong>
@@ -156,8 +156,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#8b1524]/20 border border-[#8b1524]/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Phone className="w-3 h-3 text-[#e11d48]" />
+              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
+                <Phone className="w-3 h-3 text-[#f43f5e]" />
               </span>
               <div>
                 <strong className="block text-slate-200">Teléfono / WhatsApp</strong>
