@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fcfcfd;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --primary: #701121;
-  --primary-foreground: #ffffff;
-  --secondary: #c29b38;
+  --background: #030712;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --primary: #06b6d4;
+  --primary-foreground: #020617;
+  --secondary: #3b82f6;
   --secondary-foreground: #ffffff;
   --accent: #10b981;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #1e293b;
 }
 
 body {
@@ -25,10 +25,10 @@ body {
 
 /* Glassmorphism helpers */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 .glass-panel-hover {
@@ -36,28 +36,28 @@ body {
 }
 
 .glass-panel-hover:hover {
-  border-color: rgba(112, 17, 33, 0.4);
-  box-shadow: 0 12px 35px -10px rgba(112, 17, 33, 0.15);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 12px 35px -10px rgba(6, 182, 212, 0.15);
   transform: translateY(-2px);
 }
 
 /* Tech ambient glow gradients */
-.tech-glow-red {
+.tech-glow-cyan {
   position: absolute;
   filter: blur(130px);
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.18;
   z-index: 0;
-  background: radial-gradient(circle, #701121 0%, transparent 70%);
+  background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
 }
 
-.tech-glow-gold {
+.tech-glow-blue {
   position: absolute;
   filter: blur(140px);
   pointer-events: none;
   opacity: 0.15;
   z-index: 0;
-  background: radial-gradient(circle, #c29b38 0%, transparent 70%);
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
 }
 
 /* Print Styles for Tickets & Official Certificates */

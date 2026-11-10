@@ -6,168 +6,156 @@ import {
   ShieldCheck,
   Star,
   Sparkles,
-  Award,
-  Users,
-  CheckCircle2,
   Tv,
+  CheckCircle2,
 } from "lucide-react";
 import { ConferenceCarousel } from "./ConferenceCarousel";
 
 export function HeroModern() {
   return (
-    <div className="relative bg-[#fcfcfd] text-slate-900 overflow-hidden lg:min-h-[calc(100vh-80px)] flex flex-col justify-between pt-6 lg:pt-10">
-      {/* Background Tech Circuit Grid (Light and crisp matching reference) */}
+    <div className="relative bg-slate-950 text-slate-100 overflow-hidden h-[calc(100vh-68px)] max-h-[calc(100vh-68px)] flex flex-col justify-between">
+      {/* Background Cyber Ambient Glows */}
+      <div className="absolute top-10 left-1/4 w-[450px] h-[350px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-20 right-10 w-[500px] h-[400px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* Background Tech Circuit Grid */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
           <pattern
-            id="hero-circuit-light"
-            width="120"
-            height="120"
+            id="hero-circuit-dark"
+            width="100"
+            height="100"
             patternUnits="userSpaceOnUse"
           >
             <path
-              d="M 10 10 L 40 10 L 60 30 L 110 30"
+              d="M 10 10 L 40 10 L 60 30 L 90 30"
               fill="none"
-              stroke="#701121"
+              stroke="#06b6d4"
               strokeWidth="1.2"
             />
-            <circle cx="10" cy="10" r="3" fill="#701121" />
-            <circle cx="110" cy="30" r="3" fill="#701121" />
+            <circle cx="10" cy="10" r="2.5" fill="#06b6d4" />
+            <circle cx="90" cy="30" r="2.5" fill="#06b6d4" />
             <path
-              d="M 30 70 L 60 70 L 80 90 L 110 90"
+              d="M 20 60 L 50 60 L 70 80 L 95 80"
               fill="none"
-              stroke="#c29b38"
+              stroke="#3b82f6"
               strokeWidth="1.2"
             />
-            <circle cx="30" cy="70" r="2.5" fill="#c29b38" />
-            <circle cx="110" cy="90" r="2.5" fill="#c29b38" />
+            <circle cx="20" cy="60" r="2" fill="#3b82f6" />
+            <circle cx="95" cy="80" r="2" fill="#3b82f6" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#hero-circuit-light)" />
+        <rect width="100%" height="100%" fill="url(#hero-circuit-dark)" />
       </svg>
 
-      {/* Hero Content Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-auto py-6 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      {/* Middle Hero Content: Perfectly vertically centered and fitted for Fullscreen */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full min-h-0 py-2 sm:py-3 z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center w-full">
           {/* Left Column: Headlines & Actions */}
-          <div className="lg:col-span-6 space-y-5 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-[#701121] text-xs font-bold tracking-wider uppercase shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-[#701121]" />
+          <div className="lg:col-span-6 space-y-3.5 sm:space-y-4 text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-400 text-xs font-semibold tracking-wider uppercase shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
               <span>Capacitación Técnica Avanzada 2026</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black tracking-tight text-slate-950 leading-[1.08]">
-              La ingeniería{" "}
-              <span className="block text-slate-900">
-                que tu futuro{" "}
-                <span className="relative inline-block text-[#701121]">
-                  necesita
-                  {/* Hand-drawn golden brush underline matching Tech Home reference */}
-                  <svg
-                    className="absolute -bottom-2 left-0 w-full h-3.5 text-[#c29b38] pointer-events-none"
-                    viewBox="0 0 250 20"
-                    fill="none"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M 3 14 C 60 6, 170 8, 245 12 C 180 17, 70 19, 3 14 Z"
-                      fill="#c29b38"
-                    />
-                  </svg>
-                </span>
-              </span>
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] xl:text-[46px] font-black tracking-tight text-white leading-[1.12]">
+              Domina la{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent">
+                Ingeniería de Software
+              </span>{" "}
+              con talleres de nivel productivo
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
-              <strong className="text-slate-900 font-bold">DevCon Workshops</strong> es el instituto especializado en arquitectura distribuida, microservicios, seguridad en APIs y cloud computing para ingenieros de software.
+            <p className="text-xs sm:text-sm text-slate-400 max-w-lg leading-relaxed line-clamp-3">
+              Arquitectura de microservicios, seguridad en APIs, cloud computing y agentes de inteligencia artificial. Conviértete en el ingeniero que lidera equipos de tecnología.
             </p>
 
-            {/* Action Buttons (Gold & Crimson matching Tech Home design) */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            {/* Action Buttons (Original Cyan & Dark Glass) */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <a
                 href="#eventos"
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#c29b38] hover:bg-[#a6822c] text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-600/25 hover:scale-[1.02] cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/25 hover:scale-[1.02] cursor-pointer"
               >
-                <GraduationCap className="w-4 h-4 text-white" />
+                <GraduationCap className="w-4 h-4 text-slate-950" />
                 <span>Ver Talleres Disponibles</span>
               </a>
 
               <Link
                 href="/verificar"
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#701121] hover:bg-[#580b18] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-rose-950/20 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-500/60 text-slate-200 hover:text-white font-semibold text-xs uppercase tracking-wider transition-all shadow-sm hover:scale-[1.02]"
               >
-                <ShieldCheck className="w-4 h-4 text-white" />
-                <span>Verificar Certificados</span>
+                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                <span>Validar Certificado</span>
               </Link>
             </div>
 
-            {/* Social Proof / Stars bar */}
-            <div className="pt-2 flex items-center gap-3 text-xs text-slate-500 font-medium">
-              <div className="flex items-center gap-1 text-amber-500">
+            {/* Social Proof */}
+            <div className="pt-1 flex items-center gap-2.5 text-xs text-slate-400 font-medium">
+              <div className="flex items-center gap-0.5 text-amber-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-700 font-bold">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
                 +500 ESTUDIANTES E INGENIEROS CONFÍAN EN DEVCON WORKSHOPS
               </span>
             </div>
           </div>
 
-          {/* Right Column: Prominent Academic Conference Image Keynote Showcase */}
+          {/* Right Column: Academic Conference Showcase */}
           <div className="lg:col-span-6 relative flex items-center justify-center">
-            {/* Ambient subtle glow behind container */}
-            <div className="absolute -inset-3 bg-gradient-to-tr from-rose-500/10 via-amber-500/10 to-slate-500/10 rounded-3xl blur-2xl opacity-60 pointer-events-none" />
+            {/* Ambient Cyan/Blue Glow */}
+            <div className="absolute -inset-2 bg-gradient-to-tr from-cyan-500/15 via-blue-500/15 to-transparent rounded-2xl blur-xl opacity-70 pointer-events-none" />
 
             {/* Showcase Container */}
-            <div className="relative w-full rounded-3xl bg-white border border-slate-200/90 p-3 shadow-2xl group">
-              {/* Device Window Header */}
-              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 mb-3 text-xs font-mono text-slate-500">
+            <div className="relative w-full max-w-lg rounded-2xl bg-slate-900/90 border border-slate-800 p-2.5 shadow-2xl group backdrop-blur-sm">
+              {/* Window Header */}
+              <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-slate-800/80 mb-2 text-xs font-mono text-slate-400">
                 <div className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                 </div>
-                <span className="text-[11px] text-slate-600 font-mono truncate font-semibold">
+                <span className="text-[11px] text-slate-400 font-mono truncate font-medium">
                   auditorio-central.ingenieria.edu.bo
                 </span>
-                <span className="text-[10px] text-[#701121] font-bold uppercase tracking-wider bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+                <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
                   CONFERENCIA MAGISTRAL
                 </span>
               </div>
 
               {/* Main Academic Conference Image */}
-              <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
+              <div className="relative aspect-[16/10] max-h-[250px] lg:max-h-[280px] w-full rounded-xl overflow-hidden border border-slate-800 shadow-inner">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/hero-conference.jpg"
                   alt="Conferencia Magistral Académica de Ingeniería de Sistemas y Arquitectura Cloud"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-85" />
 
                 {/* Floating Top-Right Live Badge */}
-                <div className="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-rose-500/40 text-rose-300 text-xs font-mono font-semibold flex items-center gap-2 shadow-lg">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/90 backdrop-blur-md border border-cyan-500/40 text-cyan-300 text-[11px] font-mono font-semibold flex items-center gap-1.5 shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                   <span>En Vivo: 350+ Asistentes</span>
                 </div>
 
                 {/* Floating Bottom Badge */}
-                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800/80 flex items-center justify-between text-xs text-slate-200">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/30 flex items-center justify-center">
-                      <Tv className="w-4 h-4 text-rose-400" />
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 p-2 rounded-lg bg-slate-950/90 backdrop-blur-md border border-slate-800 flex items-center justify-between text-xs text-slate-200">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center">
+                      <Tv className="w-3.5 h-3.5 text-cyan-400" />
                     </div>
                     <div>
-                      <p className="font-bold text-white text-xs">Auditorio de Ingeniería de Sistemas</p>
-                      <p className="text-[10px] text-slate-400 font-mono">Microservicios • Kubernetes • OWASP Top 10</p>
+                      <p className="font-bold text-white text-[11px] leading-tight">Auditorio de Ingeniería de Sistemas</p>
+                      <p className="text-[9px] text-slate-400 font-mono">Microservicios • Kubernetes • OWASP Top 10</p>
                     </div>
                   </div>
-                  <div className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-800/60">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/60">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                     <span>Acreditado</span>
                   </div>
                 </div>
@@ -177,7 +165,7 @@ export function HeroModern() {
         </div>
       </div>
 
-      {/* Bottom Ribbon Carousel (Passes 1-by-1 with official logos) */}
+      {/* Bottom Ribbon Carousel (Compact, Step-by-Step, Full Width) */}
       <ConferenceCarousel />
     </div>
   );
