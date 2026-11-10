@@ -40,7 +40,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Diseño, desacoplamiento y orquestación con Docker, Services, Deployments en K8s y pipelines de integración continua en entornos de producción.",
         image: "/images/hero-conference.jpg",
-        icon: <Cloud className="w-6 h-6 text-black" />,
+        icon: <Cloud className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "6 Horas",
         seats: "35 Cupos",
@@ -57,7 +57,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Simula ataques éticos y blinda vulnerabilidades críticas en arquitecturas Backend: SQLi, BOLA, JWT HttpOnly, Rate Limiting y CORS estricto.",
         image: "/images/hero-engineering.jpg",
-        icon: <ShieldCheck className="w-6 h-6 text-black" />,
+        icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Híbrido",
         academicHours: "8 Horas",
         seats: "50 Cupos",
@@ -74,7 +74,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Cómo la IA agéntica, los modelos locales y el Model Context Protocol (MCP) redefinen el desarrollo de software y el testing automatizado.",
         image: "/images/hero-conference.jpg",
-        icon: <Cpu className="w-6 h-6 text-black" />,
+        icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "4 Horas",
         seats: "250 Cupos",
@@ -91,7 +91,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Aprende infraestructura como código, validaciones estáticas de seguridad y despliegues Zero-Downtime a clústeres multi-región.",
         image: "/images/hero-engineering.jpg",
-        icon: <Terminal className="w-6 h-6 text-black" />,
+        icon: <Terminal className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios Cloud",
         academicHours: "6 Horas",
         seats: "40 Cupos",
@@ -110,7 +110,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Diseño, desacoplamiento y orquestación con Docker, Services, Deployments en K8s y pipelines de integración continua.",
         image: "/images/hero-conference.jpg",
-        icon: <Cloud className="w-6 h-6 text-black" />,
+        icon: <Cloud className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "6 Horas",
         seats: "35 Cupos",
@@ -127,7 +127,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Implementación de arquitectura hexagonal, entidades ricas, repositorios y puertos desacoplados para sistemas de alta complejidad.",
         image: "/images/hero-engineering.jpg",
-        icon: <FileCode className="w-6 h-6 text-black" />,
+        icon: <FileCode className="w-6 h-6 text-slate-950" />,
         modality: "Virtual",
         academicHours: "8 Horas",
         seats: "30 Cupos",
@@ -144,7 +144,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Procesamiento asíncrono de streams, particionamiento de eventos, consistencia eventual y tolerancia a caídas de brokers.",
         image: "/images/hero-conference.jpg",
-        icon: <Laptop className="w-6 h-6 text-black" />,
+        icon: <Laptop className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "10 Horas",
         seats: "25 Cupos",
@@ -163,7 +163,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Simulación de inyecciones, blindaje de cabeceras CSP, mitigación de ataques BOLA y rate limiting distribuido con Redis.",
         image: "/images/hero-engineering.jpg",
-        icon: <ShieldCheck className="w-6 h-6 text-black" />,
+        icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Híbrido",
         academicHours: "8 Horas",
         seats: "50 Cupos",
@@ -180,7 +180,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Aprende a diseñar esquemas de autenticación invulnerables contra robo de tokens por XSS y suplantación de identidad en microservicios.",
         image: "/images/hero-conference.jpg",
-        icon: <ShieldCheck className="w-6 h-6 text-black" />,
+        icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Virtual",
         academicHours: "6 Horas",
         seats: "45 Cupos",
@@ -199,7 +199,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Aprende cómo orquestar agentes inteligentes usando MCP para consultar bases de datos PostgreSQL y automatizar tareas de DevOps.",
         image: "/images/hero-conference.jpg",
-        icon: <Cpu className="w-6 h-6 text-black" />,
+        icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "4 Horas",
         seats: "250 Cupos",
@@ -216,7 +216,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Pipelines de embeddings con LangChain, PostgreSQL pgvector y búsqueda semántica para asistentes técnicos corporativos.",
         image: "/images/hero-engineering.jpg",
-        icon: <Cpu className="w-6 h-6 text-black" />,
+        icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios en Vivo",
         academicHours: "8 Horas",
         seats: "35 Cupos",
@@ -235,7 +235,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Automatiza tests unitarios, construcción de imágenes Docker escaneadas con Trivy y despliegue continuo con ArgoCD.",
         image: "/images/hero-engineering.jpg",
-        icon: <Terminal className="w-6 h-6 text-black" />,
+        icon: <Terminal className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios Cloud",
         academicHours: "6 Horas",
         seats: "40 Cupos",
@@ -254,7 +254,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         description:
           "Estrategias Strangler Fig, profiling de memoria en Node.js, optimización de queries SQL complejas y alta disponibilidad.",
         image: "/images/hero-conference.jpg",
-        icon: <FileCode className="w-6 h-6 text-black" />,
+        icon: <FileCode className="w-6 h-6 text-slate-950" />,
         modality: "A Medida / Remoto",
         academicHours: "12 Horas",
         seats: "20 Cupos",
@@ -270,26 +270,26 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
   return (
     <section
       id="eventos"
-      className="py-24 relative overflow-hidden bg-[#050505] border-t border-white/5"
+      className="py-24 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
     >
       <FondoTech />
 
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 relative z-10 text-white">
         {/* Badge Superior */}
         <div className="flex justify-center mb-4">
-          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#A3E635]/10 border border-[#A3E635]/30 text-[10px] font-black uppercase tracking-[0.2em] text-[#A3E635]">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 shadow-sm shadow-cyan-950">
             NUESTROS SERVICIOS & TALLERES
           </span>
         </div>
 
-        {/* Título y Subtítulo estilo Hero (Matching Reference Screenshot) */}
+        {/* Título y Subtítulo estilo Hero */}
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 leading-tight">
             Soluciones que{" "}
-            <span className="relative inline-block px-2 text-[#A3E635]">
+            <span className="relative inline-block px-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               impulsan tu futuro
               <svg
-                className="absolute w-full h-3 -bottom-1 left-0 z-[-1] text-[#A3E635]/60 opacity-80"
+                className="absolute w-full h-3 -bottom-1 left-0 z-[-1] text-cyan-500/70 opacity-90"
                 viewBox="0 0 200 9"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +309,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
           </p>
         </div>
 
-        {/* Categorías (Tabs en píldoras con active Lime #A3E635) */}
+        {/* Categorías (Tabs en píldoras con active Cyan) */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-14">
           {CATEGORIES.map((cat) => (
             <button
@@ -317,8 +317,8 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
               onClick={() => setActiveCategory(cat.id)}
               className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                 activeCategory === cat.id
-                  ? "bg-[#A3E635] text-[#0A0A0A] shadow-[0_4px_15px_rgba(163,230,53,0.3)] scale-105"
-                  : "bg-[#111827]/70 text-slate-400 border border-white/5 hover:bg-[#1f2937] hover:text-white"
+                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-[0_4px_20px_rgba(6,182,212,0.35)] scale-105 border-transparent font-black"
+                  : "bg-slate-900/80 text-slate-400 border border-slate-800 hover:bg-slate-800 hover:text-white"
               }`}
             >
               {cat.label}
@@ -334,4 +334,3 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
     </section>
   );
 }
-
