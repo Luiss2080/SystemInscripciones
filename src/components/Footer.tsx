@@ -57,7 +57,7 @@ export function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   title={soc.label}
-                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-[#8b1524] hover:border-[#8b1524] transition-all cursor-pointer shadow-xs"
+                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-[#701121] hover:border-[#701121] transition-all cursor-pointer shadow-xs"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -86,8 +86,8 @@ export function Footer() {
                     href="/#eventos"
                     className="flex items-center gap-2.5 text-slate-400 hover:text-rose-300 transition-colors group"
                   >
-                    <span className="w-6 h-6 rounded-full bg-[#8b1524]/20 border border-[#8b1524]/40 flex items-center justify-center shrink-0 group-hover:bg-[#8b1524] transition-colors">
-                      <Icon className="w-3 h-3 text-[#e11d48] group-hover:text-white transition-colors" />
+                    <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 group-hover:bg-[#701121] transition-colors">
+                      <Icon className="w-3 h-3 text-[#f43f5e] group-hover:text-white transition-colors" />
                     </span>
                     <span>{item.label}</span>
                   </Link>
