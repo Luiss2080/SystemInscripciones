@@ -140,7 +140,7 @@ export function Preloader() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-black font-mono text-[#8b1524]">
+            <span className="text-2xl font-black font-mono text-[#701121]">
               {progress}%
             </span>
           </div>
