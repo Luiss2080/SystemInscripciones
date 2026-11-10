@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import ServiciosGrid from "@/components/public/ServiciosGrid";
 import { Preloader } from "@/components/public/Preloader";
 import { HeroModern } from "@/components/public/HeroModern";
+import FondoTech from "@/components/public/FondoTech";
 import {
   Terminal,
   Sparkles,
@@ -39,16 +40,18 @@ export default async function HomePage() {
   }));
 
   return (
-    <div className="relative bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="relative bg-[#030712] text-slate-100 overflow-hidden">
       {/* Preloader with circular progress and terminal logs */}
       <Preloader />
 
       {/* Modern Hero section with academic conference image and compact 1-by-1 logo carousel */}
       <HeroModern />
 
-      {/* Facilitator / Speaker Bio Section */}
-      <section id="docente" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="bg-slate-900/80 rounded-3xl p-8 sm:p-12 border border-slate-800/90 shadow-2xl relative overflow-hidden backdrop-blur-sm">
+      {/* Facilitator / Speaker Bio Section with Unified Background & Moving Dots */}
+      <section id="docente" className="py-24 relative overflow-hidden bg-[#030712] border-t border-slate-800/80">
+        <FondoTech id="docente" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="bg-slate-900/80 rounded-3xl p-8 sm:p-12 border border-slate-800/90 shadow-2xl relative overflow-hidden backdrop-blur-sm">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="space-y-4 md:col-span-2 text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 text-xs font-bold uppercase tracking-wider">
