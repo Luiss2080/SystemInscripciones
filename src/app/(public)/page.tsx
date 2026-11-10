@@ -28,6 +28,16 @@ export default async function HomePage() {
     },
   });
 
+  const serializedEvents = events.map((event) => ({
+    ...event,
+    price: Number(event.price),
+    startDate: event.startDate.toISOString(),
+    endDate: event.endDate ? event.endDate.toISOString() : null,
+    createdAt: event.createdAt.toISOString(),
+    updatedAt: event.updatedAt.toISOString(),
+    deletedAt: event.deletedAt ? event.deletedAt.toISOString() : null,
+  }));
+
   return (
     <div className="relative bg-slate-950 text-slate-100 overflow-hidden">
       {/* Preloader with circular progress and terminal logs */}
@@ -107,7 +117,7 @@ export default async function HomePage() {
           </p>
         </div>
 
-        <EventCatalog initialEvents={events} />
+        <EventCatalog initialEvents={serializedEvents} />
       </section>
     </div>
   );
