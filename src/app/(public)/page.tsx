@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { EventCatalog } from "@/components/EventCatalog";
+import ServiciosGrid from "@/components/public/ServiciosGrid";
 import { Preloader } from "@/components/public/Preloader";
 import { HeroModern } from "@/components/public/HeroModern";
 import {
@@ -101,24 +101,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Events Catalog Section */}
-      <section id="eventos" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 text-left">
-          <div>
-            <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-cyan-400 block mb-2">
-              Agenda Académica 2026
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Talleres y Conferencias Disponibles
-            </h2>
-          </div>
-          <p className="text-sm text-slate-400 max-w-md">
-            Selecciona un taller para revisar el temario completo, requisitos previos e inscribirte directamente con pase QR.
-          </p>
-        </div>
-
-        <EventCatalog initialEvents={serializedEvents} />
-      </section>
+      {/* Talleres & Servicios Section (Design matching Image 2 with Lime #A3E635 accents and dynamic categories) */}
+      <ServiciosGrid initialEvents={serializedEvents} />
     </div>
   );
 }
