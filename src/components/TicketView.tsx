@@ -5,16 +5,15 @@ import QRCode from "qrcode";
 import {
   Printer,
   Calendar,
-  MapPin,
   Clock,
   User,
   ShieldCheck,
   Award,
   Terminal,
-  ExternalLink,
   CheckCircle2,
   Check,
   Globe,
+  MapPin,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -58,7 +57,7 @@ export function TicketView({ ticket }: TicketViewProps) {
       width: 280,
       margin: 1.5,
       color: {
-        dark: "#020617",
+        dark: "#0f172a",
         light: "#ffffff",
       },
     })
@@ -80,25 +79,25 @@ export function TicketView({ ticket }: TicketViewProps) {
           <span
             className={`px-3 py-1 rounded-full text-xs font-bold border inline-flex items-center gap-1.5 ${
               isAttended
-                ? "bg-purple-950 text-purple-300 border-purple-800"
+                ? "bg-purple-50 text-purple-800 border-purple-200"
                 : isConfirmed
-                ? "bg-emerald-950 text-emerald-300 border-emerald-800"
-                : "bg-amber-950 text-amber-300 border-amber-800"
+                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                : "bg-amber-50 text-amber-800 border-amber-200"
             }`}
           >
             {isAttended ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-purple-600" />
                 <span>Asistencia Acreditada</span>
               </>
             ) : isConfirmed ? (
               <>
-                <Check className="w-3.5 h-3.5" />
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Pase Confirmado</span>
               </>
             ) : (
               <>
-                <Clock className="w-3.5 h-3.5" />
+                <Clock className="w-3.5 h-3.5 text-amber-600" />
                 <span>Pendiente de Pago</span>
               </>
             )}
@@ -107,161 +106,113 @@ export function TicketView({ ticket }: TicketViewProps) {
 
         <button
           onClick={() => window.print()}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-200 hover:text-white hover:border-cyan-500 text-sm font-semibold transition-all shadow-sm cursor-pointer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#8b1524] hover:bg-[#72101c] text-white text-sm font-bold transition-all shadow-md cursor-pointer"
         >
-          <Printer className="w-4 h-4 text-cyan-400" />
+          <Printer className="w-4 h-4 text-white" />
           <span>Imprimir / Guardar PDF</span>
         </button>
       </div>
 
       {/* Ticket Boarding Pass Card */}
-      <div className="rounded-3xl border border-cyan-500/30 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 overflow-hidden shadow-2xl shadow-cyan-500/10 relative print:border-black print:text-black">
+      <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-2xl relative print:border-black print:text-black">
         {/* Decorative Top Banner */}
-        <div className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 p-6 text-slate-950 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#6b111a] via-[#851623] to-[#540c14] p-6 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-950/20 backdrop-blur-sm border border-black/10 flex items-center justify-center font-bold">
-              <Terminal className="w-5 h-5 text-slate-950" />
+            <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+              <Terminal className="w-5 h-5 text-amber-300" />
             </div>
             <div>
-              <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-slate-950/80">
-                Pase Oficial de Acceso
+              <span className="text-xs font-mono tracking-widest text-rose-200 block uppercase font-bold">
+                Pase de Acceso Oficial
               </span>
-              <h2 className="text-lg font-extrabold tracking-tight text-slate-950 leading-tight">
-                {event.eventType === "WORKSHOP" ? "Taller Técnico" : "Conferencia Magistral"}
+              <h2 className="text-lg font-black tracking-tight text-white">
+                DevCon Workshops 2026
               </h2>
             </div>
           </div>
-
           <div className="text-right">
-            <span className="text-[10px] font-mono uppercase text-slate-950/70 block">
-              Código Ticket
+            <span className="text-[10px] font-mono uppercase text-rose-200 block font-bold">
+              Folio Ticket
             </span>
-            <span className="text-base font-mono font-black tracking-wider text-slate-950">
+            <span className="font-mono text-base font-black tracking-wider text-amber-300">
               {ticket.ticketCode}
             </span>
           </div>
         </div>
 
-        {/* Content Body */}
+        {/* Ticket Body: Two sections separated by dotted line */}
         <div className="p-6 sm:p-8 space-y-6">
           {/* Event Title */}
           <div>
-            <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider block mb-1">
-              Evento
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-50 text-[#8b1524] border border-rose-200 uppercase tracking-wide inline-block mb-2">
+              {event.eventType === "WORKSHOP" ? "Taller Práctico" : "Conferencia Magistral"}
             </span>
-            <h1 className="text-2xl font-bold text-slate-100 leading-snug">
+            <h1 className="text-2xl font-black text-slate-900 leading-snug">
               {event.title}
             </h1>
           </div>
 
-          {/* Grid Metadata */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-sm">
+          {/* Attendee Details Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
             <div className="space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                Fecha y Hora
+              <span className="text-slate-500 uppercase font-bold flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-[#8b1524]" />
+                Asistente Acreditado
               </span>
-              <p className="font-medium text-slate-200 capitalize">
-                {formatDate(event.startDate)}
-              </p>
+              <p className="font-black text-slate-900 text-sm">{registration.attendeeName}</p>
+              <p className="text-slate-500">{registration.attendeeOccupation}</p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                Modalidad / Ubicación
+              <span className="text-slate-500 uppercase font-bold flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-[#8b1524]" />
+                Fecha & Modalidad
               </span>
-              <p className="font-medium text-slate-200 flex items-center gap-1.5">
-                {event.modality === "VIRTUAL" ? (
-                  <>
-                    <Globe className="w-4 h-4 text-cyan-400" />
-                    <span>Enlace Virtual</span>
-                  </>
-                ) : (
-                  <>
-                    <MapPin className="w-4 h-4 text-cyan-400" />
-                    <span>{event.locationOrUrl || "Presencial"}</span>
-                  </>
-                )}
+              <p className="font-bold text-slate-900 text-sm capitalize">
+                {formatDate(event.startDate)}
+              </p>
+              <p className="text-slate-500">
+                {event.modality === "VIRTUAL" ? "Transmisión Virtual en Vivo" : "Presencial"} •{" "}
+                {event.academicHours} Horas
               </p>
             </div>
           </div>
 
-          {/* Attendee Details & QR Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-dashed border-slate-800 items-center">
-            {/* Attendee Info */}
-            <div className="sm:col-span-2 space-y-3">
-              <div>
-                <span className="text-xs text-slate-400 block mb-0.5">Participante</span>
-                <p className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                  <User className="w-4 h-4 text-cyan-400" />
-                  {registration.attendeeName}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div>
-                  <span className="text-slate-400 block">Rol / Ocupación</span>
-                  <p className="font-medium text-slate-300">{registration.attendeeOccupation}</p>
-                </div>
-                {registration.attendeeOrganization && (
-                  <div>
-                    <span className="text-slate-400 block">Organización</span>
-                    <p className="font-medium text-slate-300">{registration.attendeeOrganization}</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="pt-2 flex items-center gap-2 text-xs text-slate-400">
-                <Award className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Válido para certificación de {event.academicHours} horas académicas</span>
-              </div>
-            </div>
-
-            {/* QR Code */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white text-slate-950 shadow-inner">
+          {/* QR Code & Scan Instructions */}
+          <div className="flex flex-col sm:flex-row items-center gap-6 pt-4 border-t-2 border-dashed border-slate-200">
+            {/* QR Image Box */}
+            <div className="p-3 bg-white rounded-2xl border-2 border-slate-200 shadow-md shrink-0 flex items-center justify-center">
               {qrDataUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={qrDataUrl}
                   alt={`QR Ticket ${ticket.ticketCode}`}
-                  className="w-36 h-36 object-contain"
+                  className="w-40 h-40 object-contain"
                 />
               ) : (
-                <div className="w-36 h-36 flex items-center justify-center text-xs text-slate-400">
-                  Cargando QR...
-                </div>
+                <div className="w-40 h-40 bg-slate-100 animate-pulse rounded-xl" />
               )}
-              <span className="text-[10px] font-mono font-bold tracking-wider text-slate-700 mt-1">
-                ESCANEABLE PARA CHECK-IN
-              </span>
+            </div>
+
+            {/* Verification Instructions */}
+            <div className="space-y-2 text-center sm:text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>QR Criptográficamente Seguro</span>
+              </div>
+              <h4 className="text-sm font-black text-slate-900">
+                Presenta este código al ingresar
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                El docente o moderador escaneará tu código para validar tu cupo y registrar tu asistencia en tiempo real. Al finalizar se activará tu certificado digital.
+              </p>
+              <p className="text-[10px] font-mono text-slate-400">
+                Hash: {ticket.qrHash.substring(0, 24)}...
+              </p>
             </div>
           </div>
-
-          {/* Virtual link instructions if virtual and confirmed */}
-          {event.locationOrUrl && event.modality !== "PRESENTIAL" && (
-            <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-800/40 text-xs text-cyan-300 space-y-1">
-              <span className="font-bold flex items-center gap-1.5 text-cyan-200">
-                <ExternalLink className="w-3.5 h-3.5" />
-                Instrucciones de Conexión:
-              </span>
-              <p>{event.locationOrUrl}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Security watermark footer */}
-        <div className="px-6 py-3 bg-slate-900 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-          <span className="flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Firma Criptográfica SHA-256 Verificada
-          </span>
-          <span className="font-mono text-slate-400">
-            Emitido: {new Date(ticket.issuedAt).toLocaleDateString()}
-          </span>
         </div>
       </div>
     </div>
   );
 }
-
