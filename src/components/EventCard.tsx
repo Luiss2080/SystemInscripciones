@@ -11,7 +11,7 @@ interface EventCardProps {
     eventType: string;
     modality: string;
     locationOrUrl: string | null;
-    startDate: Date;
+    startDate: Date | string;
     maxCapacity: number;
     price: number | string | any;
     currency: string;
