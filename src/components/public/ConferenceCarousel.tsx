@@ -1,13 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  ExternalLink,
-} from "lucide-react";
+import { Star, ExternalLink } from "lucide-react";
 
 interface CarouselWorkshop {
   num: string;
@@ -23,12 +17,6 @@ interface CarouselWorkshop {
 }
 
 export function ConferenceCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [cardStep, setCardStep] = useState(300);
-  const firstCardRef = useRef<HTMLDivElement | null>(null);
-  const touchStartX = useRef<number | null>(null);
-
   const workshops: CarouselWorkshop[] = [
     {
       num: "01",
@@ -282,169 +270,74 @@ export function ConferenceCarousel() {
     },
   ];
 
-  const total = workshops.length;
-
-  // Measure card width + gap dynamically to slide exactly 1-by-1
-  useEffect(() => {
-    const updateStep = () => {
-      if (firstCardRef.current) {
-        const isMobile = window.innerWidth < 640;
-        const gap = isMobile ? 12 : 16;
-        setCardStep(firstCardRef.current.offsetWidth + gap);
-      }
-    };
-
-    updateStep();
-    window.addEventListener("resize", updateStep);
-    return () => window.removeEventListener("resize", updateStep);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % total);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
-  };
-
-  // Auto-advance 1-by-1 every 3.5s
-  useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % total);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [isPaused, total]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (diff > 50) nextSlide();
-    if (diff < -50) prevSlide();
-    touchStartX.current = null;
-  };
+  // We duplicate the list to provide seamless infinite scroll without cuts
+  const duplicatedWorkshops = [...workshops, ...workshops];
 
   return (
-    <div
-      className="w-full bg-slate-900/90 border-t border-slate-800/90 py-3 sm:py-3.5 px-2 sm:px-4 relative shadow-2xl backdrop-blur-md select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <div className="w-full max-w-[1750px] mx-auto flex items-center justify-between gap-2 sm:gap-3 relative">
-        {/* Navigation Arrow Left (1-by-1) */}
-        <button
-          onClick={prevSlide}
-          aria-label="Taller anterior"
-          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 flex items-center justify-center shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-md z-20"
-        >
-          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-        </button>
+    <div className="w-full bg-slate-900/90 border-t border-slate-800/90 py-3 relative shadow-2xl backdrop-blur-md overflow-hidden select-none">
+      {/* Subtle edge fade overlays for infinite seamless blend */}
+      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 via-slate-950/70 to-transparent z-10 pointer-events-none" />
 
-        {/* Carousel Viewport */}
-        <div className="overflow-hidden w-full py-1">
-          {/* Track sliding exactly 1-by-1 */}
-          <div
-            className="flex transition-transform duration-500 ease-out gap-3 sm:gap-4 will-change-transform"
-            style={{
-              transform: `translateX(-${currentIndex * cardStep}px)`,
-            }}
-          >
-            {workshops.map((ws, idx) => {
-              const isActive = idx === currentIndex;
-              return (
-                <div
-                  key={idx}
-                  ref={idx === 0 ? firstCardRef : null}
-                  className={`shrink-0 w-[260px] sm:w-[285px] bg-slate-950/90 text-slate-100 rounded-xl p-3 shadow-lg border transition-all duration-300 flex flex-col justify-between ${
-                    isActive
-                      ? "ring-1 ring-cyan-500 border-cyan-500/80 shadow-cyan-950/40 bg-slate-950"
-                      : "border-slate-800/80 hover:border-slate-700"
-                  }`}
-                >
-                  {/* Top: Compact Squircle Logo + Metadata */}
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 shadow-xs">
-                      {ws.logo}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between text-[9px] font-mono mb-0.5">
-                        <span className="font-extrabold text-cyan-400 tracking-wider uppercase">
-                          {ws.num} {ws.type}
-                        </span>
-                        <span className="text-slate-500 font-semibold">{ws.hours}</span>
-                      </div>
-
-                      <h4 className="text-[12px] font-bold text-white tracking-tight truncate leading-tight">
-                        {ws.title}
-                      </h4>
-
-                      <p className="text-[10px] text-slate-400 truncate">
-                        {ws.modality}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Rating Stars & Badge */}
-                  <div className="flex items-center justify-between pt-1.5 border-t border-slate-800/80 text-[10px] mb-2">
-                    <div className="flex items-center gap-1 text-amber-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                      ))}
-                      <span className="font-bold text-slate-300 ml-1 font-mono text-[9px]">
-                        {ws.rating}
-                      </span>
-                    </div>
-
-                    <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/60">
-                      {ws.badge}
-                    </span>
-                  </div>
-
-                  {/* Compact Cyan Details Button */}
-                  <Link
-                    href={`/eventos/${ws.slug}`}
-                    className="w-full py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-black tracking-wider uppercase flex items-center justify-center gap-1 shadow-md shadow-cyan-950/30 transition-all hover:scale-[1.02] cursor-pointer"
-                  >
-                    <span>VER DETALLES</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </Link>
+      {/* Marquee Track: passes automatically, pauses on hover, zero arrows */}
+      <div className="w-full overflow-hidden flex items-center">
+        <div className="animate-marquee-smooth flex items-center gap-3 sm:gap-4 py-1">
+          {duplicatedWorkshops.map((ws, idx) => (
+            <div
+              key={idx}
+              className="shrink-0 w-[275px] sm:w-[295px] bg-slate-950/95 text-slate-100 rounded-xl p-3 shadow-lg border border-slate-800/80 hover:border-cyan-500/80 hover:shadow-cyan-950/50 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
+            >
+              {/* Top: Compact Squircle Logo + Metadata */}
+              <div className="flex items-center gap-2.5 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 shadow-xs group-hover:border-cyan-500/40 transition-colors">
+                  {ws.logo}
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between text-[9px] font-mono mb-0.5">
+                    <span className="font-extrabold text-cyan-400 tracking-wider uppercase">
+                      {ws.num} {ws.type}
+                    </span>
+                    <span className="text-slate-500 font-semibold">{ws.hours}</span>
+                  </div>
+
+                  <h4 className="text-[12px] font-bold text-white tracking-tight truncate leading-tight group-hover:text-cyan-300 transition-colors">
+                    {ws.title}
+                  </h4>
+
+                  <p className="text-[10px] text-slate-400 truncate">
+                    {ws.modality}
+                  </p>
+                </div>
+              </div>
+
+              {/* Rating Stars & Badge */}
+              <div className="flex items-center justify-between pt-1.5 border-t border-slate-800/80 text-[10px] mb-2">
+                <div className="flex items-center gap-1 text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                  ))}
+                  <span className="font-bold text-slate-300 ml-1 font-mono text-[9px]">
+                    {ws.rating}
+                  </span>
+                </div>
+
+                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/60">
+                  {ws.badge}
+                </span>
+              </div>
+
+              {/* Compact Cyan Details Button */}
+              <Link
+                href={`/eventos/${ws.slug}`}
+                className="w-full py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-black tracking-wider uppercase flex items-center justify-center gap-1 shadow-md shadow-cyan-950/30 transition-all hover:scale-[1.01] cursor-pointer"
+              >
+                <span>VER DETALLES</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
+          ))}
         </div>
-
-        {/* Navigation Arrow Right (1-by-1) */}
-        <button
-          onClick={nextSlide}
-          aria-label="Taller siguiente"
-          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 flex items-center justify-center shrink-0 cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-md z-20"
-        >
-          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-        </button>
-      </div>
-
-      {/* Progress Dots below cards */}
-      <div className="flex items-center justify-center gap-1.5 mt-2">
-        {workshops.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentIndex(i)}
-            aria-label={`Ir a diapositiva ${i + 1}`}
-            className={`h-1 rounded-full transition-all cursor-pointer ${
-              i === currentIndex
-                ? "w-6 bg-cyan-400"
-                : "w-1.5 bg-slate-700 hover:bg-slate-500"
-            }`}
-          />
-        ))}
       </div>
     </div>
   );
