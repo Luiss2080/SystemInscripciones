@@ -10,46 +10,13 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { ConferenceCarousel } from "./ConferenceCarousel";
+import FondoTech from "./FondoTech";
 
 export function HeroModern() {
   return (
-    <div className="relative bg-slate-950 text-slate-100 overflow-hidden h-[calc(100vh-68px)] max-h-[calc(100vh-68px)] flex flex-col justify-between">
-      {/* Background Cyber Ambient Glows */}
-      <div className="absolute top-10 left-1/4 w-[450px] h-[350px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-20 right-10 w-[500px] h-[400px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-
-      {/* Background Tech Circuit Grid */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern
-            id="hero-circuit-dark"
-            width="100"
-            height="100"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M 10 10 L 40 10 L 60 30 L 90 30"
-              fill="none"
-              stroke="#06b6d4"
-              strokeWidth="1.2"
-            />
-            <circle cx="10" cy="10" r="2.5" fill="#06b6d4" />
-            <circle cx="90" cy="30" r="2.5" fill="#06b6d4" />
-            <path
-              d="M 20 60 L 50 60 L 70 80 L 95 80"
-              fill="none"
-              stroke="#3b82f6"
-              strokeWidth="1.2"
-            />
-            <circle cx="20" cy="60" r="2" fill="#3b82f6" />
-            <circle cx="95" cy="80" r="2" fill="#3b82f6" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hero-circuit-dark)" />
-      </svg>
+    <div className="relative bg-[#030712] text-slate-100 overflow-hidden h-[calc(100vh-68px)] max-h-[calc(100vh-68px)] flex flex-col justify-between">
+      {/* Background Cyber Tech Circuit Grid with Moving Accent Dots */}
+      <FondoTech id="hero" />
 
       {/* Middle Hero Content: Perfectly vertically centered and fitted for Fullscreen */}
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full min-h-0 py-2 sm:py-3 z-10">
