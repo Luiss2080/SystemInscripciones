@@ -48,7 +48,7 @@ export function EventCard({ event }: EventCardProps) {
         {/* Top badges */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-[#8b1524] border border-rose-200">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-[#701121] border border-rose-200">
               {eventTypeLabel}
             </span>
             <span
