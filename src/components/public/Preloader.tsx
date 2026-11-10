@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Terminal, Shield, Cpu } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export function Preloader() {
   const [progress, setProgress] = useState(0);
@@ -10,7 +10,6 @@ export function Preloader() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Verificar si ya se mostró en esta sesión para no ser intrusivo en recargas continuas
     const hasLoaded = sessionStorage.getItem("devcon_preloaded");
     if (hasLoaded) {
       setVisible(false);
@@ -37,7 +36,6 @@ export function Preloader() {
           return 100;
         }
 
-        // Agregar logs según el progreso
         if (prev === 15) setLogs((l) => [...l, logMessages[0]]);
         if (prev === 40) setLogs((l) => [...l, logMessages[1]]);
         if (prev === 70) setLogs((l) => [...l, logMessages[2]]);
@@ -45,14 +43,13 @@ export function Preloader() {
 
         return prev + 2;
       });
-    }, 28);
+    }, 25);
 
     return () => clearInterval(interval);
   }, []);
 
   if (!visible) return null;
 
-  // Cálculo del stroke circular para el progreso SVG
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -86,22 +83,22 @@ export function Preloader() {
             <path
               d="M 30 70 L 60 70 L 80 90 L 110 90"
               fill="none"
-              stroke="#be123c"
+              stroke="#3b82f6"
               strokeWidth="0.8"
             />
-            <circle cx="30" cy="70" r="2" fill="#be123c" />
-            <circle cx="110" cy="90" r="2" fill="#be123c" />
+            <circle cx="30" cy="70" r="2" fill="#3b82f6" />
+            <circle cx="110" cy="90" r="2" fill="#3b82f6" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#circuit-grid)" />
       </svg>
 
-      {/* Watermark target reticles */}
-      <div className="absolute top-1/4 left-10 w-40 h-40 border border-slate-800 rounded-full flex items-center justify-center opacity-30 pointer-events-none">
-        <div className="w-24 h-24 border border-cyan-500/30 rounded-full" />
+      {/* Target reticles */}
+      <div className="absolute top-1/4 left-10 w-44 h-44 border border-cyan-500/10 rounded-full flex items-center justify-center pointer-events-none">
+        <div className="w-28 h-28 border border-blue-500/20 rounded-full" />
       </div>
-      <div className="absolute bottom-1/4 right-10 w-48 h-48 border border-slate-800 rounded-full flex items-center justify-center opacity-30 pointer-events-none">
-        <div className="w-32 h-32 border border-rose-500/30 rounded-full" />
+      <div className="absolute bottom-1/4 right-10 w-52 h-52 border border-blue-500/10 rounded-full flex items-center justify-center pointer-events-none">
+        <div className="w-36 h-36 border border-cyan-500/20 rounded-full" />
       </div>
 
       <div className="relative z-10 max-w-xl w-full px-6 flex flex-col items-center text-center">
@@ -112,7 +109,7 @@ export function Preloader() {
 
         {/* Brand Main Title */}
         <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-3">
-          DEVCON <span className="text-rose-600">WORKSHOPS</span>
+          DEVCON <span className="text-cyan-400">WORKSHOPS</span>
         </h1>
 
         <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-8 leading-relaxed">
@@ -134,7 +131,7 @@ export function Preloader() {
               cx="56"
               cy="56"
               r={radius}
-              stroke="#be123c"
+              stroke="#06b6d4"
               strokeWidth="6"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
@@ -144,21 +141,21 @@ export function Preloader() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-black font-mono text-white">
+            <span className="text-2xl font-black font-mono text-cyan-400">
               {progress}%
             </span>
           </div>
         </div>
 
-        {/* Terminal Box (Exact matching screenshot design) */}
-        <div className="w-full bg-black/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-emerald-400 shadow-2xl space-y-2 h-32 overflow-hidden flex flex-col justify-end">
+        {/* Terminal Box */}
+        <div className="w-full bg-slate-950/95 border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-emerald-400 shadow-2xl space-y-2 h-32 overflow-hidden flex flex-col justify-end">
           {logs.map((log, idx) => (
             <div key={idx} className="flex items-start gap-2 leading-tight">
               <span className="text-cyan-400 shrink-0">&gt;</span>
               <span className="text-slate-300">{log}</span>
             </div>
           ))}
-          <div className="flex items-center gap-2 text-emerald-400">
+          <div className="flex items-center gap-2 text-cyan-400">
             <span className="animate-pulse">_</span>
           </div>
         </div>
@@ -171,4 +168,3 @@ export function Preloader() {
     </div>
   );
 }
-

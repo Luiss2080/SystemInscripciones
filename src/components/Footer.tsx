@@ -23,17 +23,17 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer id="contacto" className="border-t border-slate-800/80 bg-black text-slate-400 pt-16 pb-8 px-4 sm:px-6 lg:px-8 relative">
+    <footer id="contacto" className="border-t border-slate-800/80 bg-slate-950 text-slate-400 pt-16 pb-8 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-12">
         {/* Brand Column (Left) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 to-amber-600 flex items-center justify-center shadow-lg shadow-rose-950/50">
-              <Terminal className="w-5 h-5 text-white font-bold" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+              <Terminal className="w-5 h-5 text-slate-950 font-bold" />
             </div>
             <div className="flex items-center gap-1.5 font-black text-xl text-white tracking-tight">
               <span>DEVCON</span>
-              <span className="text-rose-500">WORKSHOPS</span>
+              <span className="text-cyan-400">WORKSHOPS</span>
             </div>
           </div>
 
@@ -41,7 +41,7 @@ export function Footer() {
             Educación tecnológica y capacitación en ingeniería de sistemas de vanguardia, impulsando el aprendizaje práctico y creativo para desarrollar talento innovador y preparado para los desafíos del futuro.
           </p>
 
-          {/* Social circular SVG buttons (Exact format from Image 3) */}
+          {/* Social circular SVG buttons */}
           <div className="flex items-center gap-2.5 pt-2">
             {[
               { icon: Globe, href: "https://github.com", label: "Web" },
@@ -57,7 +57,7 @@ export function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   title={soc.label}
-                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-rose-950 hover:border-rose-700 transition-all cursor-pointer"
+                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:bg-slate-800 hover:border-cyan-500/40 transition-all cursor-pointer"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -84,10 +84,10 @@ export function Footer() {
                 <li key={idx}>
                   <Link
                     href="/#eventos"
-                    className="flex items-center gap-2.5 text-slate-400 hover:text-white transition-colors group"
+                    className="flex items-center gap-2.5 text-slate-400 hover:text-cyan-300 transition-colors group"
                   >
-                    <span className="w-6 h-6 rounded-full bg-rose-950/80 border border-rose-800 flex items-center justify-center shrink-0 group-hover:bg-rose-900 transition-colors">
-                      <Icon className="w-3 h-3 text-rose-400" />
+                    <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/80 flex items-center justify-center shrink-0 group-hover:bg-cyan-900 transition-colors">
+                      <Icon className="w-3 h-3 text-cyan-400" />
                     </span>
                     <span>{item.label}</span>
                   </Link>
@@ -116,7 +116,7 @@ export function Footer() {
                 <li key={idx}>
                   <Link
                     href={item.href}
-                    className="flex items-center gap-2.5 text-slate-400 hover:text-white transition-colors group"
+                    className="flex items-center gap-2.5 text-slate-400 hover:text-cyan-300 transition-colors group"
                   >
                     <span className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 group-hover:bg-slate-800 transition-colors">
                       <Icon className="w-3 h-3 text-slate-300" />
@@ -136,8 +136,8 @@ export function Footer() {
           </h4>
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-rose-950/80 border border-rose-800 flex items-center justify-center shrink-0 mt-0.5">
-                <MapPin className="w-3 h-3 text-rose-400" />
+              <span className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                <MapPin className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Ubicación</strong>
@@ -146,8 +146,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-rose-950/80 border border-rose-800 flex items-center justify-center shrink-0 mt-0.5">
-                <Mail className="w-3 h-3 text-rose-400" />
+              <span className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                <Mail className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Email Oficial</strong>
@@ -156,8 +156,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-rose-950/80 border border-rose-800 flex items-center justify-center shrink-0 mt-0.5">
-                <Phone className="w-3 h-3 text-rose-400" />
+              <span className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                <Phone className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Teléfono / WhatsApp</strong>
@@ -166,8 +166,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-rose-950/80 border border-rose-800 flex items-center justify-center shrink-0 mt-0.5">
-                <Clock className="w-3 h-3 text-rose-400" />
+              <span className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                <Clock className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Horarios de Atención</strong>
@@ -182,21 +182,21 @@ export function Footer() {
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
         <p>© 2026 DevCon Workshops. Todos los derechos reservados.</p>
         <div className="flex items-center gap-4 text-xs text-slate-400">
-          <Link href="/verificar" className="hover:text-white transition-colors">
+          <Link href="/verificar" className="hover:text-cyan-400 transition-colors">
             Acreditación y Certificados
           </Link>
           <span>•</span>
-          <Link href="/admin" className="hover:text-white transition-colors">
+          <Link href="/admin" className="hover:text-cyan-400 transition-colors">
             Portal Administrador
           </Link>
         </div>
       </div>
 
-      {/* Floating Bottom Left Bot SVG (Exact as Image 3) */}
+      {/* Floating Bottom Left Bot SVG */}
       <div className="fixed bottom-5 left-5 z-40 hidden sm:block">
         <div className="relative group">
-          <div className="w-12 h-12 rounded-2xl bg-rose-950 border border-rose-700 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform cursor-pointer">
-            <Bot className="w-6 h-6 text-rose-400" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700/80 flex items-center justify-center text-cyan-400 shadow-xl hover:border-cyan-500/60 hover:scale-110 transition-all cursor-pointer">
+            <Bot className="w-6 h-6 text-cyan-400" />
           </div>
           <span className="absolute left-14 top-2 bg-slate-900 border border-slate-700 text-white text-[11px] font-mono px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
             Asistente DevCon Bot
@@ -204,14 +204,14 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Floating Bottom Right WhatsApp SVG (Exact as Image 3) */}
+      {/* Floating Bottom Right WhatsApp SVG */}
       <div className="fixed bottom-5 right-5 z-40">
         <a
           href="https://wa.me/59171234567"
           target="_blank"
           rel="noreferrer"
           title="Consultas por WhatsApp"
-          className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform cursor-pointer flex items-center justify-center"
+          className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform cursor-pointer"
         >
           <MessageCircle className="w-6 h-6 fill-white text-emerald-600" />
         </a>
