@@ -101,7 +101,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Talleres & Servicios Section (Design matching Image 2 with Lime #A3E635 accents and dynamic categories) */}
+      {/* Talleres & Servicios Section (Dynamic categories, carousel cards, and official Cyber Cyan palette) */}
       <ServiciosGrid initialEvents={serializedEvents} />
     </div>
   );
