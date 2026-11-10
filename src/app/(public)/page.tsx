@@ -42,14 +42,14 @@ export default async function HomePage() {
         <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-xl relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="space-y-4 md:col-span-2 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 text-[#8b1524] border border-rose-200 text-xs font-bold uppercase tracking-wider">
-                <Terminal className="w-3.5 h-3.5 text-[#8b1524]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 text-[#701121] border border-rose-200 text-xs font-bold uppercase tracking-wider">
+                <Terminal className="w-3.5 h-3.5 text-[#701121]" />
                 <span>Facilitador & Docente Principal</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 Ing. Alex Martínez
               </h2>
-              <p className="text-[#8b1524] font-mono text-sm font-bold">
+              <p className="text-[#701121] font-mono text-sm font-bold">
                 Systems Engineer • Cloud Solutions Architect • Cybersecurity Consultant
               </p>
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -96,7 +96,7 @@ export default async function HomePage() {
       <section id="eventos" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 text-left">
           <div>
-            <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-[#8b1524] block mb-2">
+            <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-[#701121] block mb-2">
               Agenda Académica 2026
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
