@@ -28,12 +28,12 @@ export function Footer() {
         {/* Brand Column (Left) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8b1524] via-[#a81c2d] to-[#680e1a] flex items-center justify-center shadow-lg shadow-rose-950/40">
+            <div className="w-10 h-10 rounded-2xl bg-[#701121] flex items-center justify-center shadow-lg shadow-rose-950/40">
               <Terminal className="w-5 h-5 text-white font-bold" />
             </div>
             <div className="flex items-center gap-1.5 font-black text-xl text-white tracking-tight">
               <span>DEVCON</span>
-              <span className="text-[#e11d48]">WORKSHOPS</span>
+              <span className="text-[#701121]">WORKSHOPS</span>
             </div>
           </div>
 

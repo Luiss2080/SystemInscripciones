@@ -85,7 +85,7 @@ export function EventCard({ event }: EventCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-black text-slate-900 group-hover:text-[#8b1524] transition-colors mb-3 leading-snug line-clamp-2">
+        <h3 className="text-xl font-black text-slate-900 group-hover:text-[#701121] transition-colors mb-3 leading-snug line-clamp-2">
           {event.title}
         </h3>
 
@@ -97,7 +97,7 @@ export function EventCard({ event }: EventCardProps) {
         {/* Metadata Details */}
         <div className="space-y-2 text-xs text-slate-600 mb-6 bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
           <div className="flex items-center gap-2 font-medium">
-            <Calendar className="w-3.5 h-3.5 text-[#8b1524] shrink-0" />
+            <Calendar className="w-3.5 h-3.5 text-[#701121] shrink-0" />
             <span className="capitalize">{formatDate(event.startDate)}</span>
           </div>
 
@@ -109,7 +109,7 @@ export function EventCard({ event }: EventCardProps) {
             <div className="flex items-center gap-1.5 font-mono text-slate-600">
               <Users className="w-3.5 h-3.5 text-slate-500" />
               <span>
-                <strong className={availableSeats < 10 ? "text-amber-600" : "text-[#8b1524]"}>
+                <strong className={availableSeats < 10 ? "text-amber-600" : "text-[#701121]"}>
                   {availableSeats}
                 </strong>{" "}
                 / {event.maxCapacity} cupos
@@ -133,7 +133,7 @@ export function EventCard({ event }: EventCardProps) {
           className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
             isSoldOut
               ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-              : "bg-[#8b1524] hover:bg-[#72101c] text-white shadow-md shadow-rose-950/20 hover:scale-[1.02]"
+              : "bg-[#701121] hover:bg-[#580b18] text-white shadow-md shadow-rose-950/20 hover:scale-[1.02]"
           }`}
         >
           <span>{isSoldOut ? "Ver Detalles" : "Inscribirme"}</span>
