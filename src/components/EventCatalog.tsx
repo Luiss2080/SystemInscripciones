@@ -39,7 +39,7 @@ export function EventCatalog({ initialEvents }: EventCatalogProps) {
               onClick={() => setSelectedType(tab.id)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedType === tab.id
-                  ? "bg-[#8b1524] text-white shadow-md shadow-rose-950/20"
+                  ? "bg-[#701121] text-white shadow-md shadow-rose-950/20"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               }`}
             >
@@ -56,7 +56,7 @@ export function EventCatalog({ initialEvents }: EventCatalogProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por tecnología o tema..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#8b1524] text-xs font-medium"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#701121] text-xs font-medium"
           />
         </div>
       </div>
