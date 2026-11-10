@@ -28,12 +28,12 @@ export function Footer() {
         {/* Brand Column (Left) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#701121] flex items-center justify-center shadow-lg shadow-rose-950/40">
-              <Terminal className="w-5 h-5 text-white font-bold" />
+            <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shadow-lg shadow-cyan-950/40">
+              <Terminal className="w-5 h-5 text-cyan-400 font-bold" />
             </div>
             <div className="flex items-center gap-1.5 font-black text-xl text-white tracking-tight">
               <span>DEVCON</span>
-              <span className="text-[#701121]">WORKSHOPS</span>
+              <span className="text-cyan-400">WORKSHOPS</span>
             </div>
           </div>
 
@@ -41,7 +41,7 @@ export function Footer() {
             Educación tecnológica y capacitación en ingeniería de sistemas de vanguardia, impulsando el aprendizaje práctico y creativo para desarrollar talento innovador y preparado para los desafíos de la industria.
           </p>
 
-          {/* Social circular SVG buttons (Matching Screenshot 4) */}
+          {/* Social circular SVG buttons */}
           <div className="flex items-center gap-2.5 pt-2">
             {[
               { icon: Globe, href: "https://github.com", label: "Web" },
@@ -57,7 +57,7 @@ export function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   title={soc.label}
-                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-[#701121] hover:border-[#701121] transition-all cursor-pointer shadow-xs"
+                  className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-slate-950 hover:bg-cyan-400 hover:border-cyan-400 transition-all cursor-pointer shadow-xs"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -66,7 +66,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Column 2: SERVICIOS (Red bullet icons matching Screenshot 4) */}
+        {/* Column 2: SERVICIOS */}
         <div className="lg:col-span-3 space-y-4">
           <h4 className="font-extrabold text-white text-sm uppercase tracking-wider">
             Servicios
@@ -84,10 +84,10 @@ export function Footer() {
                 <li key={idx}>
                   <Link
                     href="/#eventos"
-                    className="flex items-center gap-2.5 text-slate-400 hover:text-rose-300 transition-colors group"
+                    className="flex items-center gap-2.5 text-slate-400 hover:text-cyan-300 transition-colors group"
                   >
-                    <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 group-hover:bg-[#701121] transition-colors">
-                      <Icon className="w-3 h-3 text-[#f43f5e] group-hover:text-white transition-colors" />
+                    <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 group-hover:bg-cyan-500 transition-colors">
+                      <Icon className="w-3 h-3 text-cyan-400 group-hover:text-slate-950 transition-colors" />
                     </span>
                     <span>{item.label}</span>
                   </Link>
