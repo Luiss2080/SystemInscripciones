@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, Clock, MapPin, Users, Award, ArrowRight, Globe, Zap } from "lucide-react";
+import { Calendar, Users, Award, ArrowRight, Globe, Zap, MapPin } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface EventCardProps {
@@ -37,25 +37,22 @@ export function EventCard({ event }: EventCardProps) {
 
   const modalityBadgeColor =
     event.modality === "VIRTUAL"
-      ? "bg-blue-950 text-blue-300 border-blue-800/60"
+      ? "bg-blue-50 text-blue-700 border-blue-200"
       : event.modality === "PRESENTIAL"
-      ? "bg-purple-950 text-purple-300 border-purple-800/60"
-      : "bg-emerald-950 text-emerald-300 border-emerald-800/60";
+      ? "bg-purple-50 text-purple-700 border-purple-200"
+      : "bg-emerald-50 text-emerald-700 border-emerald-200";
 
   return (
-    <article className="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-      {/* Glow highlight */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-colors pointer-events-none" />
-
+    <article className="bg-white rounded-2xl p-6 flex flex-col justify-between border border-slate-200/90 shadow-md hover:shadow-xl hover:border-slate-300 transition-all group relative overflow-hidden">
       <div>
         {/* Top badges */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-[#8b1524] border border-rose-200">
               {eventTypeLabel}
             </span>
             <span
-              className={`text-[11px] font-medium px-2 py-0.5 rounded-full border inline-flex items-center gap-1 ${modalityBadgeColor}`}
+              className={`text-[11px] font-bold px-2 py-0.5 rounded-full border inline-flex items-center gap-1 ${modalityBadgeColor}`}
             >
               {event.modality === "VIRTUAL" ? (
                 <>
@@ -77,10 +74,10 @@ export function EventCard({ event }: EventCardProps) {
           </div>
 
           <span
-            className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+            className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
               isSoldOut
-                ? "bg-rose-950/80 text-rose-300 border border-rose-800/50"
-                : "bg-emerald-950/80 text-emerald-300 border border-emerald-800/50"
+                ? "bg-rose-100 text-rose-800 border border-rose-300"
+                : "bg-emerald-50 text-emerald-700 border border-emerald-200"
             }`}
           >
             {isSoldOut ? "Cupos Agotados" : "Inscripciones Abiertas"}
@@ -88,31 +85,31 @@ export function EventCard({ event }: EventCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-3 leading-snug line-clamp-2">
+        <h3 className="text-xl font-black text-slate-900 group-hover:text-[#8b1524] transition-colors mb-3 leading-snug line-clamp-2">
           {event.title}
         </h3>
 
         {/* Description snippet */}
-        <p className="text-sm text-slate-400 mb-5 line-clamp-3 leading-relaxed">
+        <p className="text-sm text-slate-600 mb-5 line-clamp-3 leading-relaxed">
           {event.description}
         </p>
 
         {/* Metadata Details */}
-        <div className="space-y-2 text-xs text-slate-300 mb-6 bg-slate-900/60 rounded-xl p-3.5 border border-slate-800/80">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+        <div className="space-y-2 text-xs text-slate-600 mb-6 bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
+          <div className="flex items-center gap-2 font-medium">
+            <Calendar className="w-3.5 h-3.5 text-[#8b1524] shrink-0" />
             <span className="capitalize">{formatDate(event.startDate)}</span>
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <div className="flex items-center gap-2 font-medium">
+              <Award className="w-3.5 h-3.5 text-amber-600 shrink-0" />
               <span>Certificado por {event.academicHours} horas</span>
             </div>
-            <div className="flex items-center gap-1.5 font-mono text-slate-400">
-              <Users className="w-3.5 h-3.5 text-slate-400" />
+            <div className="flex items-center gap-1.5 font-mono text-slate-600">
+              <Users className="w-3.5 h-3.5 text-slate-500" />
               <span>
-                <strong className={availableSeats < 10 ? "text-amber-400" : "text-cyan-400"}>
+                <strong className={availableSeats < 10 ? "text-amber-600" : "text-[#8b1524]"}>
                   {availableSeats}
                 </strong>{" "}
                 / {event.maxCapacity} cupos
@@ -123,20 +120,20 @@ export function EventCard({ event }: EventCardProps) {
       </div>
 
       {/* Card Footer: Price & CTA */}
-      <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-4">
+      <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
         <div>
-          <span className="text-[11px] text-slate-400 uppercase tracking-wider block">Inversión</span>
-          <span className="text-lg font-bold text-slate-100 font-mono">
+          <span className="text-[11px] text-slate-500 uppercase tracking-wider block font-medium">Inversión</span>
+          <span className="text-lg font-black text-slate-900 font-mono">
             {formatCurrency(Number(event.price), event.currency)}
           </span>
         </div>
 
         <Link
           href={`/eventos/${event.slug}`}
-          className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+          className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
             isSoldOut
-              ? "bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
-              : "bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold shadow-lg shadow-cyan-500/20 hover:scale-[1.02]"
+              ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+              : "bg-[#8b1524] hover:bg-[#72101c] text-white shadow-md shadow-rose-950/20 hover:scale-[1.02]"
           }`}
         >
           <span>{isSoldOut ? "Ver Detalles" : "Inscribirme"}</span>
@@ -146,4 +143,3 @@ export function EventCard({ event }: EventCardProps) {
     </article>
   );
 }
-
