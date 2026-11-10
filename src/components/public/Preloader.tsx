@@ -74,19 +74,19 @@ export function Preloader() {
             <path
               d="M 10 10 L 40 10 L 60 30 L 110 30"
               fill="none"
-              stroke="#8b1524"
+              stroke="#701121"
               strokeWidth="1.2"
             />
-            <circle cx="10" cy="10" r="3" fill="#8b1524" />
-            <circle cx="110" cy="30" r="3" fill="#8b1524" />
+            <circle cx="10" cy="10" r="3" fill="#701121" />
+            <circle cx="110" cy="30" r="3" fill="#701121" />
             <path
               d="M 30 70 L 60 70 L 80 90 L 110 90"
               fill="none"
-              stroke="#b48228"
+              stroke="#c29b38"
               strokeWidth="1.2"
             />
-            <circle cx="30" cy="70" r="2.5" fill="#b48228" />
-            <circle cx="110" cy="90" r="2.5" fill="#b48228" />
+            <circle cx="30" cy="70" r="2.5" fill="#c29b38" />
+            <circle cx="110" cy="90" r="2.5" fill="#c29b38" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#preloader-circuit)" />
@@ -102,13 +102,13 @@ export function Preloader() {
 
       <div className="relative z-10 max-w-xl w-full px-6 flex flex-col items-center text-center">
         {/* Welcome Tag */}
-        <span className="text-xs font-mono tracking-[0.3em] text-[#8b1524] uppercase font-bold mb-2">
+        <span className="text-xs font-mono tracking-[0.3em] text-[#701121] uppercase font-bold mb-2">
           BIENVENIDO A
         </span>
 
         {/* Brand Main Title */}
         <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-2">
-          DEVCON <span className="text-[#8b1524]">WORKSHOPS</span>
+          DEVCON <span className="text-[#701121]">WORKSHOPS</span>
         </h1>
 
         <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto mb-8 leading-relaxed font-medium">
@@ -130,7 +130,7 @@ export function Preloader() {
               cx="56"
               cy="56"
               r={radius}
-              stroke="#8b1524"
+              stroke="#701121"
               strokeWidth="6"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
