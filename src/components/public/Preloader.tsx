@@ -55,13 +55,13 @@ export function Preloader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#fcfcfd] text-slate-900 transition-opacity duration-500 overflow-hidden ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950 text-slate-100 transition-opacity duration-500 overflow-hidden ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      {/* Circuit lines HUD background (Light tech theme matching Screenshot 2) */}
+      {/* Circuit lines HUD background */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-[0.08] pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -74,55 +74,55 @@ export function Preloader() {
             <path
               d="M 10 10 L 40 10 L 60 30 L 110 30"
               fill="none"
-              stroke="#701121"
+              stroke="#06b6d4"
               strokeWidth="1.2"
             />
-            <circle cx="10" cy="10" r="3" fill="#701121" />
-            <circle cx="110" cy="30" r="3" fill="#701121" />
+            <circle cx="10" cy="10" r="3" fill="#06b6d4" />
+            <circle cx="110" cy="30" r="3" fill="#06b6d4" />
             <path
               d="M 30 70 L 60 70 L 80 90 L 110 90"
               fill="none"
-              stroke="#c29b38"
+              stroke="#3b82f6"
               strokeWidth="1.2"
             />
-            <circle cx="30" cy="70" r="2.5" fill="#c29b38" />
-            <circle cx="110" cy="90" r="2.5" fill="#c29b38" />
+            <circle cx="30" cy="70" r="2.5" fill="#3b82f6" />
+            <circle cx="110" cy="90" r="2.5" fill="#3b82f6" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#preloader-circuit)" />
       </svg>
 
       {/* Background Reticle Targets */}
-      <div className="absolute top-1/4 left-10 w-48 h-48 border border-rose-300/30 rounded-full flex items-center justify-center pointer-events-none">
-        <div className="w-32 h-32 border border-amber-300/30 rounded-full" />
+      <div className="absolute top-1/4 left-10 w-48 h-48 border border-cyan-500/20 rounded-full flex items-center justify-center pointer-events-none">
+        <div className="w-32 h-32 border border-blue-500/20 rounded-full" />
       </div>
-      <div className="absolute bottom-1/4 right-10 w-56 h-56 border border-amber-300/30 rounded-full flex items-center justify-center pointer-events-none">
-        <div className="w-40 h-40 border border-rose-300/30 rounded-full" />
+      <div className="absolute bottom-1/4 right-10 w-56 h-56 border border-blue-500/20 rounded-full flex items-center justify-center pointer-events-none">
+        <div className="w-40 h-40 border border-cyan-500/20 rounded-full" />
       </div>
 
       <div className="relative z-10 max-w-xl w-full px-6 flex flex-col items-center text-center">
         {/* Welcome Tag */}
-        <span className="text-xs font-mono tracking-[0.3em] text-[#701121] uppercase font-bold mb-2">
+        <span className="text-xs font-mono tracking-[0.3em] text-cyan-400 uppercase font-bold mb-2">
           BIENVENIDO A
         </span>
 
         {/* Brand Main Title */}
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-2">
-          DEVCON <span className="text-[#701121]">WORKSHOPS</span>
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-2">
+          DEVCON <span className="text-cyan-400">WORKSHOPS</span>
         </h1>
 
-        <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto mb-8 leading-relaxed font-medium">
+        <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-8 leading-relaxed font-medium">
           Plataforma de capacitación técnica, talleres especializados en ingeniería de sistemas y certificación profesional.
         </p>
 
-        {/* Circular Percentage Loader (Matching Screenshot 2) */}
+        {/* Circular Percentage Loader */}
         <div className="relative w-28 h-28 flex items-center justify-center mb-8">
           <svg className="w-full h-full transform -rotate-90">
             <circle
               cx="56"
               cy="56"
               r={radius}
-              stroke="#e2e8f0"
+              stroke="#1e293b"
               strokeWidth="6"
               fill="transparent"
             />
@@ -130,7 +130,7 @@ export function Preloader() {
               cx="56"
               cy="56"
               r={radius}
-              stroke="#701121"
+              stroke="#06b6d4"
               strokeWidth="6"
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
@@ -140,14 +140,14 @@ export function Preloader() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-black font-mono text-[#701121]">
+            <span className="text-2xl font-black font-mono text-cyan-400">
               {progress}%
             </span>
           </div>
         </div>
 
-        {/* Terminal Box (Dark window with green logs matching Screenshot 2) */}
-        <div className="w-full bg-[#0c0d12] border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-emerald-400 shadow-2xl space-y-2 h-36 overflow-hidden flex flex-col justify-end">
+        {/* Terminal Box */}
+        <div className="w-full bg-[#090d16] border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-emerald-400 shadow-2xl space-y-2 h-36 overflow-hidden flex flex-col justify-end">
           {logs.map((log, idx) => (
             <div key={idx} className="flex items-start gap-2 leading-tight">
               <span className="text-emerald-400 shrink-0">&gt;</span>

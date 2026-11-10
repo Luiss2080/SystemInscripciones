@@ -37,18 +37,18 @@ export function EventCard({ event }: EventCardProps) {
 
   const modalityBadgeColor =
     event.modality === "VIRTUAL"
-      ? "bg-blue-50 text-blue-700 border-blue-200"
+      ? "bg-cyan-950/80 text-cyan-400 border-cyan-800/60"
       : event.modality === "PRESENTIAL"
-      ? "bg-purple-50 text-purple-700 border-purple-200"
-      : "bg-emerald-50 text-emerald-700 border-emerald-200";
+      ? "bg-purple-950/80 text-purple-400 border-purple-800/60"
+      : "bg-emerald-950/80 text-emerald-400 border-emerald-800/60";
 
   return (
-    <article className="bg-white rounded-2xl p-6 flex flex-col justify-between border border-slate-200/90 shadow-md hover:shadow-xl hover:border-slate-300 transition-all group relative overflow-hidden">
+    <article className="bg-slate-900/90 rounded-2xl p-6 flex flex-col justify-between border border-slate-800 hover:border-cyan-500/50 shadow-xl hover:shadow-cyan-950/20 transition-all group relative overflow-hidden backdrop-blur-sm">
       <div>
         {/* Top badges */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-[#701121] border border-rose-200">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60">
               {eventTypeLabel}
             </span>
             <span
@@ -76,8 +76,8 @@ export function EventCard({ event }: EventCardProps) {
           <span
             className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
               isSoldOut
-                ? "bg-rose-100 text-rose-800 border border-rose-300"
-                : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                ? "bg-rose-950/80 text-rose-400 border border-rose-800/60"
+                : "bg-emerald-950/80 text-emerald-400 border border-emerald-800/60"
             }`}
           >
             {isSoldOut ? "Cupos Agotados" : "Inscripciones Abiertas"}
@@ -85,31 +85,31 @@ export function EventCard({ event }: EventCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-black text-slate-900 group-hover:text-[#701121] transition-colors mb-3 leading-snug line-clamp-2">
+        <h3 className="text-xl font-black text-white group-hover:text-cyan-400 transition-colors mb-3 leading-snug line-clamp-2">
           {event.title}
         </h3>
 
         {/* Description snippet */}
-        <p className="text-sm text-slate-600 mb-5 line-clamp-3 leading-relaxed">
+        <p className="text-sm text-slate-400 mb-5 line-clamp-3 leading-relaxed">
           {event.description}
         </p>
 
         {/* Metadata Details */}
-        <div className="space-y-2 text-xs text-slate-600 mb-6 bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
+        <div className="space-y-2 text-xs text-slate-300 mb-6 bg-slate-950/80 rounded-xl p-3.5 border border-slate-800/80">
           <div className="flex items-center gap-2 font-medium">
-            <Calendar className="w-3.5 h-3.5 text-[#701121] shrink-0" />
+            <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
             <span className="capitalize">{formatDate(event.startDate)}</span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 font-medium">
-              <Award className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>Certificado por {event.academicHours} horas</span>
             </div>
-            <div className="flex items-center gap-1.5 font-mono text-slate-600">
+            <div className="flex items-center gap-1.5 font-mono text-slate-400">
               <Users className="w-3.5 h-3.5 text-slate-500" />
               <span>
-                <strong className={availableSeats < 10 ? "text-amber-600" : "text-[#701121]"}>
+                <strong className={availableSeats < 10 ? "text-amber-400" : "text-cyan-400"}>
                   {availableSeats}
                 </strong>{" "}
                 / {event.maxCapacity} cupos
@@ -120,10 +120,10 @@ export function EventCard({ event }: EventCardProps) {
       </div>
 
       {/* Card Footer: Price & CTA */}
-      <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
+      <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-4">
         <div>
           <span className="text-[11px] text-slate-500 uppercase tracking-wider block font-medium">Inversión</span>
-          <span className="text-lg font-black text-slate-900 font-mono">
+          <span className="text-lg font-black text-white font-mono">
             {formatCurrency(Number(event.price), event.currency)}
           </span>
         </div>
@@ -132,8 +132,8 @@ export function EventCard({ event }: EventCardProps) {
           href={`/eventos/${event.slug}`}
           className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
             isSoldOut
-              ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-              : "bg-[#701121] hover:bg-[#580b18] text-white shadow-md shadow-rose-950/20 hover:scale-[1.02]"
+              ? "bg-slate-800 text-slate-500 cursor-not-allowed"
+              : "bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold shadow-md shadow-cyan-950/30 hover:scale-[1.02]"
           }`}
         >
           <span>{isSoldOut ? "Ver Detalles" : "Inscribirme"}</span>
