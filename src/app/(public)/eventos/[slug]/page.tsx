@@ -58,7 +58,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
       <div className="mb-8">
         <Link
           href="/#eventos"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#8b1524] transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Volver al catálogo de talleres</span>
@@ -70,10 +70,10 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         <div className="lg:col-span-2 space-y-8">
           <div>
             <div className="flex flex-wrap items-center gap-2.5 mb-4">
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-rose-50 text-[#8b1524] border border-rose-200">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60">
                 {event.eventType === "WORKSHOP" ? "Taller Práctico" : "Conferencia Magistral"}
               </span>
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 inline-flex items-center gap-1.5">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-950/80 text-blue-400 border border-blue-800/60 inline-flex items-center gap-1.5">
                 {event.modality === "VIRTUAL" ? (
                   <>
                     <Globe className="w-3.5 h-3.5" />
@@ -89,51 +89,51 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               <span
                 className={`text-xs font-bold px-3 py-1 rounded-full ${
                   isSoldOut
-                    ? "bg-rose-100 text-rose-800 border border-rose-300"
-                    : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                    ? "bg-rose-950/80 text-rose-400 border border-rose-800/60"
+                    : "bg-emerald-950/80 text-emerald-400 border border-emerald-800/60"
                 }`}
               >
                 {isSoldOut ? "Cupos Agotados" : `${availableSeats} cupos disponibles`}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-4">
               {event.title}
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
               {event.description}
             </p>
           </div>
 
           {/* Quick Info Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-2xl bg-white border border-slate-200/90 shadow-md">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow-md">
             <div className="space-y-1">
-              <span className="text-xs text-slate-500 flex items-center gap-1.5 uppercase font-bold">
-                <Calendar className="w-3.5 h-3.5 text-[#8b1524]" />
+              <span className="text-xs text-slate-400 flex items-center gap-1.5 uppercase font-bold">
+                <Calendar className="w-3.5 h-3.5 text-cyan-400" />
                 Fecha & Hora
               </span>
-              <p className="font-bold text-slate-800 capitalize text-sm">
+              <p className="font-bold text-white capitalize text-sm">
                 {formatDate(event.startDate)}
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs text-slate-500 flex items-center gap-1.5 uppercase font-bold">
-                <Award className="w-3.5 h-3.5 text-amber-600" />
+              <span className="text-xs text-slate-400 flex items-center gap-1.5 uppercase font-bold">
+                <Award className="w-3.5 h-3.5 text-amber-400" />
                 Certificación
               </span>
-              <p className="font-bold text-slate-800 text-sm">
+              <p className="font-bold text-white text-sm">
                 {event.academicHours} horas académicas oficiales
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs text-slate-500 flex items-center gap-1.5 uppercase font-bold">
-                <Users className="w-3.5 h-3.5 text-[#8b1524]" />
+              <span className="text-xs text-slate-400 flex items-center gap-1.5 uppercase font-bold">
+                <Users className="w-3.5 h-3.5 text-cyan-400" />
                 Aforo Máximo
               </span>
-              <p className="font-bold text-slate-800 text-sm">
+              <p className="font-bold text-white text-sm">
                 {event.maxCapacity} participantes en vivo
               </p>
             </div>
@@ -141,14 +141,14 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
           {/* Syllabus Section */}
           {event.syllabus && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 space-y-4 border border-slate-200/90 shadow-md">
-              <div className="flex items-center gap-2 text-[#8b1524] mb-2">
+            <div className="bg-slate-900/80 rounded-2xl p-6 sm:p-8 space-y-4 border border-slate-800 shadow-md">
+              <div className="flex items-center gap-2 text-cyan-400 mb-2">
                 <BookOpen className="w-5 h-5" />
-                <h2 className="text-xl font-black text-slate-900">
+                <h2 className="text-xl font-black text-white">
                   Temario Detallado y Contenido
                 </h2>
               </div>
-              <div className="text-slate-700 text-sm whitespace-pre-line leading-relaxed font-sans">
+              <div className="text-slate-300 text-sm whitespace-pre-line leading-relaxed font-sans">
                 {event.syllabus}
               </div>
             </div>
@@ -156,14 +156,14 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
           {/* Requirements Section */}
           {event.requirements && (
-            <div className="bg-amber-50/80 rounded-2xl p-6 space-y-3 border border-amber-200 shadow-sm">
-              <div className="flex items-center gap-2 text-amber-700">
+            <div className="bg-amber-950/30 rounded-2xl p-6 space-y-3 border border-amber-800/40 shadow-sm">
+              <div className="flex items-center gap-2 text-amber-400">
                 <AlertTriangle className="w-5 h-5" />
-                <h3 className="text-lg font-bold text-amber-900">
+                <h3 className="text-lg font-bold text-amber-300">
                   Prerrequisitos y Software Recomendado
                 </h3>
               </div>
-              <p className="text-sm text-amber-900/90 leading-relaxed font-medium">
+              <p className="text-sm text-slate-300 leading-relaxed font-medium">
                 {event.requirements}
               </p>
             </div>
@@ -171,9 +171,9 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
           {/* Resources & Repos */}
           {event.resources.length > 0 && (
-            <div className="bg-white rounded-2xl p-6 space-y-4 border border-slate-200/90 shadow-md">
-              <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                <Code2 className="w-5 h-5 text-[#8b1524]" />
+            <div className="bg-slate-900/80 rounded-2xl p-6 space-y-4 border border-slate-800 shadow-md">
+              <h3 className="text-lg font-black text-white flex items-center gap-2">
+                <Code2 className="w-5 h-5 text-cyan-400" />
                 <span>Recursos y Material Preparatorio</span>
               </h3>
               <div className="space-y-2">
@@ -183,12 +183,12 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                     href={res.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#8b1524] hover:bg-rose-50/30 transition-all text-sm group"
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-900 transition-all text-sm group"
                   >
-                    <span className="text-slate-800 font-semibold group-hover:text-[#8b1524] transition-colors">
+                    <span className="text-slate-200 font-semibold group-hover:text-cyan-400 transition-colors">
                       {res.title}
                     </span>
-                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#8b1524] transition-colors" />
+                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors" />
                   </a>
                 ))}
               </div>
@@ -196,7 +196,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           )}
         </div>
 
-        {/* Right Column: Registration Form (Sticky on desktop) */}
+        {/* Right Column: Registration Form */}
         <div className="lg:col-span-1">
           <div className="sticky top-24">
             <RegistrationForm

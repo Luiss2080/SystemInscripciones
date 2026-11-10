@@ -129,15 +129,15 @@ export function Footer() {
           </ul>
         </div>
 
-        {/* Column 4: CONTACTO (Red bullet icons matching Screenshot 4) */}
+        {/* Column 4: CONTACTO */}
         <div className="lg:col-span-3 space-y-4">
           <h4 className="font-extrabold text-white text-sm uppercase tracking-wider">
             Contacto
           </h4>
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
-                <MapPin className="w-3 h-3 text-[#f43f5e]" />
+              <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5">
+                <MapPin className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Ubicación</strong>
@@ -146,8 +146,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
-                <Mail className="w-3 h-3 text-[#f43f5e]" />
+              <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5">
+                <Mail className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Email Oficial</strong>
@@ -156,8 +156,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#701121]/30 border border-[#701121]/50 flex items-center justify-center shrink-0 mt-0.5">
-                <Phone className="w-3 h-3 text-[#f43f5e]" />
+              <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5">
+                <Phone className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Teléfono / WhatsApp</strong>
