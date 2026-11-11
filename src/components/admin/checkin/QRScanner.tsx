@@ -22,7 +22,11 @@ interface ScanHistoryEntry {
   time: string;
 }
 
-export function QRScanner() {
+interface QRScannerProps {
+  initialHistory?: ScanHistoryEntry[];
+}
+
+export function QRScanner({ initialHistory = [] }: QRScannerProps) {
   const [manualCode, setManualCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -36,7 +40,7 @@ export function QRScanner() {
     ticketCode?: string;
   } | null>(null);
 
-  const [history, setHistory] = useState<ScanHistoryEntry[]>([]);
+  const [history, setHistory] = useState<ScanHistoryEntry[]>(initialHistory);
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
   const handleProcessCode = async (code: string) => {
@@ -126,10 +130,10 @@ export function QRScanner() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       {/* Scanner & Manual Input Column */}
-      <div className="lg:col-span-7 space-y-5">
-        <div className="rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 p-6 sm:p-7 shadow-2xl backdrop-blur-xl">
+      <div className="lg:col-span-7 flex flex-col gap-5">
+        <div className="flex-1 rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 p-6 sm:p-7 shadow-2xl backdrop-blur-xl flex flex-col justify-between">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center shrink-0">
@@ -281,8 +285,8 @@ export function QRScanner() {
       </div>
 
       {/* History Log & Quick Guide Column */}
-      <div className="lg:col-span-5 space-y-5">
-        <div className="rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 p-6 shadow-2xl backdrop-blur-xl space-y-4">
+      <div className="lg:col-span-5 flex flex-col">
+        <div className="h-full rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 p-6 shadow-2xl backdrop-blur-xl flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-extrabold text-white flex items-center gap-2">
               <Clock className="w-4 h-4 text-cyan-400" />

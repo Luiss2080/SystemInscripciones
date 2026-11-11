@@ -1,5 +1,6 @@
 import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
+import { getRecentCheckinLogs } from "@/services/admin/dashboard.service";
 import { QRScanner } from "@/components/admin/checkin/QRScanner";
 import { QrCode, ShieldCheck } from "lucide-react";
 
@@ -8,6 +9,8 @@ export default async function AdminCheckinPage() {
   if (!session) {
     redirect("/admin/login");
   }
+
+  const initialHistory = await getRecentCheckinLogs(6);
 
   return (
     <div className="space-y-6">
@@ -30,18 +33,18 @@ export default async function AdminCheckinPage() {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              Valida códigos QR mediante cámara o ingreso manual con verificación criptográfica anti-duplicado.
+              Valida códigos QR mediante cámara o ingreso manual con registro directo en PostgreSQL 18.
             </p>
           </div>
 
           <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-300 shrink-0 self-start md:self-auto">
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span>SHA-256 Anti-Reuso Activo</span>
+            <span>{initialHistory.length} últimos ingresos en BD</span>
           </div>
         </div>
       </div>
 
-      <QRScanner />
+      <QRScanner initialHistory={initialHistory} />
     </div>
   );
 }

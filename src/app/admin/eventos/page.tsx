@@ -26,7 +26,11 @@ export default async function AdminEventsPage() {
     orderBy: { startDate: "asc" },
     include: {
       _count: {
-        select: { registrations: true },
+        select: {
+          registrations: {
+            where: { status: { in: ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"] } },
+          },
+        },
       },
     },
   });
@@ -99,7 +103,7 @@ export default async function AdminEventsPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {events.map((event, idx) => {
             const media = getWorkshopMedia(event.slug, idx);
             const available = Math.max(0, event.maxCapacity - event._count.registrations);
@@ -115,7 +119,7 @@ export default async function AdminEventsPage() {
             return (
               <div
                 key={event.id}
-                className="group relative bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl overflow-hidden flex flex-col shadow-xl backdrop-blur-md hover:border-cyan-500/50 transition-all"
+                className="group h-full relative bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl overflow-hidden flex flex-col shadow-xl backdrop-blur-md hover:border-cyan-500/50 transition-all"
               >
                 {/* Cover Banner + Floating Top Icon */}
                 <div className="relative h-44 w-full bg-slate-950">
@@ -158,7 +162,7 @@ export default async function AdminEventsPage() {
                     <span className="inline-block px-2.5 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-800/50 text-[9px] font-mono font-bold uppercase tracking-widest text-cyan-400">
                       {media.categoryLabel}
                     </span>
-                    <h2 className="text-base font-extrabold text-white leading-snug line-clamp-2 group-hover:text-cyan-300 transition-colors">
+                    <h2 className="text-base font-extrabold text-white leading-snug line-clamp-2 min-h-[44px] flex items-center justify-center group-hover:text-cyan-300 transition-colors">
                       {event.title}
                     </h2>
                   </div>
