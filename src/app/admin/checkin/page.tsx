@@ -1,6 +1,6 @@
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
-import { QRScanner } from "@/components/QRScanner";
+import { QRScanner } from "@/components/admin/checkin/QRScanner";
 import { QrCode, ShieldCheck } from "lucide-react";
 
 export default async function AdminCheckinPage() {

@@ -1,7 +1,7 @@
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { getWorkshopMedia } from "@/lib/workshop-media";
+import { prisma } from "@/lib/db/prisma";
+import { getWorkshopMedia } from "@/lib/utils/workshop-media";
 import {
   Calendar,
   Users,

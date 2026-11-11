@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { loginAdmin } from "@/actions/auth";
+import { loginAdmin } from "@/actions/auth/session";
 import {
   Lock,
   Mail,
@@ -21,7 +21,7 @@ import {
   Award,
   Calendar,
 } from "lucide-react";
-import FondoTech from "@/components/public/FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 
 export default function AdminLoginPage() {
   const router = useRouter();

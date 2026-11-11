@@ -1,7 +1,7 @@
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { AttendeesTable } from "@/components/AttendeesTable";
+import { prisma } from "@/lib/db/prisma";
+import { AttendeesTable } from "@/components/admin/attendees/AttendeesTable";
 import { Users } from "lucide-react";
 
 export default async function AdminAttendeesPage() {

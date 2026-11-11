@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createNewEvent } from "@/actions/admin";
+import { createNewEvent } from "@/actions/admin/events";
 import {
   PlusCircle,
   Loader2,

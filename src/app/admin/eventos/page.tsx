@@ -1,7 +1,7 @@
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { getWorkshopMedia } from "@/lib/workshop-media";
+import { prisma } from "@/lib/db/prisma";
+import { getWorkshopMedia } from "@/lib/utils/workshop-media";
 import Link from "next/link";
 import {
   PlusCircle,
@@ -13,7 +13,7 @@ import {
   Layers,
   Award,
 } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/format";
 
 export default async function AdminEventsPage() {
   const session = await getAdminSession();
