@@ -321,21 +321,21 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
   return (
     <section
       id="eventos"
-      className="py-24 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
+      className="py-16 sm:py-20 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
     >
       <FondoTech id="talleres" />
 
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 relative z-10 text-white">
         {/* Badge Superior */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-3">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 shadow-sm shadow-cyan-950">
             NUESTROS SERVICIOS & TALLERES
           </span>
         </div>
 
         {/* Título y Subtítulo estilo Hero */}
-        <div className="text-center mb-10 max-w-3xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 leading-tight">
+        <div className="text-center mb-7 max-w-3xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
             Soluciones que{" "}
             <span className="relative inline-block px-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               impulsan tu futuro
@@ -361,7 +361,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         </div>
 
         {/* Categorías (Tabs en píldoras con active Cyan) */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-14">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-10">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
