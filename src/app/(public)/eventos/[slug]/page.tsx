@@ -72,6 +72,31 @@ export default async function EventDetailPage({ params }: EventPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Left Column: Event Details & Syllabus */}
         <div className="lg:col-span-2 space-y-8">
+          {/* Accompanied Cover Banner Image */}
+          <div className="relative h-64 sm:h-80 w-full rounded-3xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={
+                event.slug.includes("docker") || event.slug.includes("microservicios")
+                  ? "/images/card-docker-k8s.jpg"
+                  : event.slug.includes("owasp") || event.slug.includes("seguridad")
+                  ? "/images/card-owasp-security.jpg"
+                  : event.slug.includes("ia") || event.slug.includes("agentes")
+                  ? "/images/card-ai-agents.jpg"
+                  : "/images/card-clean-architecture.jpg"
+              }
+              alt={event.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+            <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/90 backdrop-blur-md border border-cyan-500/50 text-[11px] font-mono font-bold text-cyan-300 shadow-lg">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]" />
+                <span>CAPACITACIÓN TÉCNICA OFICIAL</span>
+              </span>
+            </div>
+          </div>
+
           <div>
             <div className="flex flex-wrap items-center gap-2.5 mb-4">
               <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60">
