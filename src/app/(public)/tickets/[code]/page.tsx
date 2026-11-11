@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 import { notFound } from "next/navigation";
-import { TicketView } from "@/components/TicketView";
-import FondoTech from "@/components/public/FondoTech";
+import { TicketView } from "@/components/public/credentials/TicketView";
+import FondoTech from "@/components/shared/FondoTech";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 

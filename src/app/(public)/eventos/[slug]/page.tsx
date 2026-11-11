@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 import { notFound } from "next/navigation";
-import { RegistrationForm } from "@/components/RegistrationForm";
-import { formatDate } from "@/lib/utils";
+import { RegistrationForm } from "@/components/public/events/RegistrationForm";
+import { formatDate } from "@/lib/utils/format";
 import {
   Calendar,
   Users,
@@ -15,7 +15,7 @@ import {
   MapPin,
 } from "lucide-react";
 import Link from "next/link";
-import FondoTech from "@/components/public/FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 
 interface EventPageProps {
   params: Promise<{

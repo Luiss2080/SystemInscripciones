@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import FondoTech from "@/components/public/FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   Mail,
   Phone,

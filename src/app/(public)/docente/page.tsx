@@ -1,6 +1,6 @@
 import Link from "next/link";
-import FondoTech from "@/components/public/FondoTech";
-import { prisma } from "@/lib/prisma";
+import FondoTech from "@/components/shared/FondoTech";
+import { prisma } from "@/lib/db/prisma";
 import {
   Terminal,
   Award,
