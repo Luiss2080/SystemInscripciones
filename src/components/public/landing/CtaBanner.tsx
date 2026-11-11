@@ -1,5 +1,5 @@
 import Link from "next/link";
-import FondoTech from "./FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   GraduationCap,
   ShieldCheck,

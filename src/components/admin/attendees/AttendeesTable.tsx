@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { manualCheckin, approvePayment } from "@/actions/admin";
+import { manualCheckin } from "@/actions/admin/checkin";
+import { approvePayment } from "@/actions/admin/registrations";
 import {
   Search,
   Download,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import FondoTech from "./FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import ServiciosCarousel, { ServicioItem } from "./ServiciosCarousel";
 import {
   Terminal,

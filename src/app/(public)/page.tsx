@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import ServiciosGrid from "@/components/public/ServiciosGrid";
-import { Preloader } from "@/components/public/Preloader";
-import { HeroModern } from "@/components/public/HeroModern";
-import FondoTech from "@/components/public/FondoTech";
-import MetodologiaSection from "@/components/public/MetodologiaSection";
-import TechStackSection from "@/components/public/TechStackSection";
-import FaqSection from "@/components/public/FaqSection";
-import CtaBanner from "@/components/public/CtaBanner";
+import { prisma } from "@/lib/db/prisma";
+import ServiciosGrid from "@/components/public/landing/ServiciosGrid";
+import { Preloader } from "@/components/shared/Preloader";
+import { HeroModern } from "@/components/public/landing/HeroModern";
+import FondoTech from "@/components/shared/FondoTech";
+import MetodologiaSection from "@/components/public/landing/MetodologiaSection";
+import TechStackSection from "@/components/public/landing/TechStackSection";
+import FaqSection from "@/components/public/landing/FaqSection";
+import CtaBanner from "@/components/public/landing/CtaBanner";
 import {
   Terminal,
   Sparkles,

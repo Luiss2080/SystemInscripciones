@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { EventCard } from "@/components/EventCard";
+import { EventCard } from "./EventCard";
 import { Search, Cpu } from "lucide-react";
 
 interface EventCatalogProps {

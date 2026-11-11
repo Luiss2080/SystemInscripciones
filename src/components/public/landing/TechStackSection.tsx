@@ -1,4 +1,4 @@
-import FondoTech from "./FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   Cloud,
   Server,

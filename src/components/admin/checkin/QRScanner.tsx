@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { validateAndCheckinTicket } from "@/actions/admin";
+import { validateAndCheckinTicket } from "@/actions/admin/checkin";
 import { Html5Qrcode } from "html5-qrcode";
 import {
   QrCode,

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import FondoTech from "./FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   HelpCircle,
   ChevronDown,

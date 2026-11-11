@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Calendar, Users, Award, ArrowRight, Globe, Zap, MapPin } from "lucide-react";
-import { formatDate, formatCurrency } from "@/lib/utils";
+import { formatDate, formatCurrency } from "@/lib/utils/format";
 
 interface EventCardProps {
   event: {

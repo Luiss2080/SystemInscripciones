@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerAttendee } from "@/actions/registration";
+import { registerAttendee } from "@/actions/public/registration";
 import { CheckCircle2, AlertCircle, Loader2, Ticket, ArrowRight, User, Mail, Phone, Briefcase, Building, Info } from "lucide-react";
 import confetti from "canvas-confetti";
 

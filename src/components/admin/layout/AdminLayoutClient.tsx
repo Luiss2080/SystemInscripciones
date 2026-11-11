@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { logoutAdmin } from "@/actions/auth";
-import FondoTech from "@/components/public/FondoTech";
+import { logoutAdmin } from "@/actions/auth/session";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   LayoutDashboard,
   QrCode,

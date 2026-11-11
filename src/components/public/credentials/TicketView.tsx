@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   Check,
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/format";
 
 interface TicketViewProps {
   ticket: {

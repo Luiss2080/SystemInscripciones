@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { issueCertificate } from "@/actions/admin";
+import { issueCertificate } from "@/actions/admin/registrations";
 import {
   Award,
   Loader2,
