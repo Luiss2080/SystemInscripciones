@@ -6,7 +6,6 @@ import { HeroModern } from "@/components/public/HeroModern";
 import FondoTech from "@/components/public/FondoTech";
 import MetodologiaSection from "@/components/public/MetodologiaSection";
 import TechStackSection from "@/components/public/TechStackSection";
-import StatsSection from "@/components/public/StatsSection";
 import FaqSection from "@/components/public/FaqSection";
 import CtaBanner from "@/components/public/CtaBanner";
 import {
@@ -53,9 +52,6 @@ export default async function HomePage() {
 
       {/* Modern Hero section with academic conference image and compact 1-by-1 logo carousel */}
       <HeroModern />
-
-      {/* Impact Stats Metrics Banner */}
-      <StatsSection />
 
       {/* Talleres & Servicios Section (Dynamic categories, carousel cards, and official Cyber Cyan palette) */}
       <ServiciosGrid initialEvents={serializedEvents} />
