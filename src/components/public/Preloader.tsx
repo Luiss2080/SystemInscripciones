@@ -147,14 +147,14 @@ export function Preloader() {
         </div>
 
         {/* Terminal Box */}
-        <div className="w-full bg-[#090d16] border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-emerald-400 shadow-2xl space-y-2 h-36 overflow-hidden flex flex-col justify-end">
+        <div className="w-full bg-[#090d16] border border-slate-800 rounded-2xl p-4 sm:p-5 text-left font-mono text-[11px] sm:text-xs text-cyan-400 shadow-2xl space-y-2 h-36 overflow-hidden flex flex-col justify-end">
           {logs.map((log, idx) => (
             <div key={idx} className="flex items-start gap-2 leading-tight">
-              <span className="text-emerald-400 shrink-0">&gt;</span>
+              <span className="text-cyan-400 shrink-0">&gt;</span>
               <span className="text-slate-200">{log}</span>
             </div>
           ))}
-          <div className="flex items-center gap-2 text-emerald-400">
+          <div className="flex items-center gap-2 text-cyan-400">
             <span className="animate-pulse">_</span>
           </div>
         </div>

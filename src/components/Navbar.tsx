@@ -8,7 +8,7 @@ import {
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md shadow-lg shadow-black/20">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-[#030712]/90 backdrop-blur-md shadow-lg shadow-black/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-4">
         {/* Brand Logo & Name */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
