@@ -133,9 +133,9 @@ export function Footer() {
 
         {/* Column 4: CONTACTO */}
         <div className="lg:col-span-3 space-y-4">
-          <h4 className="font-extrabold text-white text-sm uppercase tracking-wider">
-            Contacto
-          </h4>
+          <Link href="/contacto" className="font-extrabold text-white text-sm uppercase tracking-wider hover:text-cyan-400 block transition-colors">
+            Contacto & Sedes
+          </Link>
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2.5">
               <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5">
