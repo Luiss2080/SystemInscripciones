@@ -159,7 +159,7 @@ export function Navbar() {
           </div>
 
           <Link
-            href="/#docente"
+            href="/docente"
             className="flex items-center gap-1 px-3.5 py-1.5 rounded-full hover:bg-slate-800 hover:text-cyan-400 transition-all"
           >
             <span>Docente</span>
@@ -173,7 +173,7 @@ export function Navbar() {
           </Link>
 
           <Link
-            href="#contacto"
+            href="/contacto"
             className="flex items-center gap-1 px-3.5 py-1.5 rounded-full hover:bg-slate-800 hover:text-cyan-400 transition-all"
           >
             <span>Contacto</span>
