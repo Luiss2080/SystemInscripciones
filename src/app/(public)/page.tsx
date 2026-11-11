@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db/prisma";
+import { getPublicLandingData } from "@/services/public/catalog.service";
 import ServiciosGrid from "@/components/public/landing/ServiciosGrid";
 import { Preloader } from "@/components/shared/Preloader";
 import { HeroModern } from "@/components/public/landing/HeroModern";
@@ -18,47 +18,21 @@ import {
   Check,
 } from "lucide-react";
 
-export default async function HomePage() {
-  const events = await prisma.event.findMany({
-    where: {
-      deletedAt: null,
-    },
-    orderBy: {
-      startDate: "asc",
-    },
-    include: {
-      _count: {
-        select: {
-          registrations: {
-            where: {
-              status: { in: ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"] },
-            },
-          },
-        },
-      },
-    },
-  });
+export const dynamic = "force-dynamic";
 
-  const serializedEvents = events.map((event) => ({
-    ...event,
-    price: Number(event.price),
-    startDate: event.startDate.toISOString(),
-    endDate: event.endDate ? event.endDate.toISOString() : null,
-    createdAt: event.createdAt.toISOString(),
-    updatedAt: event.updatedAt.toISOString(),
-    deletedAt: event.deletedAt ? event.deletedAt.toISOString() : null,
-  }));
+export default async function HomePage() {
+  const { events, stats } = await getPublicLandingData();
 
   return (
     <div className="relative bg-[#030712] text-slate-100 overflow-hidden">
       {/* Preloader with circular progress and terminal logs */}
       <Preloader />
 
-      {/* Modern Hero section with academic conference image and compact 1-by-1 logo carousel */}
-      <HeroModern />
+      {/* Modern Hero section with academic conference image and live PostgreSQL telemetry */}
+      <HeroModern events={events} stats={stats} />
 
       {/* Talleres & Servicios Section (Dynamic categories, carousel cards, and official Cyber Cyan palette) */}
-      <ServiciosGrid initialEvents={serializedEvents} />
+      <ServiciosGrid initialEvents={events} />
 
       {/* Metodología & Ruta de Aprendizaje 4 Steps */}
       <MetodologiaSection />
@@ -94,7 +68,7 @@ export default async function HomePage() {
           {/* Two-Column Executive Profile & Showcase Card Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Left Column: Detailed Credentials & Experience */}
-            <div className="lg:col-span-7 bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-7 sm:p-10 shadow-2xl flex flex-col justify-between hover:border-cyan-500/40 transition-all duration-300 relative overflow-hidden">
+            <div className="lg:col-span-7 h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-7 sm:p-10 shadow-2xl flex flex-col justify-between hover:border-cyan-500/40 transition-all duration-300 relative overflow-hidden">
               <div className="absolute -top-20 -left-20 w-72 h-72 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="space-y-6 relative z-10">
@@ -105,7 +79,7 @@ export default async function HomePage() {
 
                 <div>
                   <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    Ing. Alex Martínez
+                    {stats.leadSpeakerName}
                   </h3>
                   <p className="text-cyan-400 font-mono text-xs sm:text-sm font-bold mt-1.5">
                     Systems Engineer • Cloud Solutions Architect • Cybersecurity Consultant
@@ -113,43 +87,49 @@ export default async function HomePage() {
                 </div>
 
                 <p className="text-sm text-slate-300 leading-relaxed font-medium">
-                  Con más de 10 años de experiencia diseñando arquitecturas distribuidas de alta disponibilidad, migrando sistemas monolíticos a microservicios elásticos con Docker y Kubernetes, y automatizando pipelines CI/CD para entornos financieros y corporativos.
+                  Liderando arquitecturas distribuidas de alta disponibilidad, migración hacia microservicios elásticos con Docker y Kubernetes, y automatización CI/CD para entornos productivos de misión crítica.
                 </p>
 
                 {/* 3 Verified Credentials Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
-                  <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
-                      <Cloud className="w-4 h-4 text-cyan-400" />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 items-stretch">
+                  <div className="h-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors flex flex-col justify-between">
+                    <div>
+                      <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
+                        <Cloud className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      <h4 className="text-xs font-black text-white leading-snug">
+                        AWS Architect Pro
+                      </h4>
                     </div>
-                    <h4 className="text-xs font-black text-white leading-snug">
-                      AWS Architect Pro
-                    </h4>
-                    <p className="text-[11px] text-slate-400 mt-1 font-medium">
+                    <p className="text-[11px] text-slate-400 mt-1.5 font-medium">
                       Infraestructura multi-región y Cloud Native
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
-                      <Award className="w-4 h-4 text-cyan-400" />
+                  <div className="h-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors flex flex-col justify-between">
+                    <div>
+                      <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
+                        <Award className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      <h4 className="text-xs font-black text-white leading-snug">
+                        Kubernetes CKA
+                      </h4>
                     </div>
-                    <h4 className="text-xs font-black text-white leading-snug">
-                      Kubernetes CKA
-                    </h4>
-                    <p className="text-[11px] text-slate-400 mt-1 font-medium">
+                    <p className="text-[11px] text-slate-400 mt-1.5 font-medium">
                       Orquestación elástica y Zero-Downtime
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
-                      <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                  <div className="h-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 transition-colors flex flex-col justify-between">
+                    <div>
+                      <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center mb-2.5">
+                        <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      <h4 className="text-xs font-black text-white leading-snug">
+                        OWASP Practitioner
+                      </h4>
                     </div>
-                    <h4 className="text-xs font-black text-white leading-snug">
-                      OWASP Practitioner
-                    </h4>
-                    <p className="text-[11px] text-slate-400 mt-1 font-medium">
+                    <p className="text-[11px] text-slate-400 mt-1.5 font-medium">
                       Seguridad ofensiva y blindaje de APIs
                     </p>
                   </div>
@@ -209,7 +189,7 @@ export default async function HomePage() {
             </div>
 
             {/* Right Column: Visual Card matching Modern Workshop Card System */}
-            <div className="lg:col-span-5 bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group relative">
+            <div className="lg:col-span-5 h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group relative">
               <div>
                 {/* Top Photo Banner with Floating Icon OUTSIDE overflow-hidden (ENCIMA DE TODO) */}
                 <div className="relative mb-8">
@@ -217,7 +197,7 @@ export default async function HomePage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/images/hero-engineering.jpg"
-                      alt="Ing. Alex Martínez - Facilitador Principal"
+                      alt={`${stats.leadSpeakerName} - Facilitador Principal`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
@@ -233,7 +213,7 @@ export default async function HomePage() {
                     <div className="absolute top-3 right-3 z-10">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md border border-slate-700 text-slate-200 text-[10px] font-mono font-bold">
                         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]" />
-                        <span>+500 ALUMNOS</span>
+                        <span>{stats.totalRegistrations} INSCRITOS</span>
                       </span>
                     </div>
                   </div>
@@ -250,37 +230,37 @@ export default async function HomePage() {
                     SESIONES 100% PRÁCTICAS
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-white">
-                    Ing. Alex Martínez
+                    {stats.leadSpeakerName}
                   </h3>
                   <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed font-medium">
-                    Aprende creando arquitecturas reales que escalan sin fallos en entornos productivos.
+                    {stats.leadSpeakerEmail} • Arquitecturas reales para entornos productivos.
                   </p>
                 </div>
 
-                {/* 3 Mini Metric Blocks */}
-                <div className="grid grid-cols-3 gap-2 my-6">
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center">
+                {/* 3 Live PostgreSQL Metric Blocks */}
+                <div className="grid grid-cols-3 gap-2 my-6 items-stretch">
+                  <div className="h-full bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center flex flex-col justify-center">
                     <span className="text-[9px] font-mono font-bold text-slate-500 uppercase block">
-                      EXPERIENCIA
+                      PROGRAMAS
                     </span>
-                    <span className="text-xs font-black text-cyan-400 block mt-0.5">
-                      10+ Años
+                    <span className="text-xs font-black text-cyan-400 block mt-0.5 tabular-nums">
+                      {stats.totalEvents} Activos
                     </span>
                   </div>
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center">
+                  <div className="h-full bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center flex flex-col justify-center">
                     <span className="text-[9px] font-mono font-bold text-slate-500 uppercase block">
-                      CALIFICACIÓN
+                      CARGA LIVE
                     </span>
-                    <span className="text-xs font-black text-cyan-400 block mt-0.5">
-                      4.9 / 5.0
+                    <span className="text-xs font-black text-cyan-400 block mt-0.5 tabular-nums">
+                      {stats.totalAcademicHours}h Pract.
                     </span>
                   </div>
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center">
+                  <div className="h-full bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center flex flex-col justify-center">
                     <span className="text-[9px] font-mono font-bold text-slate-500 uppercase block">
-                      FORMATO
+                      ACREDITADOS
                     </span>
-                    <span className="text-xs font-black text-cyan-400 block mt-0.5">
-                      Hands-On
+                    <span className="text-xs font-black text-cyan-400 block mt-0.5 tabular-nums">
+                      {stats.totalCertificates} Certs.
                     </span>
                   </div>
                 </div>
@@ -289,7 +269,7 @@ export default async function HomePage() {
               {/* Action Buttons Footer */}
               <div className="pt-4 border-t border-slate-800/80 flex items-center justify-center gap-2.5">
                 <a
-                  href="https://wa.me/59171234567?text=Hola%20Ing.%20Alex%20Martínez,%20quisiera%20consultar%20sobre%20sus%20talleres."
+                  href={`https://wa.me/59171234567?text=${encodeURIComponent(`Hola ${stats.leadSpeakerName}, quisiera consultar sobre sus talleres.`)}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-500/60 text-slate-200 hover:text-white font-bold text-[11px] uppercase tracking-wider transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
