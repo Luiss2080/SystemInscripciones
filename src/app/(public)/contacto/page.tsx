@@ -74,7 +74,7 @@ export default function ContactoPage() {
           {/* Left Column: Direct Channels Side-by-Side + Auditorio Banner Card */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-4">
             {/* Compact Dual Channel Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div id="canales" className="scroll-mt-24 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* WhatsApp Mini Card */}
               <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 shadow-xl backdrop-blur-md hover:border-cyan-500/40 transition-colors flex flex-col justify-between">
                 <div>
@@ -119,7 +119,10 @@ export default function ContactoPage() {
             </div>
 
             {/* Sedes & Horarios Card Accompanied by Auditorium Photo */}
-            <div className="flex-1 p-5 rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 shadow-xl backdrop-blur-md flex flex-col justify-between space-y-4">
+            <div
+              id="sedes"
+              className="scroll-mt-24 flex-1 p-5 rounded-3xl bg-[#0b0e14]/95 border border-slate-800/80 shadow-xl backdrop-blur-md flex flex-col justify-between space-y-4"
+            >
               <div className="relative h-40 w-full rounded-2xl overflow-hidden border border-slate-800 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -166,7 +169,7 @@ export default function ContactoPage() {
           </div>
 
           {/* Right Column: Compact & Complete Interactive Form */}
-          <div className="lg:col-span-7 flex">
+          <div id="formulario" className="scroll-mt-24 lg:col-span-7 flex">
             <div className="w-full bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-5">

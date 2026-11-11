@@ -277,7 +277,7 @@ export default async function DocentePage() {
 
         {/* Section: Upcoming Workshops (ALL WITH ACCOMPANIED IMAGES) */}
         {events.length > 0 && (
-          <div className="space-y-6">
+          <div id="talleres-docente" className="scroll-mt-24 space-y-6">
             <div className="text-center max-w-2xl mx-auto">
               <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-cyan-400 block mb-2">
                 CATÁLOGO ACTIVO
