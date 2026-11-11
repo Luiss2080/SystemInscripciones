@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { EventCard } from "./EventCard";
+import type { PublicEventDTO } from "@/types/events";
 import { Search, Cpu } from "lucide-react";
 
 interface EventCatalogProps {
-  initialEvents: any[];
+  initialEvents: PublicEventDTO[];
 }
 
 export function EventCatalog({ initialEvents }: EventCatalogProps) {

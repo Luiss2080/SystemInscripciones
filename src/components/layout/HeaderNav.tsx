@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import type { PublicNavEventDTO } from "@/types/events";
 import {
   Terminal,
   ChevronDown,
@@ -41,39 +42,44 @@ interface NavMenuConfig {
   items: DropdownItem[];
 }
 
-const NAV_MENUS: NavMenuConfig[] = [
-  {
-    id: "talleres",
-    label: "Talleres",
-    href: "/#eventos",
-    items: [
-      {
-        title: "Todos los Talleres",
-        description: "Agenda abierta 2026.",
-        href: "/?cat=todos#eventos",
-        icon: LayoutGrid,
-        category: "todos",
-      },
-      {
-        title: "Docker & K8s",
-        description: "Microservicios en cloud.",
-        href: "/eventos/taller-microservicios-docker-kubernetes",
-        icon: Cloud,
-      },
-      {
-        title: "Seguridad OWASP",
-        description: "Blindaje de APIs Node.js.",
-        href: "/eventos/masterclass-seguridad-apis-nodejs-owasp",
-        icon: ShieldCheck,
-      },
-      {
-        title: "Agentes IA",
-        description: "Flujos autónomos MCP.",
-        href: "/eventos/conferencia-agentes-ia-ingenieria-software",
-        icon: Cpu,
-      },
-    ],
-  },
+function getIconForSlug(slug: string): typeof Cloud {
+  const s = slug.toLowerCase();
+  if (s.includes("owasp") || s.includes("seguridad")) return ShieldCheck;
+  if (s.includes("ia") || s.includes("agentes")) return Cpu;
+  if (s.includes("docker") || s.includes("k8s") || s.includes("cloud")) return Cloud;
+  return Terminal;
+}
+
+function buildNavMenus(navEvents: PublicNavEventDTO[]): NavMenuConfig[] {
+  const dynamicWorkshopItems: DropdownItem[] =
+    navEvents.length > 0
+      ? navEvents.map((ev) => {
+          const freeSeats = Math.max(0, ev.maxCapacity - ev.registrationsCount);
+          return {
+            title: ev.title.length > 26 ? `${ev.title.slice(0, 26).trim()}…` : ev.title,
+            description: `${ev.academicHours}h • ${freeSeats}/${ev.maxCapacity} cupos`,
+            href: `/eventos/${ev.slug}`,
+            icon: getIconForSlug(ev.slug),
+          };
+        })
+      : [];
+
+  return [
+    {
+      id: "talleres",
+      label: "Talleres",
+      href: "/#eventos",
+      items: [
+        {
+          title: "Todos los Talleres",
+          description: "Catálogo completo en vivo.",
+          href: "/?cat=todos#eventos",
+          icon: LayoutGrid,
+          category: "todos",
+        },
+        ...dynamicWorkshopItems,
+      ],
+    },
   {
     id: "temarios",
     label: "Temarios",
@@ -186,7 +192,8 @@ const NAV_MENUS: NavMenuConfig[] = [
       },
     ],
   },
-];
+  ];
+}
 
 function DropdownPanel({
   items,
@@ -238,9 +245,10 @@ function DropdownPanel({
   );
 }
 
-export function HeaderNav() {
+export function HeaderNav({ navEvents = [] }: { navEvents?: PublicNavEventDTO[] }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const navMenus = buildNavMenus(navEvents);
 
   const handleSelectCategory = (catId: string) => {
     setOpenMenuId(null);
@@ -288,7 +296,7 @@ export function HeaderNav() {
 
         {/* Center Navigation Pills (Desktop) */}
         <nav className="hidden lg:flex items-center gap-1 bg-slate-900/90 p-1.5 rounded-full border border-slate-800 text-xs font-semibold tracking-wider text-slate-300 relative">
-          {NAV_MENUS.map((menu) => {
+          {navMenus.map((menu) => {
             const isOpen = openMenuId === menu.id;
             return (
               <div
@@ -356,7 +364,7 @@ export function HeaderNav() {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-800 bg-[#030712]/98 backdrop-blur-2xl px-4 py-4">
+        <div className="lg:hidden border-t border-slate-800 bg-[#030712]/95 backdrop-blur-2xl px-4 py-4">
           <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-300">
             <Link
               href="/#eventos"

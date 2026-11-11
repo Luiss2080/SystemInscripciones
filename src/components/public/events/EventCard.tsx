@@ -13,7 +13,7 @@ interface EventCardProps {
     locationOrUrl: string | null;
     startDate: Date | string;
     maxCapacity: number;
-    price: number | string | any;
+    price: number | string;
     currency: string;
     academicHours: number;
     status: string;
