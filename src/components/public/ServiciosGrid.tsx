@@ -28,7 +28,54 @@ export const CATEGORIES = [
 export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps) {
   const [activeCategory, setActiveCategory] = useState<string>("todos");
 
-  // Map real database events if present, plus rich technical items to fill each category
+  // Map real database events if present, each with its own distinct non-repeating image
+  const mappedDbEvents: ServicioItem[] = initialEvents.map((ev, index) => {
+    let itemImage = "/images/card-clean-architecture.jpg";
+    let subBadge = "CAPACITACIÓN TÉCNICA";
+    let IconComponent = <Terminal className="w-6 h-6 text-slate-950" />;
+    let checkpoints = ["Lab en Vivo", "Código Fuente", "Certificado QR"];
+
+    if (ev.slug.includes("docker") || ev.slug.includes("microservicios") || ev.slug.includes("k8s")) {
+      itemImage = "/images/card-docker-k8s.jpg";
+      subBadge = "MICROSERVICIOS & KUBERNETES";
+      IconComponent = <Cloud className="w-6 h-6 text-slate-950" />;
+      checkpoints = ["Docker & K8s", "Multi-Stage Labs", "Certificado QR"];
+    } else if (ev.slug.includes("owasp") || ev.slug.includes("seguridad")) {
+      itemImage = "/images/card-owasp-security.jpg";
+      subBadge = "SEGURIDAD OFENSIVA & OWASP";
+      IconComponent = <ShieldCheck className="w-6 h-6 text-slate-950" />;
+      checkpoints = ["Ethical Hacking", "Checklist OWASP", "Certificado Oficial"];
+    } else if (ev.slug.includes("ia") || ev.slug.includes("agentes")) {
+      itemImage = "/images/card-ai-agents.jpg";
+      subBadge = "MODEL CONTEXT PROTOCOL & IA";
+      IconComponent = <Cpu className="w-6 h-6 text-slate-950" />;
+      checkpoints = ["Agentes MCP", "Bases Vectoriales", "Pase QR Oficial"];
+    } else {
+      itemImage = "/images/card-clean-architecture.jpg";
+      subBadge = "ARQUITECTURA DE SOFTWARE";
+      IconComponent = <FileCode className="w-6 h-6 text-slate-950" />;
+      checkpoints = ["Clean Architecture", "Domain-Driven Design", "Pase Oficial"];
+    }
+
+    return {
+      id: ev.id || `db-ev-${index}`,
+      badge: ev.eventType === "WORKSHOP" ? "TALLER PRÁCTICO" : "CONFERENCIA",
+      status: "ACTIVO",
+      subBadge,
+      title: ev.title,
+      description: ev.description,
+      image: itemImage,
+      icon: IconComponent,
+      modality: ev.modality === "VIRTUAL" ? "Virtual en Vivo" : "Modalidad Híbrida",
+      academicHours: `${ev.academicHours} Horas`,
+      seats: `${ev.maxCapacity || 50} Cupos`,
+      checkpoints,
+      priceLabel: Number(ev.price) === 0 ? "Gratuito" : `${Number(ev.price).toFixed(2)} ${ev.currency || "BOB"}`,
+      slug: ev.slug,
+    };
+  });
+
+  // Default items with strictly distinct, non-repeating images for every card
   const defaultItems: Record<string, ServicioItem[]> = {
     todos: [
       {
@@ -39,7 +86,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Arquitectura de Microservicios con Docker y Kubernetes",
         description:
           "Diseño, desacoplamiento y orquestación con Docker, Services, Deployments en K8s y pipelines de integración continua en entornos de producción.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-docker-k8s.jpg",
         icon: <Cloud className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "6 Horas",
@@ -56,7 +103,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Seguridad Ofensiva y Endurecimiento OWASP Top 10 en APIs",
         description:
           "Simula ataques éticos y blinda vulnerabilidades críticas en arquitecturas Backend: SQLi, BOLA, JWT HttpOnly, Rate Limiting y CORS estricto.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-owasp-security.jpg",
         icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Híbrido",
         academicHours: "8 Horas",
@@ -73,7 +120,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "La Revolución de los Agentes de IA en la Ingeniería",
         description:
           "Cómo la IA agéntica, los modelos locales y el Model Context Protocol (MCP) redefinen el desarrollo de software y el testing automatizado.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-ai-agents.jpg",
         icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "4 Horas",
@@ -90,7 +137,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Pipelines Automatizados con GitHub Actions y Terraform",
         description:
           "Aprende infraestructura como código, validaciones estáticas de seguridad y despliegues Zero-Downtime a clústeres multi-región.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-clean-architecture.jpg",
         icon: <Terminal className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios Cloud",
         academicHours: "6 Horas",
@@ -109,7 +156,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Arquitectura de Microservicios con Docker y Kubernetes",
         description:
           "Diseño, desacoplamiento y orquestación con Docker, Services, Deployments en K8s y pipelines de integración continua.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-docker-k8s.jpg",
         icon: <Cloud className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "6 Horas",
@@ -126,7 +173,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Clean Architecture & Domain-Driven Design (DDD) en Node/Go",
         description:
           "Implementación de arquitectura hexagonal, entidades ricas, repositorios y puertos desacoplados para sistemas de alta complejidad.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-clean-architecture.jpg",
         icon: <FileCode className="w-6 h-6 text-slate-950" />,
         modality: "Virtual",
         academicHours: "8 Horas",
@@ -143,7 +190,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Sistemas Distribuidos y Event-Driven con Apache Kafka",
         description:
           "Procesamiento asíncrono de streams, particionamiento de eventos, consistencia eventual y tolerancia a caídas de brokers.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-ai-agents.jpg",
         icon: <Laptop className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "10 Horas",
@@ -162,7 +209,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Seguridad Ofensiva y Endurecimiento OWASP Top 10 en APIs",
         description:
           "Simulación de inyecciones, blindaje de cabeceras CSP, mitigación de ataques BOLA y rate limiting distribuido con Redis.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-owasp-security.jpg",
         icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Híbrido",
         academicHours: "8 Horas",
@@ -179,7 +226,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Autenticación Robusta: JWT, HttpOnly Cookies, RBAC & OAuth2",
         description:
           "Aprende a diseñar esquemas de autenticación invulnerables contra robo de tokens por XSS y suplantación de identidad en microservicios.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-clean-architecture.jpg",
         icon: <ShieldCheck className="w-6 h-6 text-slate-950" />,
         modality: "Virtual",
         academicHours: "6 Horas",
@@ -198,7 +245,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "La Revolución de los Agentes de IA en la Ingeniería",
         description:
           "Aprende cómo orquestar agentes inteligentes usando MCP para consultar bases de datos PostgreSQL y automatizar tareas de DevOps.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-ai-agents.jpg",
         icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Virtual en Vivo",
         academicHours: "4 Horas",
@@ -215,7 +262,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Construcción de Sistemas RAG sobre Documentación de Código",
         description:
           "Pipelines de embeddings con LangChain, PostgreSQL pgvector y búsqueda semántica para asistentes técnicos corporativos.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-clean-architecture.jpg",
         icon: <Cpu className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios en Vivo",
         academicHours: "8 Horas",
@@ -234,7 +281,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "CI/CD Automatizado: De Git Commit a Kubernetes Cluster",
         description:
           "Automatiza tests unitarios, construcción de imágenes Docker escaneadas con Trivy y despliegue continuo con ArgoCD.",
-        image: "/images/hero-engineering.jpg",
+        image: "/images/card-docker-k8s.jpg",
         icon: <Terminal className="w-6 h-6 text-slate-950" />,
         modality: "Laboratorios Cloud",
         academicHours: "6 Horas",
@@ -253,7 +300,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
         title: "Auditoría de Rendimiento y Refactorización de Monolitos a Microservicios",
         description:
           "Estrategias Strangler Fig, profiling de memoria en Node.js, optimización de queries SQL complejas y alta disponibilidad.",
-        image: "/images/hero-conference.jpg",
+        image: "/images/card-clean-architecture.jpg",
         icon: <FileCode className="w-6 h-6 text-slate-950" />,
         modality: "A Medida / Remoto",
         academicHours: "12 Horas",
@@ -265,7 +312,11 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
     ],
   };
 
-  const currentItems = defaultItems[activeCategory] || defaultItems.todos;
+  // If in 'todos' category and we have real database events, display them first
+  const currentItems =
+    activeCategory === "todos" && mappedDbEvents.length > 0
+      ? mappedDbEvents
+      : defaultItems[activeCategory] || defaultItems.todos;
 
   return (
     <section
