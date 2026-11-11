@@ -32,7 +32,7 @@ interface DropdownItem {
 
 const TALLERES_ITEMS: DropdownItem[] = [
   {
-    title: "Docker & Kubernetes",
+    title: "Docker & K8s",
     description: "Microservicios en producción.",
     href: "/eventos/taller-microservicios-docker-kubernetes",
     icon: Cloud,
@@ -44,28 +44,28 @@ const TALLERES_ITEMS: DropdownItem[] = [
     icon: ShieldCheck,
   },
   {
-    title: "Agentes IA & MCP",
-    description: "Flujos autónomos con LLM.",
+    title: "Agentes IA",
+    description: "Flujos autónomos con MCP.",
     href: "/eventos/conferencia-agentes-ia-ingenieria-software",
     icon: Cpu,
   },
   {
-    title: "Arquitectura Cloud",
+    title: "Arquitectura",
     description: "Sistemas escalables y DDD.",
     href: "/?cat=arquitectura#eventos",
     icon: Layers,
     category: "arquitectura",
   },
   {
-    title: "DevOps & CI/CD",
+    title: "DevOps CI/CD",
     description: "Pipelines y entrega GitOps.",
     href: "/?cat=devops#eventos",
     icon: GitBranch,
     category: "devops",
   },
   {
-    title: "Todo el Catálogo",
-    description: "Explorar agenda completa.",
+    title: "Ver Catálogo",
+    description: "Todos los talleres activos.",
     href: "/?cat=todos#eventos",
     icon: LayoutGrid,
     category: "todos",
@@ -74,7 +74,7 @@ const TALLERES_ITEMS: DropdownItem[] = [
 
 const TEMARIOS_ITEMS: DropdownItem[] = [
   {
-    title: "Catálogo Activo",
+    title: "Catálogo",
     description: "Próximos talleres y cupos.",
     href: "/#eventos",
     icon: GraduationCap,
@@ -86,25 +86,25 @@ const TEMARIOS_ITEMS: DropdownItem[] = [
     icon: Layers,
   },
   {
-    title: "Stack Técnico",
+    title: "Tech Stack",
     description: "Herramientas de producción.",
     href: "/#tech-stack",
     icon: Code2,
   },
   {
-    title: "Docente Principal",
+    title: "Docente",
     description: "Perfil del Ing. Alex Martínez.",
     href: "/#docente",
     icon: Terminal,
   },
   {
-    title: "Preguntas Frecuentes",
+    title: "Preguntas FAQ",
     description: "Dudas de registro y pagos.",
     href: "/#faq",
     icon: HelpCircle,
   },
   {
-    title: "Certificados QR",
+    title: "Certificados",
     description: "Validación pública oficial.",
     href: "/verificar",
     icon: Award,
@@ -119,12 +119,12 @@ function DropdownPanel({
   onItemClick: (category?: string) => void;
 }) {
   return (
-    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50">
-      <div className="relative w-[280px] rounded-2xl bg-[#0b0e14] border border-slate-800/90 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.75)]">
+    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3.5 z-50">
+      <div className="relative w-[275px] rounded-2xl bg-[#0b0e14] border border-slate-700/80 p-3 shadow-[0_22px_55px_rgba(0,0,0,0.85)]">
         {/* Centered Top Caret Pointer */}
         <span
           aria-hidden="true"
-          className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-[#0b0e14] border-t border-l border-slate-800/90"
+          className="absolute -top-[7px] left-1/2 -translate-x-1/2 w-3.5 h-3.5 rotate-45 bg-[#0b0e14] border-t border-l border-slate-700/80"
         />
         <div className="flex flex-col gap-1">
           {items.map((item) => {
@@ -136,7 +136,7 @@ function DropdownPanel({
                 onClick={() => onItemClick(item.category)}
                 className="flex items-center gap-3.5 px-3 py-2 rounded-xl hover:bg-slate-900/90 border border-transparent hover:border-cyan-500/25 transition-all group"
               >
-                <div className="w-9 h-9 rounded-xl bg-cyan-950/75 border border-cyan-800/50 flex items-center justify-center shrink-0 group-hover:bg-cyan-500 group-hover:border-cyan-400 transition-colors">
+                <div className="w-9 h-9 rounded-lg bg-cyan-500/12 border border-cyan-500/20 flex items-center justify-center shrink-0 group-hover:bg-cyan-500 group-hover:border-cyan-400 transition-colors">
                   <Icon className="w-4 h-4 text-cyan-400 group-hover:text-slate-950 transition-colors" />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
