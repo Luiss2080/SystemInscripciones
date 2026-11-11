@@ -75,17 +75,17 @@ export function Footer() {
           </h4>
           <ul className="space-y-3 text-xs">
             {[
-              { label: "Microservicios & Cloud Native", icon: Cpu },
-              { label: "Arquitectura de Software a Medida", icon: Code2 },
-              { label: "Auditoría & Seguridad OWASP", icon: ShieldCheck },
-              { label: "Capacitación Docente y Equipos", icon: GraduationCap },
-              { label: "Consultoría DevOps & CI/CD", icon: Server },
+              { label: "Microservicios & Cloud Native", icon: Cpu, href: "/eventos/taller-microservicios-docker-kubernetes" },
+              { label: "Arquitectura de Software a Medida", icon: Code2, href: "/#tech-stack" },
+              { label: "Auditoría & Seguridad OWASP", icon: ShieldCheck, href: "/eventos/masterclass-seguridad-apis-nodejs-owasp" },
+              { label: "Capacitación Docente y Equipos", icon: GraduationCap, href: "/docente" },
+              { label: "Consultoría DevOps & CI/CD", icon: Server, href: "/#metodologia" },
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
                 <li key={idx}>
                   <Link
-                    href="/#eventos"
+                    href={item.href}
                     className="flex items-center gap-2.5 text-slate-400 hover:text-cyan-300 transition-colors group"
                   >
                     <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 group-hover:bg-cyan-500 transition-colors">
@@ -107,11 +107,11 @@ export function Footer() {
           <ul className="space-y-3 text-xs">
             {[
               { label: "Laboratorios Hands-On", icon: Terminal, href: "/#eventos" },
-              { label: "Guías de Arquitectura", icon: FileCode, href: "/#eventos" },
+              { label: "Guías de Arquitectura", icon: FileCode, href: "/#tech-stack" },
               { label: "Repositorios de Código", icon: FolderGit2, href: "https://github.com" },
-              { label: "Temarios & Masterclasses", icon: BookOpen, href: "/#eventos" },
+              { label: "Temarios & Masterclasses", icon: BookOpen, href: "/#metodologia" },
               { label: "Verificador de Certificados", icon: Award, href: "/verificar" },
-              { label: "Preguntas Frecuentes", icon: HelpCircle, href: "/#eventos" },
+              { label: "Preguntas Frecuentes", icon: HelpCircle, href: "/#faq" },
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
