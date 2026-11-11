@@ -1,7 +1,7 @@
-import { getAdminSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { CertificatesTable } from "@/components/CertificatesTable";
+import { prisma } from "@/lib/db/prisma";
+import { CertificatesTable } from "@/components/admin/certificates/CertificatesTable";
 import { Award } from "lucide-react";
 
 export default async function AdminCertificatesPage() {
