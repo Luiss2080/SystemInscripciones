@@ -11,7 +11,7 @@ export default function MetodologiaSection() {
   const steps = [
     {
       num: "01",
-      icon: <QrCode className="w-6 h-6 text-cyan-400" />,
+      icon: <QrCode className="w-6 h-6 text-slate-950 stroke-[2.2]" />,
       title: "Registro & Pase QR Inmediato",
       description:
         "Selecciona tu taller, confirma tu cupo en tiempo real y recibe al instante tu ticket digital oficial con código QR firmado y credencial de acceso.",
@@ -19,7 +19,7 @@ export default function MetodologiaSection() {
     },
     {
       num: "02",
-      icon: <Code2 className="w-6 h-6 text-cyan-400" />,
+      icon: <Code2 className="w-6 h-6 text-slate-950 stroke-[2.2]" />,
       title: "Laboratorios Hands-On en Vivo",
       description:
         "Sesiones 100% prácticas guiadas paso a paso. Construye arquitecturas de microservicios, seguridad en APIs y despliegues en servidores reales.",
@@ -27,7 +27,7 @@ export default function MetodologiaSection() {
     },
     {
       num: "03",
-      icon: <ScanLine className="w-6 h-6 text-cyan-400" />,
+      icon: <ScanLine className="w-6 h-6 text-slate-950 stroke-[2.2]" />,
       title: "Acreditación por Escáner QR",
       description:
         "Validación de asistencia ágil y sin filas mediante el escáner de cámara web o móvil oficial de DevCon en el auditorio o aula virtual.",
@@ -35,7 +35,7 @@ export default function MetodologiaSection() {
     },
     {
       num: "04",
-      icon: <Award className="w-6 h-6 text-cyan-400" />,
+      icon: <Award className="w-6 h-6 text-slate-950 stroke-[2.2]" />,
       title: "Certificación Digital Verificable",
       description:
         "Al finalizar y acreditar tu asistencia, se emite tu certificado oficial con identificador hash único y validez pública inmediata para LinkedIn y CV.",
