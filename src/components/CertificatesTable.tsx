@@ -107,7 +107,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                 >
                   <span>{tab.label}</span>
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                    className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${
                       active ? "bg-slate-950/20 text-slate-950" : "bg-slate-950 text-slate-400"
                     }`}
                   >

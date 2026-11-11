@@ -139,7 +139,7 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
 
         {/* Mobile Drawer Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-800 bg-[#030712]/98 backdrop-blur-2xl px-4 py-3">
+          <div className="lg:hidden border-t border-slate-800 bg-[#030712]/95 backdrop-blur-2xl px-4 py-3">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-semibold">
               {ADMIN_LINKS.map((link) => {
                 const Icon = link.icon;
