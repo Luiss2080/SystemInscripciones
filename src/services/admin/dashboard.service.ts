@@ -124,3 +124,4 @@ export async function getRecentCheckinLogs(limit = 6) {
       }),
     }));
 }
+

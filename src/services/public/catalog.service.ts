@@ -121,3 +121,4 @@ export async function getPublicNavEvents(limit = 3): Promise<PublicNavEventDTO[]
     registrationsCount: ev._count.registrations,
   }));
 }
+
