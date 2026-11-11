@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   XCircle,
   Terminal,
-  ShieldCheck,
 } from "lucide-react";
 import { PrintCertificateButton } from "@/components/public/credentials/PrintCertificateButton";
 
@@ -26,7 +25,15 @@ export default async function VerifyResultPage({ params }: VerifyPageProps) {
     include: {
       registration: {
         include: {
-          event: true,
+          event: {
+            include: {
+              speaker: {
+                select: {
+                  fullName: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -129,12 +136,14 @@ export default async function VerifyResultPage({ params }: VerifyPageProps) {
             {/* Facilitator signature */}
             <div className="text-center sm:text-left space-y-1">
               <div className="font-serif italic text-2xl text-cyan-400 tracking-wider mb-2 font-bold print:text-black">
-                Alex Martínez
+                {event.speaker?.fullName?.split(" - ")[0]?.replace(/^Ing\.\s+/i, "") || "Alex Martínez"}
               </div>
               <div className="w-48 h-0.5 bg-cyan-500/40 mx-auto sm:mx-0 mb-1 print:bg-black" />
-              <p className="font-black text-white text-sm print:text-black">Ing. Alex Martínez</p>
+              <p className="font-black text-white text-sm print:text-black">
+                {event.speaker?.fullName?.split(" - ")[0] || "Ing. Alex Martínez"}
+              </p>
               <p className="text-xs text-slate-400 font-medium print:text-gray-600">
-                Systems Engineer & Cloud Solutions Architect
+                {event.speaker?.fullName?.split(" - ")[1] || "Systems Engineer & Cloud Solutions Architect"}
               </p>
             </div>
 

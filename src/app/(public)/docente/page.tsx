@@ -1,12 +1,12 @@
 import Link from "next/link";
 import FondoTech from "@/components/shared/FondoTech";
-import { prisma } from "@/lib/db/prisma";
+import { getPublicLandingData } from "@/services/public/catalog.service";
+import { getWorkshopMedia } from "@/lib/utils/workshop-media";
+import { formatCurrency } from "@/lib/utils/format";
 import {
   Terminal,
   Award,
   ShieldCheck,
-  CheckCircle2,
-  Calendar,
   ArrowRight,
   ExternalLink,
   MessageCircle,
@@ -19,23 +19,17 @@ import {
   Code2,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
-  title: "Facilitador Principal | Ing. Alex Martínez | DevCon Workshops",
+  title: "Facilitador Principal | DevCon Workshops",
   description:
-    "Perfil profesional, trayectoria académica, especializaciones y temarios dictados por el Ing. Alex Martínez.",
+    "Perfil profesional, trayectoria académica, especializaciones y temarios dictados en tiempo real desde nuestra plataforma.",
 };
 
 export default async function DocentePage() {
-  const events = await prisma.event.findMany({
-    where: {
-      deletedAt: null,
-      status: { not: "DRAFT" },
-    },
-    take: 6,
-    orderBy: {
-      startDate: "asc",
-    },
-  });
+  const { events: allEvents, stats } = await getPublicLandingData();
+  const events = allEvents.filter((ev) => ev.status !== "DRAFT").slice(0, 6);
 
   const certifications = [
     {
@@ -117,13 +111,13 @@ export default async function DocentePage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/hero-engineering.jpg"
-                    alt="Ing. Alex Martínez"
+                    alt={stats.leadSpeakerName}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
                   <div className="absolute bottom-2 left-0 right-0 text-center">
-                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-black">
-                      ING. ALEX MARTÍNEZ
+                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-black px-2 truncate block">
+                      {stats.leadSpeakerName.toUpperCase()}
                     </span>
                   </div>
                 </div>
@@ -135,14 +129,14 @@ export default async function DocentePage() {
                 </span>
               </div>
 
-              <h2 className="text-2xl font-black text-white mt-2">Ing. Alex Martínez</h2>
+              <h2 className="text-2xl font-black text-white mt-2">{stats.leadSpeakerName}</h2>
               <p className="text-xs font-mono text-cyan-400 font-bold mt-0.5">
-                La Paz / Santa Cruz • Bolivia
+                {stats.leadSpeakerEmail}
               </p>
 
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 <a
-                  href="https://wa.me/59171234567?text=Hola%20Ing.%20Alex%20Martínez,%20quisiera%20consultar%20sobre%20capacitaciones."
+                  href={`https://wa.me/59171234567?text=${encodeURIComponent(`Hola ${stats.leadSpeakerName}, quisiera consultar sobre capacitaciones.`)}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-950 border border-slate-700 hover:border-cyan-500/60 text-slate-200 hover:text-white text-xs font-bold transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
@@ -176,26 +170,42 @@ export default async function DocentePage() {
               </h1>
 
               <p className="text-sm text-slate-300 leading-relaxed font-medium">
-                Con más de una década de experiencia práctica diseñando, implementando y asegurando arquitecturas de software distribuidas. He liderado la migración de sistemas legados monolíticos a microservicios elásticos con Docker y Kubernetes, blindado APIs bajo el rigor del estándar OWASP Top 10 y automatizado pipelines de integración y entrega continua para compañías del sector financiero, tecnológico y gubernamental.
+                Experiencia práctica diseñando, implementando y asegurando arquitecturas de software distribuidas. Liderazgo técnico en microservicios elásticos con Docker y Kubernetes, blindaje de APIs bajo el estándar OWASP Top 10 y automatización de pipelines de entrega continua.
               </p>
 
-              {/* 4 Stats Matrix */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-2xl font-black font-mono text-cyan-400 block">10+</span>
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Años en Producción</span>
+              {/* 4 Dynamic PostgreSQL Stats Matrix */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 items-stretch">
+                <div className="h-full p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between">
+                  <span className="text-2xl font-black font-mono text-cyan-400 block tabular-nums">
+                    {stats.totalEvents}
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-400 uppercase mt-1">
+                    Programas Activos
+                  </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-2xl font-black font-mono text-cyan-400 block">+500</span>
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Alumnos Certificados</span>
+                <div className="h-full p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between">
+                  <span className="text-2xl font-black font-mono text-cyan-400 block tabular-nums">
+                    {stats.totalRegistrations}
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-400 uppercase mt-1">
+                    Inscritos Activos
+                  </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-2xl font-black font-mono text-cyan-400 block">4.9</span>
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Satisfacción Media</span>
+                <div className="h-full p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between">
+                  <span className="text-2xl font-black font-mono text-cyan-400 block tabular-nums">
+                    {stats.totalAcademicHours}h
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-400 uppercase mt-1">
+                    Horas Académicas
+                  </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-2xl font-black font-mono text-cyan-400 block">100%</span>
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Hands-On en Vivo</span>
+                <div className="h-full p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between">
+                  <span className="text-2xl font-black font-mono text-cyan-400 block tabular-nums">
+                    {stats.totalCertificates}
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-400 uppercase mt-1">
+                    Certificados QR
+                  </span>
                 </div>
               </div>
             </div>
@@ -209,15 +219,15 @@ export default async function DocentePage() {
               PRINCIPIOS PEDAGÓGICOS
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Cómo se aprende en las capacitaciones del Ing. Alex Martínez
+              Cómo se aprende en las capacitaciones de {stats.leadSpeakerName}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             {pillars.map((p, i) => (
               <div
                 key={i}
-                className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm hover:border-cyan-500/40 transition-colors flex items-start gap-4"
+                className="h-full bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm hover:border-cyan-500/40 transition-colors flex items-start gap-4"
               >
                 <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
                   {p.icon}
@@ -244,29 +254,31 @@ export default async function DocentePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch">
             {certifications.map((cert, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-sm hover:border-cyan-500/50 transition-colors group"
+                className="h-full bg-slate-900/80 border border-slate-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-sm hover:border-cyan-500/50 transition-colors group flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shadow-sm">
-                    {cert.icon}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shadow-sm">
+                      {cert.icon}
+                    </div>
+                    <span className="text-[10px] font-mono text-cyan-400 font-bold px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/40">
+                      {cert.year}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-cyan-400 font-bold px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/40">
-                    {cert.year}
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-950 border border-slate-800 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    {cert.tag}
                   </span>
+                  <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-1">
+                    {cert.title}
+                  </h3>
+                  <p className="text-xs font-mono text-slate-400 font-bold mb-2">
+                    {cert.issuer}
+                  </p>
                 </div>
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-950 border border-slate-800 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  {cert.tag}
-                </span>
-                <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-1">
-                  {cert.title}
-                </h3>
-                <p className="text-xs font-mono text-slate-400 font-bold mb-2">
-                  {cert.issuer}
-                </p>
                 <p className="text-xs text-slate-400 leading-relaxed font-medium">
                   {cert.detail}
                 </p>
@@ -275,12 +287,12 @@ export default async function DocentePage() {
           </div>
         </div>
 
-        {/* Section: Upcoming Workshops (ALL WITH ACCOMPANIED IMAGES) */}
+        {/* Section: Upcoming Workshops (ALL WITH ACCOMPANIED IMAGES & UNIFORM CARD HEIGHTS) */}
         {events.length > 0 && (
           <div id="talleres-docente" className="scroll-mt-24 space-y-6">
             <div className="text-center max-w-2xl mx-auto">
               <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-cyan-400 block mb-2">
-                CATÁLOGO ACTIVO
+                CATÁLOGO ACTIVO ({events.length})
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                 Próximos Talleres Dictados por el Docente
@@ -291,35 +303,35 @@ export default async function DocentePage() {
             </div>
 
             {/* Grid of Workshop Cards Accompanied by Rich Images */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {events.map((ev) => {
-                // Determine image based on slug with strictly distinct non-repeating visuals
-                let itemImage = "/images/card-clean-architecture.jpg";
-                let subBadge = "ARQUITECTURA DE SOFTWARE";
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+              {events.map((ev, index) => {
+                const media = getWorkshopMedia(ev.slug, index);
+                const slugNorm = ev.slug.toLowerCase();
                 let IconComponent = Terminal;
-                let checkpoints = ["Clean Architecture", "Domain-Driven Design", "Pase QR"];
+                let checkpoints = ["Clean Architecture", "Labs Live", "Pase QR"];
 
-                if (ev.slug.includes("docker") || ev.slug.includes("microservicios") || ev.slug.includes("k8s")) {
-                  itemImage = "/images/card-docker-k8s.jpg";
-                  subBadge = "MICROSERVICIOS & KUBERNETES";
+                if (slugNorm.includes("docker") || slugNorm.includes("microservicios") || slugNorm.includes("k8s")) {
                   IconComponent = Cloud;
-                  checkpoints = ["Docker & K8s", "Multi-Stage Labs", "Certificado QR"];
-                } else if (ev.slug.includes("owasp") || ev.slug.includes("seguridad")) {
-                  itemImage = "/images/card-owasp-security.jpg";
-                  subBadge = "SEGURIDAD OFENSIVA & OWASP";
+                  checkpoints = ["Docker & K8s", "Multi-Stage", "Certificado QR"];
+                } else if (slugNorm.includes("owasp") || slugNorm.includes("seguridad")) {
                   IconComponent = ShieldCheck;
-                  checkpoints = ["Ethical Hacking", "Checklist OWASP", "Certificado Oficial"];
-                } else if (ev.slug.includes("ia") || ev.slug.includes("agentes")) {
-                  itemImage = "/images/card-ai-agents.jpg";
-                  subBadge = "MODEL CONTEXT PROTOCOL & IA";
+                  checkpoints = ["Ethical Hacking", "OWASP", "Certificado QR"];
+                } else if (slugNorm.includes("ia") || slugNorm.includes("agentes") || slugNorm.includes("mcp")) {
                   IconComponent = Cpu;
-                  checkpoints = ["Agentes MCP", "Bases Vectoriales", "Pase QR Oficial"];
+                  checkpoints = ["Agentes MCP", "Vectores", "Pase QR"];
                 }
+
+                const modalityLabel =
+                  ev.modality === "VIRTUAL"
+                    ? "Virtual"
+                    : ev.modality === "HYBRID"
+                    ? "Híbrido"
+                    : "Presencial";
 
                 return (
                   <div
                     key={ev.id}
-                    className="bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1"
+                    className="h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1"
                   >
                     <div>
                       {/* Top Banner Image with Floating Icon OUTSIDE overflow-hidden (ENCIMA DE TODO) */}
@@ -328,7 +340,7 @@ export default async function DocentePage() {
                         <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={itemImage}
+                            src={media.image}
                             alt={ev.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                           />
@@ -345,7 +357,7 @@ export default async function DocentePage() {
                           <div className="absolute top-3 right-3 z-10">
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-slate-200 text-[10px] font-mono font-bold">
                               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]" />
-                              <span>EN VIVO</span>
+                              <span>{ev.status === "OPEN" ? "ABIERTO" : ev.status}</span>
                             </span>
                           </div>
                         </div>
@@ -359,17 +371,17 @@ export default async function DocentePage() {
                       {/* Sub-badge Pill */}
                       <div className="flex justify-center mt-3 mb-2.5">
                         <span className="inline-block px-3 py-0.5 rounded-full bg-cyan-950/50 border border-cyan-800/50 text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">
-                          {subBadge}
+                          {media.categoryLabel}
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-lg sm:text-xl font-black text-white text-center mb-2.5 leading-snug group-hover:text-cyan-300 transition-colors line-clamp-2 px-1">
+                      <h3 className="text-lg sm:text-xl font-black text-white text-center mb-2.5 leading-snug group-hover:text-cyan-300 transition-colors line-clamp-2 min-h-[52px] flex items-center justify-center px-1">
                         {ev.title}
                       </h3>
 
                       {/* Description */}
-                      <p className="text-xs sm:text-[13px] text-slate-400 text-center leading-relaxed font-medium mb-5 line-clamp-3 px-2">
+                      <p className="text-xs sm:text-[13px] text-slate-400 text-center leading-relaxed font-medium mb-5 line-clamp-3 min-h-[58px] px-2">
                         {ev.description}
                       </p>
 
@@ -381,7 +393,7 @@ export default async function DocentePage() {
                             MODALIDAD
                           </span>
                           <span className="text-xs font-bold text-slate-200 block mt-0.5 truncate w-full">
-                            {ev.modality === "VIRTUAL" ? "Virtual" : "Híbrido"}
+                            {modalityLabel}
                           </span>
                         </div>
 
@@ -398,16 +410,16 @@ export default async function DocentePage() {
                         <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-2.5 text-center flex flex-col justify-center items-center">
                           <Users className="w-3.5 h-3.5 text-cyan-400 mb-1" />
                           <span className="text-[9px] font-mono font-bold text-slate-500 uppercase block">
-                            CUPOS
+                            INSCRITOS
                           </span>
-                          <span className="text-xs font-bold text-slate-200 block mt-0.5 truncate w-full">
-                            {ev.maxCapacity || 50} Cupos
+                          <span className="text-xs font-bold text-slate-200 block mt-0.5 truncate w-full tabular-nums">
+                            {ev.registrationsCount}/{ev.maxCapacity}
                           </span>
                         </div>
                       </div>
 
                       {/* Checkmarks Checklist */}
-                      <div className="flex flex-wrap items-center justify-center gap-3 mb-6 text-[11px] text-slate-300 font-medium">
+                      <div className="flex flex-wrap items-center justify-center gap-3 mb-6 text-[11px] text-slate-300 font-medium min-h-[24px]">
                         {checkpoints.map((chk, i) => (
                           <div key={i} className="inline-flex items-center gap-1.5">
                             <Check className="w-3.5 h-3.5 text-cyan-400 stroke-[2.5]" />
@@ -421,10 +433,10 @@ export default async function DocentePage() {
                     <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
                       <div className="text-left">
                         <span className="text-[9px] font-mono font-bold uppercase text-slate-500 block">
-                          PRESUPUESTO
+                          INVERSIÓN
                         </span>
                         <span className="text-sm sm:text-base font-black text-cyan-300 font-mono">
-                          {Number(ev.price) === 0 ? "Gratuito" : `${Number(ev.price).toFixed(2)} ${ev.currency}`}
+                          {formatCurrency(ev.price, ev.currency)}
                         </span>
                       </div>
 
