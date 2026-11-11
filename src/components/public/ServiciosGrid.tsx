@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FondoTech from "./FondoTech";
 import ServiciosCarousel, { ServicioItem } from "./ServiciosCarousel";
 import {
@@ -17,16 +17,36 @@ interface ServiciosGridProps {
 }
 
 export const CATEGORIES = [
-  { id: "todos", label: "TODOS LOS TALLERES" },
-  { id: "arquitectura", label: "ARQUITECTURA & CLOUD" },
-  { id: "seguridad", label: "SEGURIDAD & OWASP" },
+  { id: "todos", label: "TODOS" },
+  { id: "arquitectura", label: "ARQUITECTURA" },
+  { id: "seguridad", label: "SEGURIDAD" },
   { id: "ia", label: "IA & AGENTES" },
-  { id: "devops", label: "DEVOPS & CI/CD" },
-  { id: "software", label: "SOFTWARE A MEDIDA" },
+  { id: "devops", label: "DEVOPS CI/CD" },
+  { id: "software", label: "A MEDIDA" },
 ];
 
 export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps) {
   const [activeCategory, setActiveCategory] = useState<string>("todos");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const catParam = params.get("cat");
+    if (catParam && CATEGORIES.some((c) => c.id === catParam)) {
+      setActiveCategory(catParam);
+    }
+
+    const handleCategoryEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail && CATEGORIES.some((c) => c.id === customEvent.detail)) {
+        setActiveCategory(customEvent.detail);
+      }
+    };
+
+    window.addEventListener("select-workshop-category", handleCategoryEvent);
+    return () => {
+      window.removeEventListener("select-workshop-category", handleCategoryEvent);
+    };
+  }, []);
 
   // Map real database events if present, each with its own distinct non-repeating image
   const mappedDbEvents: ServicioItem[] = initialEvents.map((ev, index) => {
