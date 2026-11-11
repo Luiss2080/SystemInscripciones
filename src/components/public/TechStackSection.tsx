@@ -57,21 +57,21 @@ export default function TechStackSection() {
   return (
     <section
       id="tech-stack"
-      className="py-24 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
+      className="py-16 sm:py-20 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
     >
       <FondoTech id="techstack" />
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-white">
         {/* Section Header Badge */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-3">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 shadow-sm shadow-cyan-950">
             ECOSISTEMA DE PRODUCCIÓN
           </span>
         </div>
 
         {/* Section Title */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-6 leading-tight tracking-tight">
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight tracking-tight">
             Herramientas y tecnologías que dominan el{" "}
             <span className="relative inline-block px-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               mercado laboral
@@ -83,16 +83,16 @@ export default function TechStackSection() {
         </div>
 
         {/* 4 Tech Pillars Cards Grid with Cover Images and Floating Icons (ENCIMA DE TODO) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {categories.map((cat, idx) => (
             <div
               key={idx}
-              className="bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1 relative"
+              className="bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1 relative"
             >
               <div>
                 {/* Top Image Banner with Floating Icon (ENCIMA DE TODO) */}
                 <div className="relative mb-7">
-                  <div className="relative h-48 sm:h-56 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner">
+                  <div className="relative h-44 sm:h-48 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={cat.image}

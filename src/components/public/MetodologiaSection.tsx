@@ -46,21 +46,21 @@ export default function MetodologiaSection() {
   return (
     <section
       id="metodologia"
-      className="py-24 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
+      className="py-16 sm:py-20 relative overflow-hidden bg-[#030712] border-t border-slate-800/80"
     >
       <FondoTech id="metodologia" />
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-white">
         {/* Section Header Badge */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-3">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 shadow-sm shadow-cyan-950">
             METODOLOGÍA DE APRENDIZAJE & CERTIFICACIÓN
           </span>
         </div>
 
         {/* Section Title */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-6 leading-tight tracking-tight">
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight tracking-tight">
             Cómo transformamos tu aprendizaje en{" "}
             <span className="relative inline-block px-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               experiencia real
