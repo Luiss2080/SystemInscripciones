@@ -106,17 +106,31 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center justify-center p-8 rounded-3xl bg-gradient-to-b from-cyan-950/30 via-slate-900/60 to-slate-950 border border-cyan-800/40 text-white text-center shadow-xl">
-                <div className="w-24 h-24 rounded-3xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center font-black text-4xl text-cyan-400 shadow-2xl mb-4">
-                  AM
+              <div className="flex flex-col items-center justify-center p-6 sm:p-8 rounded-3xl bg-slate-950/90 border border-slate-800 text-white text-center shadow-xl relative overflow-hidden group">
+                <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-cyan-500/40 shadow-xl relative mb-4 bg-slate-900">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/hero-engineering.jpg"
+                    alt="Ing. Alex Martínez"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                 </div>
-                <span className="font-extrabold text-white text-lg">Sesiones Hands-On</span>
-                <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                <span className="font-extrabold text-white text-lg">Ing. Alex Martínez</span>
+                <p className="text-xs text-cyan-400 font-mono font-bold mt-0.5">
+                  Facilitador Principal
+                </p>
+                <p className="text-xs text-slate-400 mt-2 max-w-xs">
                   Aprende creando arquitecturas que escalan en entornos reales de producción.
                 </p>
-                <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-xs text-cyan-400 font-bold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Cursos 100% Prácticos</span>
+                <div className="mt-4 flex items-center gap-2">
+                  <Link
+                    href="/docente"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-cyan-500/25 cursor-pointer hover:scale-105 active:scale-95"
+                  >
+                    <span>Ver Trayectoria</span>
+                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </Link>
                 </div>
               </div>
             </div>

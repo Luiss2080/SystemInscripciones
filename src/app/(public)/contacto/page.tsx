@@ -120,9 +120,25 @@ export default function ContactoPage() {
               </a>
             </div>
 
-            {/* Sedes & Horarios Card */}
-            <div className="p-6 rounded-3xl bg-slate-900/85 border border-slate-800 shadow-xl backdrop-blur-md space-y-4 text-xs">
-              <div className="flex items-start gap-3">
+            {/* Sedes & Horarios Card Accompanied by Auditorium Photo */}
+            <div className="p-6 rounded-3xl bg-slate-900/85 border border-slate-800 shadow-xl backdrop-blur-md space-y-4 text-xs overflow-hidden">
+              <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-slate-800 group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/hero-conference.jpg"
+                  alt="Auditorio Central de Ingeniería"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+                <div className="absolute bottom-2.5 left-3">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-950/90 border border-cyan-800/60 text-[10px] font-mono font-bold text-cyan-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span>AUDITORIO CENTRAL</span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 pt-1">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-white text-sm">Sedes & Auditorio</strong>
