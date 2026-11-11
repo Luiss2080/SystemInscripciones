@@ -168,8 +168,8 @@ export function Footer() {
             </li>
 
             <li className="flex items-start gap-2.5">
-              <span className="w-6 h-6 rounded-full bg-[#8b1524]/20 border border-[#8b1524]/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Clock className="w-3 h-3 text-[#e11d48]" />
+              <span className="w-6 h-6 rounded-full bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shrink-0 mt-0.5">
+                <Clock className="w-3 h-3 text-cyan-400" />
               </span>
               <div>
                 <strong className="block text-slate-200">Horarios de Atención</strong>
@@ -184,11 +184,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4 relative z-10">
         <p>© 2026 DevCon Workshops. Todos los derechos reservados.</p>
         <div className="flex items-center gap-4 text-xs text-slate-500">
-          <Link href="/verificar" className="hover:text-white transition-colors">
+          <Link href="/verificar" className="hover:text-cyan-400 transition-colors">
             Acreditación y Certificados
           </Link>
           <span>•</span>
-          <Link href="/admin" className="hover:text-white transition-colors">
+          <Link href="/admin" className="hover:text-cyan-400 transition-colors">
             Portal Administrador
           </Link>
         </div>
@@ -197,8 +197,8 @@ export function Footer() {
       {/* Floating Bottom Left Bot SVG */}
       <div className="fixed bottom-5 left-5 z-40 hidden sm:block">
         <div className="relative group">
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700/80 flex items-center justify-center text-[#e11d48] shadow-xl hover:border-rose-500/60 hover:scale-110 transition-all cursor-pointer">
-            <Bot className="w-6 h-6 text-[#e11d48]" />
+          <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700/80 flex items-center justify-center text-cyan-400 shadow-xl hover:border-cyan-500/60 hover:scale-110 transition-all cursor-pointer">
+            <Bot className="w-6 h-6 text-cyan-400" />
           </div>
           <span className="absolute left-14 top-2 bg-slate-900 border border-slate-700 text-white text-[11px] font-mono px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
             Asistente DevCon Bot
