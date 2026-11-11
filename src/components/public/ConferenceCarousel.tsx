@@ -274,10 +274,10 @@ export function ConferenceCarousel() {
   const duplicatedWorkshops = [...workshops, ...workshops];
 
   return (
-    <div className="w-full bg-slate-900/90 border-t border-slate-800/90 py-3 relative shadow-2xl backdrop-blur-md overflow-hidden select-none">
+    <div className="w-full bg-[#030712]/90 border-t border-slate-800/80 py-3 relative shadow-2xl backdrop-blur-md overflow-hidden select-none">
       {/* Subtle edge fade overlays for infinite seamless blend */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-slate-950 via-slate-950/70 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#030712] via-[#030712]/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#030712] via-[#030712]/80 to-transparent z-10 pointer-events-none" />
 
       {/* Marquee Track: passes automatically, pauses on hover, zero arrows */}
       <div className="w-full overflow-hidden flex items-center">

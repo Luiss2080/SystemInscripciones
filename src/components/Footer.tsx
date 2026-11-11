@@ -20,11 +20,13 @@ import {
   Share2,
 } from "lucide-react";
 import Link from "next/link";
+import FondoTech from "./public/FondoTech";
 
 export function Footer() {
   return (
-    <footer id="contacto" className="border-t border-slate-800/90 bg-[#090b10] text-slate-400 pt-16 pb-8 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-12">
+    <footer id="contacto" className="border-t border-slate-800/80 bg-[#030712] text-slate-400 pt-16 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <FondoTech id="footer" />
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-12 relative z-10">
         {/* Brand Column (Left) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="flex items-center gap-3">
@@ -179,7 +181,7 @@ export function Footer() {
       </div>
 
       {/* Sub-footer bottom bar */}
-      <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+      <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4 relative z-10">
         <p>© 2026 DevCon Workshops. Todos los derechos reservados.</p>
         <div className="flex items-center gap-4 text-xs text-slate-500">
           <Link href="/verificar" className="hover:text-white transition-colors">
