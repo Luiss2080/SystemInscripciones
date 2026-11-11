@@ -71,49 +71,49 @@ export default function MetodologiaSection() {
           </p>
         </div>
 
-        {/* 4 Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+        {/* 4 Steps Grid with Floating Icons on Top, Centered Content & Connecting Arrows */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative pt-4">
           {steps.map((step, index) => (
             <div
               key={step.num}
-              className="bg-slate-900/80 border border-slate-800/80 rounded-3xl p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1 backdrop-blur-sm relative"
+              className="bg-slate-900/85 border border-slate-800/90 rounded-3xl p-6 pt-11 shadow-2xl flex flex-col justify-between hover:border-cyan-500/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] transition-all duration-300 group hover:-translate-y-1 backdrop-blur-md relative text-center"
             >
-              {/* Connector line for desktop */}
+              {/* Floating Centered Icon: ENCIMA DE TODO (z-30, elevated top boundary, glowing cyan) */}
+              <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-slate-950 flex items-center justify-center shadow-xl shadow-cyan-500/40 font-bold z-30 ring-4 ring-[#030712] group-hover:scale-110 transition-transform">
+                {step.icon}
+              </div>
+
+              {/* Connecting Flow Arrow between Steps on Desktop */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-10 -right-3 w-6 h-[2px] bg-gradient-to-r from-cyan-500/60 to-transparent z-20 pointer-events-none" />
+                <div className="hidden lg:flex absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950 border border-cyan-500/60 text-cyan-400 items-center justify-center z-30 shadow-xl shadow-cyan-950/80 backdrop-blur-md">
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </div>
               )}
 
               <div>
-                {/* Step Top Bar */}
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shadow-lg shadow-cyan-950/40 group-hover:scale-105 group-hover:border-cyan-500/60 transition-transform">
-                    {step.icon}
-                  </div>
-                  <span className="text-2xl font-black font-mono text-cyan-400/30 group-hover:text-cyan-400 transition-colors">
-                    {step.num}
+                {/* Centered Step Badge */}
+                <div className="flex justify-center mb-3">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800/60 text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span>FASE {step.num} • {step.highlight}</span>
                   </span>
                 </div>
 
-                {/* Step Badge */}
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400 mb-3">
-                  {step.highlight}
-                </span>
-
-                {/* Title */}
+                {/* Title (Centered) */}
                 <h3 className="text-lg font-black text-white mb-2.5 leading-snug group-hover:text-cyan-300 transition-colors">
                   {step.title}
                 </h3>
 
-                {/* Description */}
+                {/* Description (Centered) */}
                 <p className="text-xs sm:text-[13px] text-slate-400 leading-relaxed font-medium">
                   {step.description}
                 </p>
               </div>
 
-              {/* Bottom detail pill */}
-              <div className="pt-5 mt-5 border-t border-slate-800/80 flex items-center gap-1.5 text-[11px] font-bold text-cyan-400 font-mono">
-                <span>FASE {step.num}</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              {/* Bottom detail pill (Centered with Arrow) */}
+              <div className="pt-4 mt-6 border-t border-slate-800/80 flex items-center justify-center gap-2 text-xs font-mono font-bold text-cyan-400">
+                <span>PASO 0{index + 1} COMPLETADO</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
               </div>
             </div>
           ))}
