@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import ServiciosGrid from "@/components/public/ServiciosGrid";
 import { Preloader } from "@/components/public/Preloader";
@@ -11,6 +12,7 @@ import CtaBanner from "@/components/public/CtaBanner";
 import {
   Terminal,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 
 export default async function HomePage() {

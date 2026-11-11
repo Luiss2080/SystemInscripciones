@@ -290,24 +290,24 @@ export default async function DocentePage() {
             {/* Grid of Workshop Cards Accompanied by Rich Images */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {events.map((ev) => {
-                // Determine image based on slug
-                let itemImage = "/images/hero-conference.jpg";
-                let subBadge = "CAPACITACIÓN TÉCNICA";
+                // Determine image based on slug with strictly distinct non-repeating visuals
+                let itemImage = "/images/card-clean-architecture.jpg";
+                let subBadge = "ARQUITECTURA DE SOFTWARE";
                 let IconComponent = Terminal;
-                let checkpoints = ["Lab en Vivo", "Código Fuente", "Certificado QR"];
+                let checkpoints = ["Clean Architecture", "Domain-Driven Design", "Pase QR"];
 
                 if (ev.slug.includes("docker") || ev.slug.includes("microservicios") || ev.slug.includes("k8s")) {
-                  itemImage = "/images/workshop-docker-k8s.jpg";
+                  itemImage = "/images/card-docker-k8s.jpg";
                   subBadge = "MICROSERVICIOS & KUBERNETES";
                   IconComponent = Cloud;
                   checkpoints = ["Docker & K8s", "Multi-Stage Labs", "Certificado QR"];
                 } else if (ev.slug.includes("owasp") || ev.slug.includes("seguridad")) {
-                  itemImage = "/images/workshop-owasp-security.jpg";
+                  itemImage = "/images/card-owasp-security.jpg";
                   subBadge = "SEGURIDAD OFENSIVA & OWASP";
                   IconComponent = ShieldCheck;
                   checkpoints = ["Ethical Hacking", "Checklist OWASP", "Certificado Oficial"];
                 } else if (ev.slug.includes("ia") || ev.slug.includes("agentes")) {
-                  itemImage = "/images/workshop-ai-agents.jpg";
+                  itemImage = "/images/card-ai-agents.jpg";
                   subBadge = "MODEL CONTEXT PROTOCOL & IA";
                   IconComponent = Cpu;
                   checkpoints = ["Agentes MCP", "Bases Vectoriales", "Pase QR Oficial"];
