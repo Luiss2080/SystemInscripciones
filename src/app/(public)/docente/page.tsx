@@ -96,13 +96,13 @@ export default async function DocentePage() {
   ];
 
   return (
-    <div className="relative min-h-[calc(100vh-68px)] bg-[#030712] text-white overflow-hidden py-16 px-4 sm:px-6 lg:px-8">
+    <div className="relative min-h-[calc(100vh-68px)] bg-[#030712] text-white overflow-hidden py-10 sm:py-12 px-4 sm:px-6 lg:px-8">
       {/* Background Cyber Tech Circuit Grid with Moving Accent Dots */}
       <FondoTech id="docente-page" />
 
-      <div className="max-w-6xl mx-auto space-y-16 relative z-10">
+      <div className="max-w-6xl mx-auto space-y-12 relative z-10">
         {/* Profile Hero Card with Photo & Credentials */}
-        <div className="bg-slate-900/85 border border-slate-800/80 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div className="bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
           {/* Subtle Ambient Radial Light */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
 
