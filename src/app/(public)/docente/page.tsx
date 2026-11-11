@@ -319,39 +319,42 @@ export default async function DocentePage() {
                     className="bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1"
                   >
                     <div>
-                      {/* Top Banner Image with Badges */}
-                      <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden mb-6 bg-slate-900 border border-slate-800">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={itemImage}
-                          alt={ev.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+                      {/* Top Banner Image with Floating Icon OUTSIDE overflow-hidden (ENCIMA DE TODO) */}
+                      <div className="relative mb-7">
+                        {/* Clipped Image Container */}
+                        <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={itemImage}
+                            alt={ev.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
 
-                        {/* Top-Left Category Badge */}
-                        <div className="absolute top-3 left-3">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-md">
-                            {ev.eventType === "WORKSHOP" ? "TALLER PRÁCTICO" : "CONFERENCIA"}
-                          </span>
+                          {/* Top-Left Category Badge */}
+                          <div className="absolute top-3 left-3 z-10">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-md">
+                              {ev.eventType === "WORKSHOP" ? "TALLER PRÁCTICO" : "CONFERENCIA"}
+                            </span>
+                          </div>
+
+                          {/* Top-Right Status Badge */}
+                          <div className="absolute top-3 right-3 z-10">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-slate-200 text-[10px] font-mono font-bold">
+                              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]" />
+                              <span>EN VIVO</span>
+                            </span>
+                          </div>
                         </div>
 
-                        {/* Top-Right Status Badge */}
-                        <div className="absolute top-3 right-3">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-slate-200 text-[10px] font-mono font-bold">
-                            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]" />
-                            <span>EN VIVO</span>
-                          </span>
-                        </div>
-
-                        {/* Floating Centered Icon on Image Junction */}
-                        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-slate-950 flex items-center justify-center shadow-lg shadow-cyan-500/30 font-bold z-10">
+                        {/* Floating Centered Icon: ENCIMA DE TODO (z-30, 100% visible, not clipped) */}
+                        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-slate-950 flex items-center justify-center shadow-xl shadow-cyan-500/40 font-bold z-30 ring-4 ring-[#0b0e14]">
                           <IconComponent className="w-6 h-6 text-slate-950" />
                         </div>
                       </div>
 
                       {/* Sub-badge Pill */}
-                      <div className="flex justify-center mt-3 mb-2">
+                      <div className="flex justify-center mt-3 mb-2.5">
                         <span className="inline-block px-3 py-0.5 rounded-full bg-cyan-950/50 border border-cyan-800/50 text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">
                           {subBadge}
                         </span>
