@@ -15,6 +15,7 @@ import {
   MapPin,
 } from "lucide-react";
 import Link from "next/link";
+import FondoTech from "@/components/public/FondoTech";
 
 interface EventPageProps {
   params: Promise<{
@@ -53,17 +54,20 @@ export default async function EventDetailPage({ params }: EventPageProps) {
   const isSoldOut = event.status === "SOLD_OUT" || availableSeats === 0;
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Back button */}
-      <div className="mb-8">
-        <Link
-          href="/#eventos"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver al catálogo de talleres</span>
-        </Link>
-      </div>
+    <div className="relative min-h-[calc(100vh-68px)] py-12 px-4 sm:px-6 lg:px-8 bg-[#030712] text-white overflow-hidden">
+      <FondoTech id="evento-detail" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Back button */}
+        <div className="mb-8">
+          <Link
+            href="/#eventos"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Volver al catálogo de talleres</span>
+          </Link>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Left Column: Event Details & Syllabus */}
@@ -208,6 +212,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
             />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

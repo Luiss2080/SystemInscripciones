@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "@/actions/auth";
 import { Lock, Mail, Terminal, Loader2, AlertCircle } from "lucide-react";
+import FondoTech from "@/components/public/FondoTech";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -29,8 +30,9 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6">
-      <div className="w-full max-w-md glass-panel rounded-3xl p-8 border-slate-800 relative">
+    <div className="relative min-h-[calc(100vh-68px)] flex items-center justify-center px-4 sm:px-6 bg-[#030712] text-white overflow-hidden">
+      <FondoTech id="admin-login" />
+      <div className="w-full max-w-md bg-slate-900/90 rounded-3xl p-8 border border-slate-800 shadow-2xl relative z-10 backdrop-blur-xl">
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto mb-4">
             <Lock className="w-7 h-7 text-cyan-400" />
