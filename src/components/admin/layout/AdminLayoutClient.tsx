@@ -20,6 +20,8 @@ import {
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
+  adminName?: string;
+  adminEmail?: string;
 }
 
 const ADMIN_LINKS = [
@@ -30,7 +32,11 @@ const ADMIN_LINKS = [
   { href: "/admin/certificados", label: "Certificados", icon: Award },
 ];
 
-export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
+export function AdminLayoutClient({
+  children,
+  adminName = "Administrador",
+  adminEmail,
+}: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -70,8 +76,8 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
                   SYSENG
                 </span>
               </div>
-              <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:block">
-                Control Operativo • Ing. Alex Martínez
+              <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest hidden sm:block truncate max-w-[230px]">
+                {adminName}{adminEmail ? ` • ${adminEmail}` : ""}
               </p>
             </div>
           </Link>
