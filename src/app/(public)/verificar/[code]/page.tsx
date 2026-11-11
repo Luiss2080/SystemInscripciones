@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 import Link from "next/link";
-import FondoTech from "@/components/public/FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 import {
   CheckCircle2,
   ArrowLeft,
@@ -8,7 +8,7 @@ import {
   Terminal,
   ShieldCheck,
 } from "lucide-react";
-import { PrintCertificateButton } from "@/components/PrintCertificateButton";
+import { PrintCertificateButton } from "@/components/public/credentials/PrintCertificateButton";
 
 interface VerifyPageProps {
   params: Promise<{
