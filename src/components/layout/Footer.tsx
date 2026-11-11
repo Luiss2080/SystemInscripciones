@@ -20,7 +20,7 @@ import {
   Share2,
 } from "lucide-react";
 import Link from "next/link";
-import FondoTech from "./public/FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 
 export function Footer() {
   return (

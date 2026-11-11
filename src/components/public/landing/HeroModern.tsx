@@ -10,7 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { ConferenceCarousel } from "./ConferenceCarousel";
-import FondoTech from "./FondoTech";
+import FondoTech from "@/components/shared/FondoTech";
 
 export function HeroModern() {
   return (
