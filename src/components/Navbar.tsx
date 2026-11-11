@@ -234,7 +234,7 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/#docente"
+              href="/docente"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-900 hover:text-cyan-400"
             >
@@ -252,7 +252,7 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="#contacto"
+              href="/contacto"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-900 hover:text-cyan-400"
             >
