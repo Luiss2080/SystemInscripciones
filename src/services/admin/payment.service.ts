@@ -28,3 +28,4 @@ export async function approvePaymentService(registrationId: string) {
     return { success: false, message };
   }
 }
+

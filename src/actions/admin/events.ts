@@ -18,3 +18,4 @@ export async function createNewEvent(formData: FormData) {
 
   return result;
 }
+

@@ -149,3 +149,4 @@ export async function registerAttendeeService(formData: unknown): Promise<Action
     };
   }
 }
+

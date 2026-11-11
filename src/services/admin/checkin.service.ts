@@ -103,3 +103,4 @@ export async function manualCheckinService(registrationId: string) {
     return { success: false, message };
   }
 }
+

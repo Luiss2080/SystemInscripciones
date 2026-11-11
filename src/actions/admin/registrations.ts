@@ -35,3 +35,4 @@ export async function issueCertificate(registrationId: string) {
 
   return result;
 }
+

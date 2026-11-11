@@ -6,3 +6,4 @@ import type { ActionResponse } from "@/types/actions";
 export async function registerAttendee(formData: unknown): Promise<ActionResponse> {
   return registerAttendeeService(formData);
 }
+

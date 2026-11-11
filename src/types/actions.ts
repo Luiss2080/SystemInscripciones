@@ -27,3 +27,4 @@ export interface CreateEventResult {
   message?: string;
   eventSlug?: string;
 }
+

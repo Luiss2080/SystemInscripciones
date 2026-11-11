@@ -40,3 +40,4 @@ export async function manualCheckin(registrationId: string) {
 
   return result;
 }
+
