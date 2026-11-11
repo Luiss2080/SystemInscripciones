@@ -322,7 +322,7 @@ export function ConferenceCarousel() {
                   </span>
                 </div>
 
-                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/60">
+                <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60">
                   {ws.badge}
                 </span>
               </div>

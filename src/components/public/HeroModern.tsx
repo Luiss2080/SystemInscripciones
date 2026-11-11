@@ -121,8 +121,8 @@ export function HeroModern() {
                       <p className="text-[9px] text-slate-400 font-mono">Microservicios • Kubernetes • OWASP Top 10</p>
                     </div>
                   </div>
-                  <div className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/60">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                  <div className="inline-flex items-center gap-1 text-[10px] font-mono text-cyan-400 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
+                    <CheckCircle2 className="w-3 h-3 text-cyan-400" />
                     <span>Acreditado</span>
                   </div>
                 </div>
