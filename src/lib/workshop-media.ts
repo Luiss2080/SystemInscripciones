@@ -46,3 +46,4 @@ export function getWorkshopMedia(slug: string, index = 0): WorkshopMediaMeta {
     categoryLabel: "ARQUITECTURA CLOUD",
   };
 }
+
