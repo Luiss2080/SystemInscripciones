@@ -102,7 +102,10 @@ export default async function DocentePage() {
 
       <div className="max-w-6xl mx-auto space-y-12 relative z-10">
         {/* Profile Hero Card with Photo & Credentials */}
-        <div className="bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div
+          id="perfil"
+          className="scroll-mt-24 bg-[#0b0e14]/95 border border-slate-800/80 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden"
+        >
           {/* Subtle Ambient Radial Light */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -200,7 +203,7 @@ export default async function DocentePage() {
         </div>
 
         {/* Section: Methodology & Pillars */}
-        <div className="space-y-6">
+        <div id="principios" className="scroll-mt-24 space-y-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-cyan-400 block mb-2">
               PRINCIPIOS PEDAGÓGICOS
@@ -231,7 +234,7 @@ export default async function DocentePage() {
         </div>
 
         {/* Section: Certifications & Diplomas */}
-        <div className="space-y-6">
+        <div id="certificaciones" className="scroll-mt-24 space-y-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-cyan-400 block mb-2">
               RESPALDO PROFESIONAL
