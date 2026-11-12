@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { MotionStaggerItem } from "@/components/shared/MotionPrimitives";
 import {
   ChevronLeft,
   ChevronRight,
@@ -75,12 +76,13 @@ export default function ServiciosCarousel({ items }: ServiciosCarouselProps) {
         </button>
       )}
 
-      {/* Equal-Height Cards Grid */}
+      {/* Equal-Height Animated Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
         {visibleItems.map((item, index) => (
-          <div
+          <MotionStaggerItem
             key={`${item.id}-${index}`}
-            className="h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1 relative"
+            index={index}
+            className="h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-colors duration-300 group relative"
           >
             <div>
               {/* Banner + Elevated Floating Icon */}
@@ -212,7 +214,7 @@ export default function ServiciosCarousel({ items }: ServiciosCarouselProps) {
                 </Link>
               </div>
             </div>
-          </div>
+          </MotionStaggerItem>
         ))}
       </div>
 

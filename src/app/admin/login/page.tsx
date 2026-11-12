@@ -22,6 +22,7 @@ import {
   Calendar,
 } from "lucide-react";
 import FondoTech from "@/components/shared/FondoTech";
+import { MotionFadeIn } from "@/components/shared/MotionPrimitives";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -67,7 +68,7 @@ export default function AdminLoginPage() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[130px] pointer-events-none" />
 
       {/* Unified Compact Split Portal Container */}
-      <div className="w-full max-w-4xl bg-[#0b0e14]/95 border border-slate-800/90 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.12)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative z-10 backdrop-blur-xl">
+      <MotionFadeIn className="w-full max-w-4xl bg-[#0b0e14]/95 border border-slate-800/90 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.12)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative z-10 backdrop-blur-xl">
         {/* Left Brand & Security Visual Column */}
         <div className="lg:col-span-5 relative overflow-hidden p-6 sm:p-8 flex flex-col justify-between bg-slate-950/90 border-b lg:border-b-0 lg:border-r border-slate-800/80">
           {/* Atmospheric Background Image Overlay */}
@@ -302,7 +303,7 @@ export default function AdminLoginPage() {
             </button>
           </div>
         </div>
-      </div>
+      </MotionFadeIn>
     </div>
   );
 }

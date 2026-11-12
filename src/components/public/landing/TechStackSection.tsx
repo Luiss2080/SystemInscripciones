@@ -1,4 +1,5 @@
 import FondoTech from "@/components/shared/FondoTech";
+import { MotionStaggerItem } from "@/components/shared/MotionPrimitives";
 import {
   Cloud,
   Server,
@@ -82,12 +83,13 @@ export default function TechStackSection() {
           </p>
         </div>
 
-        {/* 4 Tech Pillars Cards Grid with Cover Images and Floating Icons (ENCIMA DE TODO) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {/* 4 Tech Pillars Equal-Height Animated Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
           {categories.map((cat, idx) => (
-            <div
+            <MotionStaggerItem
               key={idx}
-              className="bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group hover:-translate-y-1 relative"
+              index={idx}
+              className="h-full bg-[#0b0e14] border border-slate-800/80 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-colors duration-300 group relative"
             >
               <div>
                 {/* Top Image Banner with Floating Icon (ENCIMA DE TODO) */}
@@ -152,7 +154,7 @@ export default function TechStackSection() {
                   </span>
                 ))}
               </div>
-            </div>
+            </MotionStaggerItem>
           ))}
         </div>
       </div>

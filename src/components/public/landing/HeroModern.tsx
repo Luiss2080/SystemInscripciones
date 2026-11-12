@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { ConferenceCarousel } from "./ConferenceCarousel";
 import FondoTech from "@/components/shared/FondoTech";
+import { MotionFadeIn, AnimatedCounter } from "@/components/shared/MotionPrimitives";
 import { getWorkshopMedia } from "@/lib/utils/workshop-media";
 import type { PublicEventDTO, PublicSiteStats } from "@/types/events";
 
@@ -35,7 +36,7 @@ export function HeroModern({ events, stats }: HeroModernProps) {
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full py-6 sm:py-8 z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center w-full">
           {/* Left Column: Headlines & Live DB Proof */}
-          <div className="lg:col-span-6 space-y-4 text-left">
+          <MotionFadeIn className="lg:col-span-6 space-y-4 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-400 text-xs font-semibold tracking-wider uppercase shadow-xs">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
               <span>Agenda Técnica Activa • {stats.totalEvents} Capacitaciones</span>
@@ -75,21 +76,27 @@ export function HeroModern({ events, stats }: HeroModernProps) {
             <div className="pt-2 flex flex-wrap items-center gap-3 text-[11px] font-mono text-slate-300">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800">
                 <Users className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{stats.totalRegistrations} inscritos registrados</span>
+                <span>
+                  <AnimatedCounter value={stats.totalRegistrations} /> inscritos registrados
+                </span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800">
                 <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{stats.totalAcademicHours}h académicas acumuladas</span>
+                <span>
+                  <AnimatedCounter value={stats.totalAcademicHours} suffix="h" /> académicas acumuladas
+                </span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800">
                 <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{stats.totalCertificates} certificados QR</span>
+                <span>
+                  <AnimatedCounter value={stats.totalCertificates} /> certificados QR
+                </span>
               </span>
             </div>
-          </div>
+          </MotionFadeIn>
 
           {/* Right Column: Live Featured DB Workshop Showcase */}
-          <div className="lg:col-span-6 relative flex items-center justify-center">
+          <MotionFadeIn delay={0.1} className="lg:col-span-6 relative flex items-center justify-center">
             <div className="absolute -inset-2 bg-gradient-to-tr from-cyan-500/15 via-blue-500/15 to-transparent rounded-2xl blur-xl opacity-70 pointer-events-none" />
 
             <div className="relative w-full max-w-lg rounded-2xl bg-slate-900/90 border border-slate-800 p-2.5 shadow-2xl group backdrop-blur-sm">
@@ -151,7 +158,7 @@ export function HeroModern({ events, stats }: HeroModernProps) {
                 </Link>
               </div>
             </div>
-          </div>
+          </MotionFadeIn>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import FondoTech from "@/components/shared/FondoTech";
+import { MotionStaggerItem } from "@/components/shared/MotionPrimitives";
 import {
   QrCode,
   Code2,
@@ -71,12 +72,13 @@ export default function MetodologiaSection() {
           </p>
         </div>
 
-        {/* 4 Steps Grid with Floating Icons on Top, Centered Content & Connecting Arrows */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative pt-4">
+        {/* 4 Steps Grid with Equal Height & Stagger Animation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative pt-4 items-stretch">
           {steps.map((step, index) => (
-            <div
+            <MotionStaggerItem
               key={step.num}
-              className="bg-slate-900/85 border border-slate-800/90 rounded-3xl p-6 pt-11 shadow-2xl flex flex-col justify-between hover:border-cyan-500/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] transition-all duration-300 group hover:-translate-y-1 backdrop-blur-md relative text-center"
+              index={index}
+              className="h-full bg-slate-900/85 border border-slate-800/90 rounded-3xl p-6 pt-11 shadow-2xl flex flex-col justify-between hover:border-cyan-500/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] transition-colors duration-300 group backdrop-blur-md relative text-center"
             >
               {/* Floating Centered Icon: ENCIMA DE TODO (z-30, elevated top boundary, glowing cyan) */}
               <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-slate-950 flex items-center justify-center shadow-xl shadow-cyan-500/40 font-bold z-30 ring-4 ring-[#030712] group-hover:scale-110 transition-transform">
@@ -115,7 +117,7 @@ export default function MetodologiaSection() {
                 <span>PASO 0{index + 1} COMPLETADO</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
               </div>
-            </div>
+            </MotionStaggerItem>
           ))}
         </div>
       </div>

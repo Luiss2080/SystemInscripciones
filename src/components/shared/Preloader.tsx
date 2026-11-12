@@ -11,8 +11,8 @@ export function Preloader() {
   useEffect(() => {
     const hasLoaded = sessionStorage.getItem("devcon_preloaded");
     if (hasLoaded) {
-      setVisible(false);
-      return;
+      const hideTimer = setTimeout(() => setVisible(false), 0);
+      return () => clearTimeout(hideTimer);
     }
 
     const logMessages = [

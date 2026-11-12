@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import FondoTech from "@/components/shared/FondoTech";
 import ServiciosCarousel, { type ServicioItem } from "./ServiciosCarousel";
 import { getWorkshopMedia } from "@/lib/utils/workshop-media";
@@ -150,21 +151,29 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
           </p>
         </div>
 
-        {/* Dynamic Filter Pills with Live DB Counts */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-10">
+        {/* Dynamic Filter Pills with Animated Spring Indicator */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-8">
           {CATEGORIES.map((cat) => {
             const count = initialEvents.filter((ev) => matchesCategory(ev, cat.id)).length;
+            const active = activeCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
-                  activeCategory === cat.id
-                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-[0_4px_20px_rgba(6,182,212,0.35)] scale-105 border-transparent"
+                className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5 z-10 ${
+                  active
+                    ? "text-slate-950"
                     : "bg-slate-900/80 text-slate-400 border border-slate-800 hover:bg-slate-800 hover:text-white"
                 }`}
               >
+                {active && (
+                  <motion.span
+                    layoutId="public-cat-pill"
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-[0_4px_20px_rgba(6,182,212,0.35)] -z-10"
+                  />
+                )}
                 <span>{cat.label}</span>
                 <span className="font-mono text-[10px] opacity-80">({count})</span>
               </button>
