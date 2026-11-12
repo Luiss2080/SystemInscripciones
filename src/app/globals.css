@@ -149,6 +149,35 @@ body {
   animation: float-dot-4 9.5s ease-in-out infinite;
 }
 
+/* Cyber QR Laser Sweep & Shimmer Animations */
+@keyframes scan-laser {
+  0%, 100% {
+    top: 12%;
+    opacity: 0.35;
+  }
+  50% {
+    top: 84%;
+    opacity: 0.95;
+  }
+}
+
+.animate-scan-laser {
+  animation: scan-laser 2.4s ease-in-out infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmer-sweep 2.6s ease-in-out infinite;
+}
+
 /* Print Styles for Tickets & Official Certificates */
 @media print {
   @page {
