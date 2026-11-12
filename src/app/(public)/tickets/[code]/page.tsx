@@ -18,10 +18,30 @@ export default async function TicketPage({ params }: TicketPageProps) {
     where: {
       ticketCode: code,
     },
-    include: {
+    select: {
+      ticketCode: true,
+      qrHash: true,
+      issuedAt: true,
       registration: {
-        include: {
-          event: true,
+        select: {
+          attendeeName: true,
+          attendeeEmail: true,
+          attendeePhone: true,
+          attendeeOccupation: true,
+          attendeeOrganization: true,
+          status: true,
+          attendedAt: true,
+          event: {
+            select: {
+              title: true,
+              eventType: true,
+              modality: true,
+              locationOrUrl: true,
+              startDate: true,
+              endDate: true,
+              academicHours: true,
+            },
+          },
         },
       },
     },
