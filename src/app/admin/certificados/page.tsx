@@ -2,11 +2,9 @@ import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { CertificatesTable } from "@/components/admin/certificates/CertificatesTable";
-import {
-  MotionFadeIn,
-  AnimatedProgressBar,
-} from "@/components/shared/MotionPrimitives";
-import { Award } from "lucide-react";
+import { AdminPageHeader } from "@/components/admin/ui";
+import { AnimatedProgressBar } from "@/components/shared/MotionPrimitives";
+import { Award, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -39,31 +37,16 @@ export default async function AdminCertificatesPage() {
     .reduce((sum, r) => sum + r.event.academicHours, 0);
 
   return (
-    <div className="space-y-4">
-      {/* Compact Command Banner with Live Coverage Bar */}
-      <MotionFadeIn className="relative overflow-hidden rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 p-4 sm:p-5 shadow-xl backdrop-blur-xl space-y-3">
-        <div className="absolute -top-16 -right-16 w-60 h-60 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-cyan-400">
-              <Award className="w-3 h-3 text-cyan-400" />
-              <span>ACREDITACIÓN & VALIDEZ QR</span>
-            </div>
-
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Emisión de{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                Certificados Digitales
-              </span>
-            </h1>
-
-            <p className="text-xs text-slate-400 font-medium">
-              Participantes con asistencia verificada (ATTENDED) en PostgreSQL listos para emisión de folio único.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3.5 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 self-start lg:self-auto">
+    <div className="space-y-5">
+      {/* Standard Module Header */}
+      <AdminPageHeader
+        icon={Award}
+        badgeText="ACREDITACIÓN & VALIDEZ QR • POSTGRESQL 18"
+        title="Emisión de"
+        accentTitle="Certificados Digitales"
+        description="Gestión oficial de folios criptográficos para participantes con asistencia acreditada (ATTENDED). Emisión en 1-clic y verificación pública inmediata."
+        actions={
+          <div className="flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 shadow-sm">
             <div>
               <span className="text-slate-400 block text-[9px]">ELEGIBLES</span>
               <strong className="text-white font-black tabular-nums">{attendedRecords.length}</strong>
@@ -84,17 +67,19 @@ export default async function AdminCertificatesPage() {
               <strong className="text-cyan-400 font-black tabular-nums">{certifiedHours}h</strong>
             </div>
           </div>
-        </div>
+        }
+      />
 
-        {/* Live Animated Coverage Progress */}
-        <div className="relative z-10 flex items-center gap-3 pt-1">
-          <span className="text-[10px] font-mono font-bold text-slate-400 uppercase whitespace-nowrap">
-            Cobertura Emisión ({coveragePct}%)
-          </span>
-          <AnimatedProgressBar percentage={coveragePct} className="flex-1" />
-        </div>
-      </MotionFadeIn>
+      {/* Live Animated Coverage Bar Card */}
+      <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center gap-3">
+        <span className="text-[11px] font-mono font-bold text-slate-300 uppercase whitespace-nowrap flex items-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Cobertura de Emisión ({coveragePct}%)</span>
+        </span>
+        <AnimatedProgressBar percentage={coveragePct} className="flex-1" />
+      </div>
 
+      {/* Main Standardized Table & Filter Section */}
       <CertificatesTable initialRecords={attendedRecords} />
     </div>
   );
