@@ -10,6 +10,11 @@ import {
   AnimatedCounter,
 } from "@/components/shared/MotionPrimitives";
 import {
+  AdminPageHeader,
+  AdminBadge,
+  getStatusBadgeVariant,
+} from "@/components/admin/ui";
+import {
   Calendar,
   Users,
   CheckCircle2,
@@ -19,7 +24,6 @@ import {
   ArrowRight,
   ExternalLink,
   Activity,
-  Sparkles,
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
@@ -95,34 +99,19 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-4">
-      {/* Compact Command Strip */}
-      <MotionFadeIn className="relative overflow-hidden rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 p-4 sm:p-5 shadow-xl backdrop-blur-xl">
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-cyan-400">
-              <Activity className="w-3 h-3 text-cyan-400" />
-              <span>CONSOLA OPERATIVA • {data.totalEvents} EVENTOS EN BD</span>
-            </div>
-
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
-              Bienvenido,{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                {shortAdminName}
-              </span>
-            </h1>
-
-            <p className="text-xs text-slate-400 font-medium">
-              Monitoreo en vivo de inscripciones, recaudación, aforos QR y certificaciones en PostgreSQL 18.
-            </p>
-          </div>
-
+    <div className="space-y-5">
+      {/* Standard Module Header */}
+      <AdminPageHeader
+        icon={Activity}
+        badgeText={`CONSOLA OPERATIVA • ${data.totalEvents} EVENTOS EN BD`}
+        title="Bienvenido,"
+        accentTitle={shortAdminName}
+        description="Monitoreo en vivo de inscripciones, recaudación, aforos QR y certificaciones en PostgreSQL 18."
+        actions={
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <Link
               href="/admin/checkin"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/20 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20 hover:scale-[1.02]"
             >
               <QrCode className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Escanear QR</span>
@@ -130,7 +119,7 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/eventos/nuevo"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
             >
               <PlusCircle className="w-3.5 h-3.5 text-cyan-400" />
               <span>Nuevo Taller</span>
@@ -138,14 +127,14 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/certificados"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
             >
               <Award className="w-3.5 h-3.5 text-cyan-400" />
               <span>{data.pendingCertificatesCount} por Emitir</span>
             </Link>
           </div>
-        </div>
-      </MotionFadeIn>
+        }
+      />
 
       {/* Compact Equal-Height Animated KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-stretch">
@@ -272,18 +261,20 @@ export default async function AdminDashboardPage() {
                               <span className="text-[10px] text-slate-500 font-mono">S/T</span>
                             )}
                           </td>
-                          <td className="py-2 px-2">
-                            <span
-                              className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full inline-flex items-center ${
-                                reg.status === "ATTENDED"
-                                  ? "bg-cyan-950 text-cyan-300 border border-cyan-700/60"
+                          <td className="py-2 px-2 text-center whitespace-nowrap">
+                            <AdminBadge
+                              variant={getStatusBadgeVariant(reg.status)}
+                              label={
+                                reg.status === "PENDING_PAYMENT"
+                                  ? "PENDIENTE"
                                   : reg.status === "CONFIRMED"
-                                  ? "bg-emerald-950 text-emerald-300 border border-emerald-700/60"
-                                  : "bg-amber-950 text-amber-300 border border-amber-700/60"
-                              }`}
-                            >
-                              {reg.status === "PENDING_PAYMENT" ? "PENDIENTE" : reg.status}
-                            </span>
+                                  ? "CONFIRMADO"
+                                  : reg.status === "ATTENDED"
+                                  ? "ASISTIÓ (QR)"
+                                  : reg.status
+                              }
+                              pulse={reg.status === "PENDING_PAYMENT"}
+                            />
                           </td>
                           <td className="py-2 px-2 text-right text-[10px] font-mono text-slate-400 whitespace-nowrap">
                             {formatShortDate(reg.createdAt)}
