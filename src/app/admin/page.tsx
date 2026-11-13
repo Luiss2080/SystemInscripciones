@@ -25,6 +25,7 @@ import {
   ExternalLink,
   Activity,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
