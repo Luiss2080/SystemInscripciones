@@ -26,13 +26,14 @@ export async function authenticateAdminService(
       where: { email },
     });
 
-    if (!user || user.role !== "ADMIN") {
-      return { success: false, message: "Credenciales de administrador incorrectas." };
+    const ALLOWED_ROLES = ["ADMIN", "SPEAKER", "STAFF"];
+    if (!user || !ALLOWED_ROLES.includes(user.role)) {
+      return { success: false, message: "Usuario no registrado o rol no autorizado." };
     }
 
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
-      return { success: false, message: "Credenciales de administrador incorrectas." };
+      return { success: false, message: "Contraseña incorrecta." };
     }
 
     const token = signAdminToken({

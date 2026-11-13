@@ -17,13 +17,54 @@ async function main() {
   const adminEmail = process.env.INITIAL_ADMIN_EMAIL || "admin@ingeniero.tech";
   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || "AdminPassword2026!";
   const passwordHash = await bcrypt.hash(adminPassword, 10);
+  const docentePasswordHash = await bcrypt.hash("DocentePassword2026!", 10);
+  const staffPasswordHash = await bcrypt.hash("StaffPassword2026!", 10);
 
+  // 1. Administrador General
   const admin = await prisma.user.create({
     data: {
       email: adminEmail,
       fullName: "Ing. Alex Martínez - Systems Engineer & Cloud Architect",
       passwordHash,
       role: "ADMIN",
+    },
+  });
+
+  // 2. Docentes / Speakers Especialistas
+  const speaker1 = await prisma.user.create({
+    data: {
+      email: "docente@ingeniero.tech",
+      fullName: "Dr. Carlos Siles - Cloud & Microservices Lead",
+      passwordHash: docentePasswordHash,
+      role: "SPEAKER",
+    },
+  });
+
+  const speaker2 = await prisma.user.create({
+    data: {
+      email: "maria.torres@ingeniero.tech",
+      fullName: "Ing. María Torres - DevSecOps & Security Auditor",
+      passwordHash: docentePasswordHash,
+      role: "SPEAKER",
+    },
+  });
+
+  // 3. Personal de Logística & Control de Acceso (Staff)
+  const staff1 = await prisma.user.create({
+    data: {
+      email: "staff@ingeniero.tech",
+      fullName: "Lic. Mariana Vega - Coordinadora de Acreditación & Puerta",
+      passwordHash: staffPasswordHash,
+      role: "STAFF",
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: "juan.logistica@ingeniero.tech",
+      fullName: "Tec. Juan Quispe - Operador de Escáner QR",
+      passwordHash: staffPasswordHash,
+      role: "STAFF",
     },
   });
 
@@ -66,7 +107,7 @@ async function main() {
       currency: "BOB",
       academicHours: 6,
       status: "OPEN",
-      speakerId: admin.id,
+      speakerId: speaker1.id,
       resources: {
         create: [
           {
@@ -106,7 +147,7 @@ async function main() {
       currency: "BOB",
       academicHours: 8,
       status: "OPEN",
-      speakerId: admin.id,
+      speakerId: speaker2.id,
       resources: {
         create: [
           {
@@ -193,7 +234,7 @@ async function main() {
       currency: "BOB",
       academicHours: 6,
       status: "OPEN",
-      speakerId: admin.id,
+      speakerId: speaker1.id,
     },
   });
 
@@ -216,7 +257,7 @@ async function main() {
       currency: "BOB",
       academicHours: 3,
       status: "OPEN",
-      speakerId: admin.id,
+      speakerId: speaker2.id,
     },
   });
 

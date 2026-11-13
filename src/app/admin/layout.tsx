@@ -10,7 +10,11 @@ export default async function AdminLayout({
   const adminShortName = session?.fullName?.split(" - ")[0]?.trim() || "Administrador";
 
   return (
-    <AdminLayoutClient adminName={adminShortName} adminEmail={session?.email}>
+    <AdminLayoutClient
+      adminName={adminShortName}
+      adminEmail={session?.email}
+      adminRole={session?.role || "ADMIN"}
+    >
       {children}
     </AdminLayoutClient>
   );
