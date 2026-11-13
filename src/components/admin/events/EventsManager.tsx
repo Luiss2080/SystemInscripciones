@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { formatCurrency, formatShortDate } from "@/lib/utils/format";
 import { getWorkshopMedia } from "@/lib/utils/workshop-media";
@@ -19,7 +19,6 @@ import {
 } from "@/components/shared/MotionPrimitives";
 import {
   Calendar,
-  Layers,
   PlusCircle,
   ExternalLink,
   Users,
@@ -29,7 +28,6 @@ import {
   Eye,
   LayoutGrid,
   List,
-  Sparkles,
   BookOpen,
   MapPin,
 } from "lucide-react";
@@ -68,56 +66,51 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
   const [sortBy, setSortBy] = useState("date_asc");
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
 
   // Selected event for details modal
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   // Filter & Sort Pipeline
-  const filteredEvents = useMemo(() => {
-    const query = searchTerm.toLowerCase().trim();
-    return events
-      .filter((e) => {
-        const matchesSearch =
-          query === "" ||
-          e.title.toLowerCase().includes(query) ||
-          e.slug.toLowerCase().includes(query) ||
-          e.description.toLowerCase().includes(query);
+  const query = searchTerm.toLowerCase().trim();
+  const filteredEvents = events
+    .filter((e) => {
+      const matchesSearch =
+        query === "" ||
+        e.title.toLowerCase().includes(query) ||
+        e.slug.toLowerCase().includes(query) ||
+        e.description.toLowerCase().includes(query);
 
-        const matchesType = typeFilter === "ALL" ? true : e.eventType === typeFilter;
-        const matchesModality =
-          modalityFilter === "ALL" ? true : e.modality === modalityFilter;
+      const matchesType = typeFilter === "ALL" ? true : e.eventType === typeFilter;
+      const matchesModality =
+        modalityFilter === "ALL" ? true : e.modality === modalityFilter;
 
-        return matchesSearch && matchesType && matchesModality;
-      })
-      .sort((a, b) => {
-        if (sortBy === "date_asc") {
-          return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-        }
-        if (sortBy === "date_desc") {
-          return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
-        }
-        if (sortBy === "capacity_desc") {
-          return b.maxCapacity - a.maxCapacity;
-        }
-        if (sortBy === "occupancy_desc") {
-          return b._count.registrations - a._count.registrations;
-        }
-        if (sortBy === "name_asc") {
-          return a.title.localeCompare(b.title);
-        }
-        return 0;
-      });
-  }, [events, searchTerm, typeFilter, modalityFilter, sortBy]);
+      return matchesSearch && matchesType && matchesModality;
+    })
+    .sort((a, b) => {
+      if (sortBy === "date_asc") {
+        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      }
+      if (sortBy === "date_desc") {
+        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+      }
+      if (sortBy === "capacity_desc") {
+        return b.maxCapacity - a.maxCapacity;
+      }
+      if (sortBy === "occupancy_desc") {
+        return b._count.registrations - a._count.registrations;
+      }
+      if (sortBy === "name_asc") {
+        return a.title.localeCompare(b.title);
+      }
+      return 0;
+    });
 
   // Pagination
   const totalItems = filteredEvents.length;
   const effectivePageSize = viewMode === "grid" ? 6 : 10;
   const totalPages = Math.ceil(totalItems / effectivePageSize) || 1;
-  const paginatedEvents = useMemo(() => {
-    const start = (currentPage - 1) * effectivePageSize;
-    return filteredEvents.slice(start, start + effectivePageSize);
-  }, [filteredEvents, currentPage, effectivePageSize]);
+  const startIndex = (currentPage - 1) * effectivePageSize;
+  const paginatedEvents = filteredEvents.slice(startIndex, startIndex + effectivePageSize);
 
   // Tab counts
   const tabCounts = {

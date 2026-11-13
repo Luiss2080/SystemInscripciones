@@ -1,7 +1,5 @@
 import { prisma } from "../src/lib/db/prisma";
 import { registerAttendee } from "../src/actions/public/registration";
-import { validateAndCheckinTicket } from "../src/actions/admin/checkin";
-import { issueCertificate } from "../src/actions/admin/registrations";
 import crypto from "crypto";
 
 async function runTests() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { issueCertificate } from "@/actions/admin/registrations";
@@ -25,7 +25,6 @@ import {
   Download,
   RotateCcw,
   Eye,
-  Calendar,
   Clock,
   User,
   Sparkles,
@@ -159,49 +158,45 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
   };
 
   // Pipeline Filter and Sort
-  const filteredRecords = useMemo(() => {
-    const query = searchTerm.toLowerCase().trim();
-    return records
-      .filter((r) => {
-        const matchesSearch =
-          query === "" ||
-          r.attendeeName.toLowerCase().includes(query) ||
-          r.attendeeEmail.toLowerCase().includes(query) ||
-          r.event.title.toLowerCase().includes(query) ||
-          (r.certificate?.certificateCode.toLowerCase().includes(query) ?? false);
+  const query = searchTerm.toLowerCase().trim();
+  const filteredRecords = records
+    .filter((r) => {
+      const matchesSearch =
+        query === "" ||
+        r.attendeeName.toLowerCase().includes(query) ||
+        r.attendeeEmail.toLowerCase().includes(query) ||
+        r.event.title.toLowerCase().includes(query) ||
+        (r.certificate?.certificateCode.toLowerCase().includes(query) ?? false);
 
-        const matchesFilter =
-          filterMode === "ALL"
-            ? true
-            : filterMode === "ISSUED"
-            ? r.certificate !== null
-            : r.certificate === null;
+      const matchesFilter =
+        filterMode === "ALL"
+          ? true
+          : filterMode === "ISSUED"
+          ? r.certificate !== null
+          : r.certificate === null;
 
-        return matchesSearch && matchesFilter;
-      })
-      .sort((a, b) => {
-        if (sortBy === "recent") {
-          const aTime = a.certificate ? new Date(a.certificate.issuedAt).getTime() : 0;
-          const bTime = b.certificate ? new Date(b.certificate.issuedAt).getTime() : 0;
-          return bTime - aTime;
-        }
-        if (sortBy === "name_asc") {
-          return a.attendeeName.localeCompare(b.attendeeName);
-        }
-        if (sortBy === "name_desc") {
-          return b.attendeeName.localeCompare(a.attendeeName);
-        }
-        return 0;
-      });
-  }, [records, searchTerm, filterMode, sortBy]);
+      return matchesSearch && matchesFilter;
+    })
+    .sort((a, b) => {
+      if (sortBy === "recent") {
+        const aTime = a.certificate ? new Date(a.certificate.issuedAt).getTime() : 0;
+        const bTime = b.certificate ? new Date(b.certificate.issuedAt).getTime() : 0;
+        return bTime - aTime;
+      }
+      if (sortBy === "name_asc") {
+        return a.attendeeName.localeCompare(b.attendeeName);
+      }
+      if (sortBy === "name_desc") {
+        return b.attendeeName.localeCompare(a.attendeeName);
+      }
+      return 0;
+    });
 
   // Pagination calculation
   const totalItems = filteredRecords.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
-  const paginatedRecords = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredRecords.slice(start, start + pageSize);
-  }, [filteredRecords, currentPage, pageSize]);
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedRecords = filteredRecords.slice(startIndex, startIndex + pageSize);
 
   // Counts for tabs
   const issuedCount = records.filter((r) => r.certificate !== null).length;

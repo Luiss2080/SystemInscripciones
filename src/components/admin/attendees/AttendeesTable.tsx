@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { manualCheckin } from "@/actions/admin/checkin";
@@ -22,18 +22,15 @@ import {
   RotateCcw,
   Eye,
   CheckCircle2,
-  Clock,
   Loader2,
   ExternalLink,
   CreditCard,
   Check,
-  Mail,
   Phone,
   Building,
   Briefcase,
   Ticket,
   Calendar,
-  AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -178,49 +175,45 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
   };
 
   // Filter and Sort Pipeline
-  const filteredAttendees = useMemo(() => {
-    const query = searchTerm.toLowerCase().trim();
-    return attendees
-      .filter((a) => {
-        const matchesSearch =
-          query === "" ||
-          a.attendeeName.toLowerCase().includes(query) ||
-          a.attendeeEmail.toLowerCase().includes(query) ||
-          a.attendeePhone.toLowerCase().includes(query) ||
-          a.event.title.toLowerCase().includes(query) ||
-          (a.ticket?.ticketCode.toLowerCase().includes(query) ?? false);
+  const query = searchTerm.toLowerCase().trim();
+  const filteredAttendees = attendees
+    .filter((a) => {
+      const matchesSearch =
+        query === "" ||
+        a.attendeeName.toLowerCase().includes(query) ||
+        a.attendeeEmail.toLowerCase().includes(query) ||
+        a.attendeePhone.toLowerCase().includes(query) ||
+        a.event.title.toLowerCase().includes(query) ||
+        (a.ticket?.ticketCode.toLowerCase().includes(query) ?? false);
 
-        const matchesStatus =
-          statusFilter === "ALL" ? true : a.status === statusFilter;
-        const matchesEvent =
-          eventFilter === "ALL" ? true : a.event.id === eventFilter;
+      const matchesStatus =
+        statusFilter === "ALL" ? true : a.status === statusFilter;
+      const matchesEvent =
+        eventFilter === "ALL" ? true : a.event.id === eventFilter;
 
-        return matchesSearch && matchesStatus && matchesEvent;
-      })
-      .sort((a, b) => {
-        if (sortBy === "recent") {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }
-        if (sortBy === "oldest") {
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        }
-        if (sortBy === "name_asc") {
-          return a.attendeeName.localeCompare(b.attendeeName);
-        }
-        if (sortBy === "name_desc") {
-          return b.attendeeName.localeCompare(a.attendeeName);
-        }
-        return 0;
-      });
-  }, [attendees, searchTerm, statusFilter, eventFilter, sortBy]);
+      return matchesSearch && matchesStatus && matchesEvent;
+    })
+    .sort((a, b) => {
+      if (sortBy === "recent") {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      if (sortBy === "oldest") {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+      if (sortBy === "name_asc") {
+        return a.attendeeName.localeCompare(b.attendeeName);
+      }
+      if (sortBy === "name_desc") {
+        return b.attendeeName.localeCompare(a.attendeeName);
+      }
+      return 0;
+    });
 
   // Pagination calculation
   const totalItems = filteredAttendees.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
-  const paginatedAttendees = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredAttendees.slice(start, start + pageSize);
-  }, [filteredAttendees, currentPage, pageSize]);
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedAttendees = filteredAttendees.slice(startIndex, startIndex + pageSize);
 
   // Counts for tabs
   const tabCounts = {

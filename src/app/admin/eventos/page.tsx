@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { EventsManager } from "@/components/admin/events/EventsManager";
 import { AdminPageHeader } from "@/components/admin/ui";
 import Link from "next/link";
-import { PlusCircle, Layers, Calendar, Globe } from "lucide-react";
+import { PlusCircle, Layers } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 

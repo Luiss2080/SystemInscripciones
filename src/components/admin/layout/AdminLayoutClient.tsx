@@ -19,10 +19,8 @@ import {
   X,
   ShieldCheck,
   Clock,
-  Sparkles,
   ChevronRight,
   PlusCircle,
-  Database,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
@@ -251,10 +249,9 @@ export function AdminLayoutClient({
             </div>
             <div className="min-w-0">
               <p className="text-xs font-bold text-white truncate">{adminName}</p>
-              <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400">
-                <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                <span className="truncate">Sesión Activa</span>
-              </div>
+              <p className="text-[10px] text-slate-400 font-mono truncate" title={adminEmail}>
+                {adminEmail}
+              </p>
             </div>
           </div>
 
