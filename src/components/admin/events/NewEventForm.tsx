@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { AdminPageHeader } from "@/components/admin/ui";
+
 function slugifyTitle(value: string): string {
   return value
     .toLowerCase()
@@ -63,31 +65,23 @@ export function NewEventForm() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4">
-      <MotionFadeIn className="relative overflow-hidden rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 p-4 sm:p-5 shadow-xl backdrop-blur-xl">
-        <div className="absolute -top-16 -right-16 w-60 h-60 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="space-y-1">
-            <Link
-              href="/admin/eventos"
-              className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Volver al Catálogo</span>
-            </Link>
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Programar Nuevo{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-                Taller o Conferencia
-              </span>
-            </h1>
-            <p className="text-xs text-slate-400 font-medium">
-              Define temario, cupos y modalidad para habilitar registro QR automático en PostgreSQL.
-            </p>
-          </div>
-        </div>
-      </MotionFadeIn>
+    <div className="max-w-5xl mx-auto space-y-5">
+      <AdminPageHeader
+        icon={PlusCircle}
+        badgeText="PROGRAMACIÓN ACADÉMICA • POSTGRESQL 18"
+        title="Programar Nuevo"
+        accentTitle="Taller o Conferencia"
+        description="Define temarios técnicos, cupos máximos, tarifa y modalidad para habilitar el registro con ticket QR automático en la base de datos."
+        actions={
+          <Link
+            href="/admin/eventos"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-xs font-mono font-bold text-slate-300 hover:text-white transition-all shadow-sm"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Volver al Catálogo</span>
+          </Link>
+        }
+      />
 
       {errorMsg && (
         <MotionFadeIn className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium flex items-center gap-2">
