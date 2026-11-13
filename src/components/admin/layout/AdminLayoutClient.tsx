@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +17,12 @@ import {
   ExternalLink,
   Menu,
   X,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  ChevronRight,
+  PlusCircle,
+  Database,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
@@ -25,22 +31,78 @@ interface AdminLayoutClientProps {
   adminEmail?: string;
 }
 
-const ADMIN_LINKS = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
-  { href: "/admin/eventos", label: "Talleres", icon: Calendar },
-  { href: "/admin/asistentes", label: "Asistentes", icon: Users },
-  { href: "/admin/certificados", label: "Certificados", icon: Award },
+interface NavItem {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+  tag?: string;
+  external?: boolean;
+}
+
+interface NavSection {
+  title: string;
+  badge?: string;
+  items: NavItem[];
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    title: "OPERACIONES",
+    badge: "3",
+    items: [
+      { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, tag: "Check-in" },
+      { href: "/admin/eventos", label: "Talleres & Eventos", icon: Calendar, tag: "Catálogo" },
+    ],
+  },
+  {
+    title: "GESTIÓN & PADRÓN",
+    badge: "2",
+    items: [
+      { href: "/admin/asistentes", label: "Asistentes & Pagos", icon: Users, tag: "Padrón" },
+      { href: "/admin/certificados", label: "Certificados Digitales", icon: Award, tag: "Acreditación" },
+    ],
+  },
+  {
+    title: "SISTEMA & ENLACES",
+    items: [
+      { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
+      { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+    ],
+  },
 ];
 
 export function AdminLayoutClient({
   children,
   adminName = "Administrador",
-  adminEmail,
+  adminEmail = "admin@ingeniero.tech",
 }: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState<string>("");
+
+  // Deterministic live clock on client only to prevent SSR hydration mismatches
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      };
+      setCurrentTime(now.toLocaleString("es-ES", options));
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   if (pathname === "/admin/login") {
     return <>{children}</>;
@@ -52,164 +114,280 @@ export function AdminLayoutClient({
     router.refresh();
   };
 
+  // Determine current active section title for top header breadcrumbs
+  const getActiveTitle = () => {
+    if (pathname === "/admin") return { section: "OPERACIONES", title: "Dashboard Consola" };
+    if (pathname.startsWith("/admin/checkin")) return { section: "OPERACIONES", title: "Escáner QR & Check-in" };
+    if (pathname.startsWith("/admin/eventos/nuevo")) return { section: "OPERACIONES", title: "Programar Nuevo Taller" };
+    if (pathname.startsWith("/admin/eventos")) return { section: "OPERACIONES", title: "Gestión de Talleres" };
+    if (pathname.startsWith("/admin/asistentes")) return { section: "GESTIÓN", title: "Asistentes & Pagos" };
+    if (pathname.startsWith("/admin/certificados")) return { section: "GESTIÓN", title: "Certificados Digitales" };
+    return { section: "ADMIN", title: "Consola de Control" };
+  };
+
+  const activeInfo = getActiveTitle();
+  const adminInitial = adminName.trim().charAt(0).toUpperCase() || "A";
+
+  const renderSidebarContent = (isMobile = false) => (
+    <div className="flex flex-col h-full bg-[#070b12] text-slate-200">
+      {/* Brand Header */}
+      <div className="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between shrink-0 bg-slate-950/40">
+        <Link
+          href="/admin"
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+          className="flex items-center gap-2.5 group"
+        >
+          <div className="w-9 h-9 rounded-xl bg-cyan-950/90 border border-cyan-800/70 flex items-center justify-center shadow-md shadow-cyan-950/40 group-hover:scale-105 group-hover:border-cyan-500/80 transition-all">
+            <Terminal className="w-4 h-4 text-cyan-400" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-sm tracking-tight text-white">DevCon</span>
+              <span className="font-extrabold text-sm tracking-tight text-cyan-400">Admin</span>
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/60">
+                PRO
+              </span>
+            </div>
+            <p className="text-[10px] font-mono text-slate-400 tracking-wider">
+              SysEng Operations
+            </p>
+          </div>
+        </Link>
+
+        {isMobile && (
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+
+      {/* Navigation Sections */}
+      <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6 scrollbar-thin">
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.title} className="space-y-1">
+            <div className="px-2.5 py-1 flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">
+                {section.title}
+              </span>
+              {section.badge && (
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-900 text-slate-400 border border-slate-800">
+                  {section.badge}
+                </span>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = item.exact
+                  ? pathname === item.href
+                  : pathname.startsWith(item.href);
+
+                const linkProps = item.external
+                  ? { target: "_blank", rel: "noreferrer" }
+                  : { onClick: () => isMobile && setMobileMenuOpen(false) };
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    {...linkProps}
+                    className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all group ${
+                      isActive
+                        ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30 shadow-xs shadow-cyan-500/10"
+                        : "text-slate-300 hover:text-white hover:bg-slate-900/80 border border-transparent"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon
+                        className={`w-4 h-4 transition-colors ${
+                          isActive
+                            ? "text-cyan-400"
+                            : "text-slate-400 group-hover:text-cyan-400"
+                        }`}
+                      />
+                      <span>{item.label}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      {item.tag && !isActive && (
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-mono text-slate-400 bg-slate-900/60 border border-slate-800">
+                          {item.tag}
+                        </span>
+                      )}
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-xs shadow-cyan-400" />
+                      )}
+                      {item.external && (
+                        <ExternalLink className="w-3 h-3 text-slate-400 opacity-60" />
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Sidebar Footer User Card */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 space-y-2.5">
+        <div className="flex items-center justify-between px-2 py-1">
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>PostgreSQL 18 Activo</span>
+          </div>
+          <span className="text-[10px] font-mono text-slate-400">Localhost</span>
+        </div>
+
+        <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center font-bold text-white text-xs shrink-0 shadow-sm">
+              {adminInitial}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-white truncate">{adminName}</p>
+              <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400">
+                <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                <span className="truncate">Sesión Activa</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            title="Cerrar sesión de administrador"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="relative min-h-screen bg-[#030712] text-slate-100 flex flex-col overflow-x-hidden">
-      {/* Live Cyber Circuit Grid Background */}
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex overflow-x-hidden">
+      {/* Background Tech Network */}
       <FondoTech id="admin-shell" />
 
-      {/* Compact Cyber Command Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-[#030712]/90 backdrop-blur-md shadow-lg shadow-black/25">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-[60px] flex items-center justify-between gap-3">
-          {/* Admin Brand Identity */}
-          <Link href="/admin" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center shadow-md shadow-cyan-950/40 group-hover:scale-105 group-hover:border-cyan-500/60 transition-all">
-              <Terminal className="w-4 h-4 text-cyan-400" />
+      {/* Desktop Fixed Left Sidebar */}
+      <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 z-40 border-r border-slate-800/80 shadow-2xl">
+        {renderSidebarContent(false)}
+      </aside>
+
+      {/* Mobile Drawer (AnimatePresence) */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              className="fixed inset-y-0 left-0 w-72 max-w-[85vw] z-50 shadow-2xl border-r border-slate-800"
+            >
+              {renderSidebarContent(true)}
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content Area (Offset by Sidebar on Desktop) */}
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
+        {/* Consistent Top Header */}
+        <header className="sticky top-0 z-30 w-full h-16 border-b border-slate-800/80 bg-[#030712]/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 shadow-md shadow-black/30">
+          {/* Left: Mobile trigger & Breadcrumb */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Abrir menú lateral"
+              className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-slate-400 border border-slate-800 uppercase">
+                {activeInfo.section}
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-600 hidden sm:inline-block" />
+              <h1 className="text-sm sm:text-base font-black tracking-tight text-white flex items-center gap-2">
+                <span>{activeInfo.title}</span>
+              </h1>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-sm sm:text-base tracking-tight text-white">
-                  DevCon
-                </span>
-                <span className="font-extrabold text-sm sm:text-base tracking-tight text-cyan-400">
-                  Admin
-                </span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/60">
-                  SYSENG
-                </span>
+          </div>
+
+          {/* Right: Live Clock, Contextual Quick Actions & Profile */}
+          <div className="flex items-center gap-2.5">
+            {/* Live Clock (Client only) */}
+            {currentTime && (
+              <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-[11px] font-mono text-slate-300 shadow-xs">
+                <Clock className="w-3 h-3 text-cyan-400" />
+                <span>{currentTime}</span>
               </div>
-              <p className="text-[10px] font-mono text-slate-400 tracking-wider hidden sm:block truncate max-w-[230px]">
-                {adminName}
-                {adminEmail ? ` • ${adminEmail}` : ""}
-              </p>
-            </div>
-          </Link>
+            )}
 
-          {/* Center Animated Pill Navigation (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-900/90 p-1 rounded-full border border-slate-800 text-xs font-semibold tracking-wide text-slate-300">
-            {ADMIN_LINKS.map((link) => {
-              const Icon = link.icon;
-              const isActive = link.exact
-                ? pathname === link.href
-                : pathname.startsWith(link.href);
+            {/* Quick Contextual Action: Nuevo Taller or QR Scanner */}
+            <Link
+              href="/admin/checkin"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-800/60 hover:border-cyan-500/70 text-cyan-300 text-xs font-bold transition-all shadow-xs"
+            >
+              <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Escáner QR</span>
+            </Link>
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors z-10 ${
-                    isActive
-                      ? "text-slate-950 font-extrabold"
-                      : "text-slate-300 hover:text-cyan-400"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="admin-nav-pill"
-                      transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-full bg-cyan-500 shadow-md shadow-cyan-500/25 -z-10"
-                    />
-                  )}
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+            <Link
+              href="/admin/eventos/nuevo"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-sm shadow-cyan-500/25"
+            >
+              <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>+ Nuevo Taller</span>
+            </Link>
 
-          {/* Right Action Pills */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-[10px] font-mono font-bold text-cyan-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              <span>POSTGRESQL LIVE</span>
-            </span>
+            <div className="w-px h-6 bg-slate-800 hidden sm:block" />
 
+            {/* Public Link */}
             <Link
               href="/"
               target="_blank"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-700/80 hover:border-cyan-500/40 text-xs font-bold transition-all"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold transition-all"
+              title="Abrir Web Pública en nueva pestaña"
             >
               <span>Web</span>
               <ExternalLink className="w-3 h-3" />
             </Link>
 
+            {/* Quick Logout Button */}
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-bold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold transition-all cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Salir</span>
             </button>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Menú Admin"
-              className="lg:hidden p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
-        </div>
+        </header>
 
-        {/* Mobile Drawer Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="lg:hidden border-t border-slate-800 bg-[#030712]/95 backdrop-blur-2xl px-4 py-3 overflow-hidden"
-            >
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-semibold">
-                {ADMIN_LINKS.map((link) => {
-                  const Icon = link.icon;
-                  const isActive = link.exact
-                    ? pathname === link.href
-                    : pathname.startsWith(link.href);
-
-                  return (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                        isActive
-                          ? "bg-cyan-500 text-slate-950 border-cyan-400 font-extrabold"
-                          : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-cyan-500/40"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 shrink-0" />
-                      <span>{link.label}</span>
-                    </Link>
-                  );
-                })}
-
-                <Link
-                  href="/"
-                  target="_blank"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-300 hover:border-cyan-500/40"
-                >
-                  <ExternalLink className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span>Web Pública</span>
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
-
-      {/* Compact Main Workspace */}
-      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-        {children}
-      </main>
-
-      {/* Slim Footer */}
-      <footer className="relative z-10 border-t border-slate-800/70 bg-[#030712]/80 py-3 px-6 text-center text-[11px] text-slate-500 font-mono">
-        DevCon Admin • Arquitectura Limpia, PostgreSQL 18 & Spec-Driven Development (SDD)
-      </footer>
+        {/* Page Container */}
+        <main className="flex-1 w-full max-w-[1500px] mx-auto p-4 sm:p-6 lg:p-7 space-y-6">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

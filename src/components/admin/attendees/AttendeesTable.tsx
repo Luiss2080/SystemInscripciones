@@ -1,43 +1,63 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { manualCheckin } from "@/actions/admin/checkin";
 import { approvePayment } from "@/actions/admin/registrations";
-import { MotionFadeIn } from "@/components/shared/MotionPrimitives";
-import { formatShortTime } from "@/lib/utils/format";
+import { formatShortTime, formatShortDate } from "@/lib/utils/format";
 import {
-  Search,
+  AdminFilterBar,
+  AdminTrayHeader,
+  AdminStatusTabs,
+  AdminPagination,
+  AdminEmptyState,
+  AdminBadge,
+  AdminModal,
+  getStatusBadgeVariant,
+} from "@/components/admin/ui";
+import {
+  Users,
   Download,
+  RotateCcw,
+  Eye,
   CheckCircle2,
   Clock,
   Loader2,
   ExternalLink,
   CreditCard,
   Check,
-  Filter,
+  Mail,
+  Phone,
+  Building,
+  Briefcase,
+  Ticket,
+  Calendar,
+  AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 
-interface AttendeesTableProps {
-  initialAttendees: {
+interface AttendeeRecord {
+  id: string;
+  attendeeName: string;
+  attendeeEmail: string;
+  attendeePhone: string;
+  attendeeOccupation: string;
+  attendeeOrganization: string | null;
+  status: string;
+  attendedAt: Date | string | null;
+  createdAt: Date | string;
+  event: {
     id: string;
-    attendeeName: string;
-    attendeeEmail: string;
-    attendeePhone: string;
-    attendeeOccupation: string;
-    attendeeOrganization: string | null;
-    status: string;
-    attendedAt: Date | string | null;
-    createdAt: Date | string;
-    event: {
-      id: string;
-      title: string;
-    };
-    ticket: {
-      ticketCode: string;
-    } | null;
-  }[];
+    title: string;
+  };
+  ticket: {
+    ticketCode: string;
+  } | null;
+}
+
+interface AttendeesTableProps {
+  initialAttendees: AttendeeRecord[];
   events: {
     id: string;
     title: string;
@@ -45,33 +65,23 @@ interface AttendeesTableProps {
 }
 
 export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps) {
-  const [attendees, setAttendees] = useState(initialAttendees);
+  const router = useRouter();
+  const [attendees, setAttendees] = useState<AttendeeRecord[]>(initialAttendees);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [eventFilter, setEventFilter] = useState("ALL");
+  const [sortBy, setSortBy] = useState("recent");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Loading states
   const [checkingInId, setCheckingInId] = useState<string | null>(null);
   const [approvingId, setApprovingId] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
-  const counts = {
-    ALL: attendees.length,
-    CONFIRMED: attendees.filter((a) => a.status === "CONFIRMED").length,
-    ATTENDED: attendees.filter((a) => a.status === "ATTENDED").length,
-    PENDING_PAYMENT: attendees.filter((a) => a.status === "PENDING_PAYMENT").length,
-  };
-
-  const filteredAttendees = attendees.filter((a) => {
-    const query = searchTerm.toLowerCase();
-    const matchesSearch =
-      a.attendeeName.toLowerCase().includes(query) ||
-      a.attendeeEmail.toLowerCase().includes(query) ||
-      a.event.title.toLowerCase().includes(query) ||
-      (a.ticket?.ticketCode.toLowerCase().includes(query) ?? false);
-
-    const matchesStatus = statusFilter === "ALL" ? true : a.status === statusFilter;
-    const matchesEvent = eventFilter === "ALL" ? true : a.event.id === eventFilter;
-    return matchesSearch && matchesStatus && matchesEvent;
-  });
+  // Selected attendee for details modal
+  const [selectedAttendee, setSelectedAttendee] = useState<AttendeeRecord | null>(null);
 
   const showToast = (msg: string) => {
     setActionFeedback(msg);
@@ -90,7 +100,9 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
               : item
           )
         );
-        showToast(res.message || "Asistencia acreditada.");
+        showToast(res.message || "Asistencia acreditada con éxito.");
+      } else {
+        showToast(res.message || "Error al acreditar asistencia.");
       }
     } finally {
       setCheckingInId(null);
@@ -107,11 +119,19 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
             item.id === id ? { ...item, status: "CONFIRMED" } : item
           )
         );
-        showToast(res.message || "Pago aprobado correctamente.");
+        showToast(res.message || "Pago aprobado. Ticket generado.");
+      } else {
+        showToast(res.message || "Error al aprobar pago.");
       }
     } finally {
       setApprovingId(null);
     }
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    router.refresh();
+    setTimeout(() => setIsRefreshing(false), 800);
   };
 
   const exportToCSV = () => {
@@ -122,7 +142,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
       "Telefono",
       "Ocupacion",
       "Organizacion",
-      "Evento",
+      "Programa / Taller",
       "Ticket",
       "Estado",
       "Fecha Registro",
@@ -154,252 +174,534 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    showToast(`Exportados ${filteredAttendees.length} registros a CSV.`);
   };
 
-  const filterTabs = [
-    { id: "ALL", label: "Todos", count: counts.ALL },
-    { id: "CONFIRMED", label: "Confirmados", count: counts.CONFIRMED },
-    { id: "ATTENDED", label: "Asistieron", count: counts.ATTENDED },
-    { id: "PENDING_PAYMENT", label: "Pago Pendiente", count: counts.PENDING_PAYMENT },
+  // Filter and Sort Pipeline
+  const filteredAttendees = useMemo(() => {
+    const query = searchTerm.toLowerCase().trim();
+    return attendees
+      .filter((a) => {
+        const matchesSearch =
+          query === "" ||
+          a.attendeeName.toLowerCase().includes(query) ||
+          a.attendeeEmail.toLowerCase().includes(query) ||
+          a.attendeePhone.toLowerCase().includes(query) ||
+          a.event.title.toLowerCase().includes(query) ||
+          (a.ticket?.ticketCode.toLowerCase().includes(query) ?? false);
+
+        const matchesStatus =
+          statusFilter === "ALL" ? true : a.status === statusFilter;
+        const matchesEvent =
+          eventFilter === "ALL" ? true : a.event.id === eventFilter;
+
+        return matchesSearch && matchesStatus && matchesEvent;
+      })
+      .sort((a, b) => {
+        if (sortBy === "recent") {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+        if (sortBy === "oldest") {
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        }
+        if (sortBy === "name_asc") {
+          return a.attendeeName.localeCompare(b.attendeeName);
+        }
+        if (sortBy === "name_desc") {
+          return b.attendeeName.localeCompare(a.attendeeName);
+        }
+        return 0;
+      });
+  }, [attendees, searchTerm, statusFilter, eventFilter, sortBy]);
+
+  // Pagination calculation
+  const totalItems = filteredAttendees.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const paginatedAttendees = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredAttendees.slice(start, start + pageSize);
+  }, [filteredAttendees, currentPage, pageSize]);
+
+  // Counts for tabs
+  const tabCounts = {
+    ALL: attendees.length,
+    CONFIRMED: attendees.filter((a) => a.status === "CONFIRMED").length,
+    ATTENDED: attendees.filter((a) => a.status === "ATTENDED").length,
+    PENDING_PAYMENT: attendees.filter((a) => a.status === "PENDING_PAYMENT").length,
+  };
+
+  const statusTabs = [
+    { id: "ALL", label: "Todos los Asistentes", count: tabCounts.ALL },
+    { id: "CONFIRMED", label: "Confirmados", count: tabCounts.CONFIRMED },
+    { id: "ATTENDED", label: "Asistieron (Check-in)", count: tabCounts.ATTENDED },
+    { id: "PENDING_PAYMENT", label: "Pendientes Pago", count: tabCounts.PENDING_PAYMENT },
   ];
 
+  const isFiltered =
+    searchTerm !== "" || statusFilter !== "ALL" || eventFilter !== "ALL";
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("ALL");
+    setEventFilter("ALL");
+    setSortBy("recent");
+    setCurrentPage(1);
+  };
+
   return (
-    <div className="space-y-3.5">
-      {/* Compact Animated Toolbar */}
-      <MotionFadeIn delay={0.05} className="rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 p-3.5 shadow-xl backdrop-blur-md space-y-2.5">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5">
-          {/* Animated Status Tabs */}
-          <div className="flex flex-wrap items-center gap-1 bg-slate-950/70 p-1 rounded-full border border-slate-800/80">
-            {filterTabs.map((tab) => {
-              const active = statusFilter === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setStatusFilter(tab.id)}
-                  className={`relative px-3 py-1 rounded-full text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5 z-10 ${
-                    active
-                      ? "text-slate-950 font-extrabold"
-                      : "text-slate-300 hover:text-cyan-400"
-                  }`}
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="attendees-filter-pill"
-                      transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-full bg-cyan-500 shadow-md shadow-cyan-500/20 -z-10"
-                    />
-                  )}
-                  <span>{tab.label}</span>
-                  <span
-                    className={`px-1.5 py-0.5 rounded-full text-[9px] font-mono ${
-                      active ? "bg-slate-950/20 text-slate-950" : "bg-slate-900 text-slate-400"
-                    }`}
-                  >
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search + Dynamic Workshop Filter + CSV */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 xl:max-w-xl justify-end">
-            <div className="relative sm:w-52">
-              <Filter className="w-3.5 h-3.5 text-cyan-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <select
-                value={eventFilter}
-                onChange={(e) => setEventFilter(e.target.value)}
-                aria-label="Filtrar por taller"
-                className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 focus:outline-none focus:border-cyan-500 text-xs truncate"
-              >
-                <option value="ALL">Todos los programas ({events.length})</option>
-                {events.map((ev) => (
-                  <option key={ev.id} value={ev.id}>
-                    {ev.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="relative flex-1">
-              <Search className="w-3.5 h-3.5 text-cyan-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Buscar nombre, email o ticket..."
-                className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-slate-950/90 border border-slate-800 text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 text-xs"
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={exportToCSV}
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 text-slate-200 hover:text-white hover:border-cyan-500/50 text-xs font-bold transition-all cursor-pointer shrink-0"
-            >
-              <Download className="w-3.5 h-3.5 text-cyan-400" />
-              <span>CSV ({filteredAttendees.length})</span>
-            </button>
-          </div>
-        </div>
-
-        <AnimatePresence>
-          {actionFeedback && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="text-xs font-semibold text-emerald-300 bg-emerald-950/60 border border-emerald-700/50 px-3 py-1.5 rounded-xl flex items-center gap-2"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+    <div className="space-y-4">
+      {/* Dynamic Feedback Toast */}
+      <AnimatePresence>
+        {actionFeedback && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="p-3 rounded-xl bg-cyan-950/90 border border-cyan-800/80 text-cyan-300 text-xs font-mono font-bold flex items-center justify-between shadow-lg"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-cyan-400" />
               <span>{actionFeedback}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </MotionFadeIn>
+            </div>
+            <button
+              onClick={() => setActionFeedback(null)}
+              className="text-cyan-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Compact Animated Data Table */}
-      <MotionFadeIn delay={0.1} className="rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 p-4 shadow-2xl backdrop-blur-xl overflow-hidden">
+      {/* Standardized Filter & Search Bar */}
+      <AdminFilterBar
+        title="FILTRAR ASISTENTES & PAGOS"
+        searchValue={searchTerm}
+        onSearchChange={(val) => {
+          setSearchTerm(val);
+          setCurrentPage(1);
+        }}
+        searchPlaceholder="Buscar por código #TCK, nombre, email o cédula..."
+        filters={[
+          {
+            id: "event",
+            label: "Taller",
+            value: eventFilter,
+            onChange: (val) => {
+              setEventFilter(val);
+              setCurrentPage(1);
+            },
+            options: [
+              { label: "Todos los Talleres (BD)", value: "ALL" },
+              ...events.map((e) => ({ label: e.title, value: e.id })),
+            ],
+          },
+        ]}
+        sortValue={sortBy}
+        onSortChange={(val) => {
+          setSortBy(val);
+          setCurrentPage(1);
+        }}
+        sortOptions={[
+          { label: "Más Recientes", value: "recent" },
+          { label: "Más Antiguos", value: "oldest" },
+          { label: "Nombre (A - Z)", value: "name_asc" },
+          { label: "Nombre (Z - A)", value: "name_desc" },
+        ]}
+        onReset={handleResetFilters}
+        isFiltered={isFiltered}
+      />
+
+      {/* Main Table Card Tray */}
+      <div className="rounded-2xl bg-[#0b0e14]/95 border border-slate-800/80 overflow-hidden shadow-xl backdrop-blur-xl">
+        {/* Tray Header */}
+        <AdminTrayHeader
+          icon={Users}
+          title="BANDEJA DE ASISTENTES & PEDIDOS"
+          subtitle="> CONSULTA, AUDITORÍA Y ACREDITACIÓN EN TIEMPO REAL"
+          totalCount={filteredAttendees.length}
+          countLabel="REGISTROS"
+          actions={
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={exportToCSV}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 text-xs font-bold transition-all cursor-pointer shadow-xs"
+              >
+                <Download className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Exportar CSV</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 text-xs font-bold transition-all cursor-pointer shadow-xs"
+                title="Actualizar datos de PostgreSQL"
+              >
+                <RotateCcw
+                  className={`w-3.5 h-3.5 text-cyan-400 ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
+                />
+                <span className="hidden sm:inline">Actualizar</span>
+              </button>
+            </div>
+          }
+        />
+
+        {/* Status Filter Tabs with Animated Spring Indicator */}
+        <AdminStatusTabs
+          tabs={statusTabs}
+          activeTab={statusFilter}
+          onChange={(tab) => {
+            setStatusFilter(tab);
+            setCurrentPage(1);
+          }}
+          layoutId="attendees-status-pill"
+        />
+
+        {/* Data Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="text-[10px] font-mono uppercase tracking-wider text-slate-400 border-b border-slate-800/80">
-              <tr>
-                <th className="py-2.5 px-2.5">Asistente</th>
-                <th className="py-2.5 px-2.5">Programa</th>
-                <th className="py-2.5 px-2.5">Perfil / Org</th>
-                <th className="py-2.5 px-2.5">Ticket QR</th>
-                <th className="py-2.5 px-2.5">Estado</th>
-                <th className="py-2.5 px-2.5 text-right">Acción</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60">
-              {filteredAttendees.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-8 text-center text-xs text-slate-500">
-                    No se encontraron asistentes con los filtros aplicados.
-                  </td>
+          {filteredAttendees.length === 0 ? (
+            <AdminEmptyState
+              title="No se encontraron asistentes"
+              description="No hay participantes registrados que coincidan con la búsqueda o el filtro seleccionado."
+              action={isFiltered ? { label: "Restablecer Filtros", onClick: handleResetFilters } : undefined}
+            />
+          ) : (
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950/60 text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                  <th className="py-3 px-4 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Ticket className="w-3 h-3 text-cyan-400" />
+                      <span>Ticket & Registro</span>
+                    </span>
+                  </th>
+                  <th className="py-3 px-4 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Users className="w-3 h-3 text-cyan-400" />
+                      <span>Asistente & Contacto</span>
+                    </span>
+                  </th>
+                  <th className="py-3 px-4 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3 text-cyan-400" />
+                      <span>Programa / Taller</span>
+                    </span>
+                  </th>
+                  <th className="py-3 px-4 font-bold text-center">Estado</th>
+                  <th className="py-3 px-4 font-bold text-center">Asistencia QR</th>
+                  <th className="py-3 px-4 font-bold text-right">Acciones</th>
                 </tr>
-              ) : (
-                filteredAttendees.map((a) => {
-                  const initial = a.attendeeName.trim().charAt(0).toUpperCase() || "A";
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {paginatedAttendees.map((attendee) => {
+                  const initial = attendee.attendeeName.trim().charAt(0).toUpperCase() || "A";
+                  const isPendingPay = attendee.status === "PENDING_PAYMENT";
+                  const isAttended = attendee.status === "ATTENDED";
+                  const isConfirmed = attendee.status === "CONFIRMED";
+
                   return (
-                    <tr key={a.id} className="hover:bg-slate-900/50 transition-colors">
-                      <td className="py-2.5 px-2.5">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-[11px] font-black text-cyan-400 shrink-0">
-                            {initial}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="font-bold text-white text-xs truncate">
-                              {a.attendeeName}
-                            </p>
-                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono">
-                              <span className="truncate max-w-[165px]">{a.attendeeEmail}</span>
-                              <span>•</span>
-                              <span>{a.attendeePhone}</span>
-                            </div>
+                    <tr
+                      key={attendee.id}
+                      className="hover:bg-slate-900/50 transition-colors group"
+                    >
+                      {/* Ticket & Fecha */}
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <div className="space-y-0.5">
+                          {attendee.ticket ? (
+                            <Link
+                              href={`/tickets/${attendee.ticket.ticketCode}`}
+                              target="_blank"
+                              className="inline-flex items-center gap-1 font-mono font-bold text-cyan-400 hover:text-cyan-300 hover:underline"
+                            >
+                              <span>{attendee.ticket.ticketCode}</span>
+                              <ExternalLink className="w-3 h-3 opacity-60" />
+                            </Link>
+                          ) : (
+                            <span className="font-mono text-slate-500 text-[11px]">
+                              Sin ticket
+                            </span>
+                          )}
+                          <div className="text-[10px] font-mono text-slate-400">
+                            {formatShortDate(attendee.createdAt)}
                           </div>
                         </div>
                       </td>
-                      <td className="py-2.5 px-2.5 max-w-[190px] truncate text-xs text-slate-300 font-medium">
-                        {a.event.title}
+
+                      {/* Asistente */}
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2.5 min-w-[200px]">
+                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-700 to-blue-700 text-white font-bold text-[11px] flex items-center justify-center shrink-0 shadow-xs">
+                            {initial}
+                          </div>
+                          <div className="min-w-0">
+                            <span className="font-bold text-white block truncate group-hover:text-cyan-300 transition-colors">
+                              {attendee.attendeeName}
+                            </span>
+                            <span className="text-[11px] text-slate-400 block truncate font-mono">
+                              {attendee.attendeeEmail}
+                            </span>
+                          </div>
+                        </div>
                       </td>
-                      <td className="py-2.5 px-2.5 text-[11px] text-slate-400">
-                        <p className="text-slate-200 font-medium truncate max-w-[150px]">
-                          {a.attendeeOccupation}
-                        </p>
-                        {a.attendeeOrganization && (
-                          <span className="text-[10px] text-slate-500 block truncate max-w-[150px]">
-                            {a.attendeeOrganization}
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-2.5 px-2.5">
-                        {a.ticket ? (
-                          <Link
-                            href={`/tickets/${a.ticket.ticketCode}`}
-                            target="_blank"
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 hover:border-cyan-500/50 font-mono text-[10px] font-bold text-cyan-400 transition-colors"
-                          >
-                            <span>{a.ticket.ticketCode}</span>
-                            <ExternalLink className="w-2.5 h-2.5" />
-                          </Link>
-                        ) : (
-                          <span className="text-[10px] text-slate-600 font-mono">Sin ticket</span>
-                        )}
-                      </td>
-                      <td className="py-2.5 px-2.5">
-                        <span
-                          className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${
-                            a.status === "ATTENDED"
-                              ? "bg-cyan-950 text-cyan-300 border border-cyan-700/60"
-                              : a.status === "CONFIRMED"
-                              ? "bg-emerald-950 text-emerald-300 border border-emerald-700/60"
-                              : "bg-amber-950 text-amber-300 border border-amber-700/60"
-                          }`}
-                        >
-                          {a.status === "ATTENDED" ? (
-                            <>
-                              <CheckCircle2 className="w-2.5 h-2.5 text-cyan-400" />
-                              <span>Asistió</span>
-                            </>
-                          ) : a.status === "CONFIRMED" ? (
-                            <>
-                              <Check className="w-2.5 h-2.5 text-emerald-400" />
-                              <span>Confirmado</span>
-                            </>
-                          ) : (
-                            <>
-                              <Clock className="w-2.5 h-2.5 text-amber-400" />
-                              <span>Pendiente</span>
-                            </>
-                          )}
+
+                      {/* Evento */}
+                      <td className="py-3 px-4 max-w-xs">
+                        <span className="text-slate-300 font-medium line-clamp-1">
+                          {attendee.event.title}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400 block truncate">
+                          {attendee.attendeeOccupation}
+                          {attendee.attendeeOrganization ? ` • ${attendee.attendeeOrganization}` : ""}
                         </span>
                       </td>
-                      <td className="py-2.5 px-2.5 text-right">
-                        {a.status === "PENDING_PAYMENT" ? (
-                          <button
-                            type="button"
-                            onClick={() => handleApprovePayment(a.id)}
-                            disabled={approvingId === a.id}
-                            className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
-                          >
-                            {approvingId === a.id ? (
-                              <Loader2 className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <CreditCard className="w-3 h-3" />
-                            )}
-                            <span>Aprobar Pago</span>
-                          </button>
-                        ) : a.status === "CONFIRMED" ? (
-                          <button
-                            type="button"
-                            onClick={() => handleManualCheckin(a.id)}
-                            disabled={checkingInId === a.id}
-                            className="px-2.5 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/30 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
-                          >
-                            {checkingInId === a.id ? (
-                              <Loader2 className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <CheckCircle2 className="w-3 h-3" />
-                            )}
-                            <span>Acreditar</span>
-                          </button>
+
+                      {/* Estado */}
+                      <td className="py-3 px-4 text-center whitespace-nowrap">
+                        <AdminBadge
+                          variant={getStatusBadgeVariant(attendee.status)}
+                          label={
+                            isConfirmed
+                              ? "CONFIRMADO"
+                              : isAttended
+                              ? "ASISTIÓ (QR)"
+                              : isPendingPay
+                              ? "PENDIENTE PAGO"
+                              : attendee.status
+                          }
+                          pulse={isPendingPay}
+                        />
+                      </td>
+
+                      {/* Check-in QR timestamp */}
+                      <td className="py-3 px-4 text-center whitespace-nowrap">
+                        {attendee.attendedAt ? (
+                          <div className="inline-flex items-center gap-1 text-[11px] font-mono text-cyan-400 font-bold">
+                            <CheckCircle2 className="w-3 h-3 text-cyan-400" />
+                            <span>{formatShortTime(attendee.attendedAt)}</span>
+                          </div>
                         ) : (
-                          <span className="text-[10px] text-slate-400 font-mono tabular-nums">
-                            {a.attendedAt ? `${formatShortTime(a.attendedAt)} UTC` : "Acreditado"}
+                          <span className="text-slate-500 font-mono text-[11px]">
+                            Pendiente
                           </span>
                         )}
+                      </td>
+
+                      {/* Standardized Actions Column */}
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5 justify-end">
+                          {/* 1. View Details (Eye Modal) */}
+                          <button
+                            type="button"
+                            onClick={() => setSelectedAttendee(attendee)}
+                            title="Ver detalles completos del participante"
+                            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* 2. Primary Action Button */}
+                          {isPendingPay && (
+                            <button
+                              type="button"
+                              onClick={() => handleApprovePayment(attendee.id)}
+                              disabled={approvingId === attendee.id}
+                              title="Aprobar pago y emitir ticket QR"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-[11px] font-bold transition-all cursor-pointer shadow-xs"
+                            >
+                              {approvingId === attendee.id ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <CreditCard className="w-3 h-3 text-amber-400" />
+                              )}
+                              <span>Aprobar</span>
+                            </button>
+                          )}
+
+                          {isConfirmed && (
+                            <button
+                              type="button"
+                              onClick={() => handleManualCheckin(attendee.id)}
+                              disabled={checkingInId === attendee.id}
+                              title="Acreditar ingreso manual (Check-in)"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold transition-all cursor-pointer shadow-xs"
+                            >
+                              {checkingInId === attendee.id ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Check className="w-3 h-3 text-cyan-400" />
+                              )}
+                              <span>Check-in</span>
+                            </button>
+                          )}
+
+                          {isAttended && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 text-[10px] font-mono font-bold">
+                              <CheckCircle2 className="w-3 h-3" />
+                              <span>Acreditado</span>
+                            </span>
+                          )}
+
+                          {/* 3. Ticket Link */}
+                          {attendee.ticket && (
+                            <Link
+                              href={`/tickets/${attendee.ticket.ticketCode}`}
+                              target="_blank"
+                              title="Ver credencial de acceso digital"
+                              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Link>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
-      </MotionFadeIn>
+
+        {/* Standardized Pagination Bar */}
+        <AdminPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="asistentes registrados"
+        />
+      </div>
+
+      {/* Standardized Attendee Detail Modal */}
+      <AdminModal
+        isOpen={selectedAttendee !== null}
+        onClose={() => setSelectedAttendee(null)}
+        title="Ficha Oficial del Participante"
+        subtitle={`Registro ID: ${selectedAttendee?.id || ""}`}
+        icon={Users}
+        footer={
+          <div className="flex items-center justify-between w-full">
+            <div>
+              {selectedAttendee?.ticket && (
+                <Link
+                  href={`/tickets/${selectedAttendee.ticket.ticketCode}`}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:underline font-mono font-bold"
+                >
+                  <Ticket className="w-3.5 h-3.5" />
+                  <span>Ver Ticket Digital #{selectedAttendee.ticket.ticketCode}</span>
+                </Link>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => setSelectedAttendee(null)}
+              className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+            >
+              Cerrar Ficha
+            </button>
+          </div>
+        }
+      >
+        {selectedAttendee && (
+          <div className="space-y-4">
+            {/* Header info */}
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-600 text-white font-bold text-sm flex items-center justify-center">
+                  {selectedAttendee.attendeeName.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-sm">
+                    {selectedAttendee.attendeeName}
+                  </h4>
+                  <p className="text-xs text-slate-400 font-mono">
+                    {selectedAttendee.attendeeEmail}
+                  </p>
+                </div>
+              </div>
+              <AdminBadge
+                variant={getStatusBadgeVariant(selectedAttendee.status)}
+                label={selectedAttendee.status}
+              />
+            </div>
+
+            {/* Details Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                  <Phone className="w-3 h-3 text-cyan-400" />
+                  <span>Teléfono / WhatsApp</span>
+                </span>
+                <p className="text-white font-mono font-bold">
+                  {selectedAttendee.attendeePhone || "No especificado"}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                  <Briefcase className="w-3 h-3 text-cyan-400" />
+                  <span>Ocupación / Rol</span>
+                </span>
+                <p className="text-white font-medium">
+                  {selectedAttendee.attendeeOccupation}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                  <Building className="w-3 h-3 text-cyan-400" />
+                  <span>Organización / Universidad</span>
+                </span>
+                <p className="text-white font-medium">
+                  {selectedAttendee.attendeeOrganization || "Independiente"}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+                  <Calendar className="w-3 h-3 text-cyan-400" />
+                  <span>Fecha de Inscripción</span>
+                </span>
+                <p className="text-white font-mono">
+                  {new Date(selectedAttendee.createdAt).toLocaleString("es-ES")}
+                </p>
+              </div>
+            </div>
+
+            {/* Event Info */}
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-mono text-slate-400 uppercase block">
+                Programa Académico Asignado
+              </span>
+              <p className="text-sm font-bold text-cyan-300">
+                {selectedAttendee.event.title}
+              </p>
+            </div>
+
+            {/* Check-in status note */}
+            <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs">
+              <span className="text-slate-400 font-mono">Estado de Acreditación QR:</span>
+              {selectedAttendee.attendedAt ? (
+                <span className="text-cyan-400 font-mono font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{new Date(selectedAttendee.attendedAt).toLocaleString("es-ES")}</span>
+                </span>
+              ) : (
+                <span className="text-amber-400 font-mono font-bold">
+                  Pendiente de ingreso al evento
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 }
