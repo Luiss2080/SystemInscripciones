@@ -596,3 +596,4 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
     </div>
   );
 }
+
