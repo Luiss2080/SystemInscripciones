@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { AttendeesTable } from "@/components/admin/attendees/AttendeesTable";
 import { AdminPageHeader } from "@/components/admin/ui";
 import { formatRevenue } from "@/lib/utils/format";
-import { Users, CreditCard, CheckCircle2, Clock } from "lucide-react";
+import { Users } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { CertificatesTable } from "@/components/admin/certificates/CertificatesTable";
 import { AdminPageHeader } from "@/components/admin/ui";
 import { AnimatedProgressBar } from "@/components/shared/MotionPrimitives";
-import { Award, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
+import { Award, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
