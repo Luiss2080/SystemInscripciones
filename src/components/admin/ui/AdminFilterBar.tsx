@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, X, RotateCcw, Filter, ArrowUpDown } from "lucide-react";
+import { Search, X, RotateCcw, Filter, ArrowUpDown, ChevronDown } from "lucide-react";
 
 export interface FilterSelectOption {
   label: string;
