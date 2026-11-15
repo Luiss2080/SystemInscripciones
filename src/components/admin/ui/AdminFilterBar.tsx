@@ -115,10 +115,10 @@ export function AdminFilterBar({
           </div>
         ))}
 
-        {/* Sorting Dropdown */}
-        {sortOptions.length > 0 && onSortChange && (
-          <div className="w-full sm:w-auto min-w-[170px]">
-            <div className="relative">
+        {/* Right action group: Sort + Dedicated Filter Modal Trigger Button */}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          {sortOptions.length > 0 && onSortChange && (
+            <div className="relative flex-1 sm:w-auto sm:min-w-[170px]">
               <select
                 value={sortValue || sortOptions[0]?.value}
                 onChange={(e) => onSortChange(e.target.value)}
@@ -134,38 +134,36 @@ export function AdminFilterBar({
                 <ArrowUpDown className="w-3 h-3" />
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Dedicated Filter Modal Trigger Button with Funnel Icon right next to Sort */}
-        {onOpenFilterModal && (
-          <button
-            type="button"
-            onClick={onOpenFilterModal}
-            className={`w-10 h-9 rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-xs ${
-              isFiltered
-                ? "bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-cyan-500/25"
-                : "bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border-slate-700/80 hover:border-cyan-500/50"
-            }`}
-            title="Abrir filtros avanzados"
-            aria-label="Abrir filtros avanzados"
-          >
-            <Filter className="w-4 h-4 stroke-[2.2]" />
-          </button>
-        )}
+          {onOpenFilterModal && (
+            <button
+              type="button"
+              onClick={onOpenFilterModal}
+              className={`h-9 w-10 min-w-[40px] rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-xs ${
+                isFiltered
+                  ? "bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/25"
+                  : "bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border-slate-700/80 hover:border-cyan-500/50"
+              }`}
+              title="Abrir filtros avanzados"
+              aria-label="Abrir filtros avanzados"
+            >
+              <Filter className="w-4 h-4 stroke-[2.2]" />
+            </button>
+          )}
 
-        {/* Reset Filter Button */}
-        {isFiltered && onReset && (
-          <button
-            type="button"
-            onClick={onReset}
-            className="w-full sm:w-auto p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
-            title="Restablecer filtros"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden xl:inline text-[11px]">Restablecer</span>
-          </button>
-        )}
+          {isFiltered && onReset && (
+            <button
+              type="button"
+              onClick={onReset}
+              className="h-9 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+              title="Restablecer filtros"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden xl:inline text-[11px]">Restablecer</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
