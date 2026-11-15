@@ -523,7 +523,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                               onClick={() => handleManualCheckin(attendee.id)}
                               disabled={checkingInId === attendee.id}
                               title="Acreditar ingreso manual (Check-in)"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold transition-all cursor-pointer shadow-xs"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
                             >
                               {checkingInId === attendee.id ? (
                                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -535,7 +535,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                           )}
 
                           {isAttended && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 text-[10px] font-mono font-bold">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 text-[10px] font-mono font-bold">
                               <CheckCircle2 className="w-3 h-3" />
                               <span>Acreditado</span>
                             </span>
@@ -547,7 +547,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                               href={`/tickets/${attendee.ticket.ticketCode}`}
                               target="_blank"
                               title="Ver credencial de acceso digital"
-                              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all"
+                              className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 text-slate-400 hover:text-white transition-all shadow-xs"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Link>

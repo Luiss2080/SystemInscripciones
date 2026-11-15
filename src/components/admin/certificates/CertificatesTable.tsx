@@ -452,7 +452,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                             type="button"
                             onClick={() => setSelectedRecord(r)}
                             title="Previsualizar certificado digital"
-                            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
+                            className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
                           >
                             <Eye className="w-3.5 h-3.5" />
                           </button>
@@ -464,7 +464,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                               onClick={() => handleIssue(r.id)}
                               disabled={issuingId === r.id}
                               title="Emitir certificado oficial con folio único"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-[11px] uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-cyan-500/20"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-cyan-500/20"
                             >
                               {issuingId === r.id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -481,7 +481,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                               href={`/verificar/${r.certificate!.certificateCode}`}
                               target="_blank"
                               title="Verificar diploma digital en portal público"
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-cyan-200 border border-slate-700/80 hover:border-cyan-500/40 text-[11px] font-bold transition-all shadow-xs"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-cyan-200 border border-slate-700/80 hover:border-cyan-500/40 text-xs font-bold transition-all shadow-xs"
                             >
                               <span>Verificar</span>
                               <ExternalLink className="w-3 h-3" />

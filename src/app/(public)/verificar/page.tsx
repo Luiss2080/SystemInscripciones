@@ -77,7 +77,7 @@ export default function VerifySearchPage() {
             <CheckCircle2 className="w-4 h-4 text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="font-bold text-white text-xs mb-1">Anti-Falsificación</p>
             <span className="text-slate-400 font-medium text-[11px] leading-relaxed block">
-              Firma SHA-256 única y trazable en base de datos PostgreSQL.
+              Firma criptográfica SHA-256 única y trazable en el registro oficial.
             </span>
           </div>
 

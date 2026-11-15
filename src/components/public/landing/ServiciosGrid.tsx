@@ -135,7 +135,7 @@ export default function ServiciosGrid({ initialEvents = [] }: ServiciosGridProps
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 relative z-10 text-white">
         <div className="flex justify-center mb-3">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 shadow-sm shadow-cyan-950">
-            CATÁLOGO OFICIAL • POSTGRESQL EN VIVO ({initialEvents.length})
+            CATÁLOGO OFICIAL • PROGRAMAS DISPONIBLES ({initialEvents.length})
           </span>
         </div>
 
