@@ -29,6 +29,7 @@ interface AdminFilterBarProps {
   onReset?: () => void;
   isFiltered?: boolean;
   className?: string;
+  onOpenFilterModal?: () => void;
 }
 
 export function AdminFilterBar({
@@ -43,6 +44,7 @@ export function AdminFilterBar({
   onReset,
   isFiltered = false,
   className = "",
+  onOpenFilterModal,
 }: AdminFilterBarProps) {
   return (
     <div
@@ -67,10 +69,10 @@ export function AdminFilterBar({
         )}
       </div>
 
-      {/* Inputs Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5">
+      {/* Inputs Bar */}
+      <div className="flex flex-col sm:flex-row items-center gap-2.5">
         {/* Main Search Input */}
-        <div className={`relative ${filters.length > 0 || sortOptions.length > 0 ? "lg:col-span-5" : "lg:col-span-12"}`}>
+        <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
@@ -93,7 +95,7 @@ export function AdminFilterBar({
 
         {/* Dynamic Select Filters */}
         {filters.map((filter) => (
-          <div key={filter.id} className="lg:col-span-3 sm:col-span-1">
+          <div key={filter.id} className="w-full sm:w-auto min-w-[190px]">
             <div className="relative">
               <select
                 value={filter.value}
@@ -115,7 +117,7 @@ export function AdminFilterBar({
 
         {/* Sorting Dropdown */}
         {sortOptions.length > 0 && onSortChange && (
-          <div className="lg:col-span-3 sm:col-span-1">
+          <div className="w-full sm:w-auto min-w-[170px]">
             <div className="relative">
               <select
                 value={sortValue || sortOptions[0]?.value}
@@ -135,19 +137,37 @@ export function AdminFilterBar({
           </div>
         )}
 
-        {/* Reset Filter Button (if filtered and fits in column) */}
+        {/* Dedicated Filter Modal Trigger Button with Funnel Icon */}
+        {onOpenFilterModal && (
+          <button
+            type="button"
+            onClick={onOpenFilterModal}
+            className={`w-full sm:w-auto px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-xs ${
+              isFiltered
+                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/60 shadow-cyan-500/10"
+                : "bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 hover:border-cyan-500/50"
+            }`}
+            title="Abrir modal de filtros"
+          >
+            <Filter className={`w-3.5 h-3.5 ${isFiltered ? "text-cyan-400" : "text-slate-400"}`} />
+            <span className="font-mono text-[11px]">Filtros</span>
+            {isFiltered && (
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            )}
+          </button>
+        )}
+
+        {/* Reset Filter Button */}
         {isFiltered && onReset && (
-          <div className="lg:col-span-1 sm:col-span-2 flex items-center">
-            <button
-              type="button"
-              onClick={onReset}
-              className="w-full py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              title="Restablecer filtros"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-              <span className="lg:hidden text-[11px]">Restablecer</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onReset}
+            className="w-full sm:w-auto p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+            title="Restablecer filtros"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden xl:inline text-[11px]">Restablecer</span>
+          </button>
         )}
       </div>
     </div>
