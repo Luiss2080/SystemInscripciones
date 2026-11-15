@@ -52,7 +52,7 @@ export default async function AdminCertificatesPage() {
             ? `CÁTEDRA DOCENTE • CERTIFICADOS DE MIS ALUMNOS`
             : isStaff
             ? `CONTROL OPERATIVO • ACREDITACIONES Y FOLIOS QR`
-            : `ACREDITACIÓN & VALIDEZ QR • POSTGRESQL 18`
+            : `ACREDITACIÓN & VALIDEZ QR • REGISTRO OFICIAL`
         }
         title={isSpeaker ? "Certificados de" : "Emisión de"}
         accentTitle={isSpeaker ? "Mis Cursos" : "Certificados Digitales"}
