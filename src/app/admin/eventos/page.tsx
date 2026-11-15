@@ -14,8 +14,11 @@ export default async function AdminEventsPage() {
     redirect("/admin/login");
   }
 
+  const isSpeaker = session.role === "SPEAKER";
+  const eventFilter = isSpeaker ? { deletedAt: null, speakerId: session.id } : { deletedAt: null };
+
   const rawEvents = await prisma.event.findMany({
-    where: { deletedAt: null },
+    where: eventFilter,
     orderBy: { startDate: "asc" },
     include: {
       _count: {
@@ -60,10 +63,18 @@ export default async function AdminEventsPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={Layers}
-        badgeText={`CATÁLOGO ACADÉMICO • ${rawEvents.length} PROGRAMAS EN BD`}
-        title="Talleres y"
-        accentTitle="Conferencias"
-        description="Control centralizado de aforos, tarifas, temarios, modalidades y acceso directo a landings públicas en PostgreSQL 18."
+        badgeText={
+          isSpeaker
+            ? `CÁTEDRA DOCENTE • ${rawEvents.length} PROGRAMAS ASIGNADOS`
+            : `CATÁLOGO ACADÉMICO • ${rawEvents.length} PROGRAMAS EN BD`
+        }
+        title={isSpeaker ? "Mis Talleres y" : "Talleres y"}
+        accentTitle={isSpeaker ? "Cursos Asignados" : "Conferencias"}
+        description={
+          isSpeaker
+            ? "Control de tus talleres técnicos: temarios, modalidades, cupos asignados y acceso a la landing pública."
+            : "Control centralizado de aforos, tarifas, temarios, modalidades y acceso directo a landings públicas en PostgreSQL 18."
+        }
         actions={
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <div className="flex items-center gap-3.5 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono">
@@ -82,13 +93,15 @@ export default async function AdminEventsPage() {
               </div>
             </div>
 
-            <Link
-              href="/admin/eventos/nuevo"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20"
-            >
-              <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Programar Taller</span>
-            </Link>
+            {session.role === "ADMIN" && (
+              <Link
+                href="/admin/eventos/nuevo"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20"
+              >
+                <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Programar Taller</span>
+              </Link>
+            )}
           </div>
         }
       />

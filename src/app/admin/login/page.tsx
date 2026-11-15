@@ -33,11 +33,42 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [demoFilled, setDemoFilled] = useState(false);
 
-  const handleFillDemo = () => {
-    setEmail("admin@ingeniero.tech");
-    setPassword("AdminPassword2026!");
+  const [selectedDemoRole, setSelectedDemoRole] = useState<string>("ADMIN");
+
+  const DEMO_ACCOUNTS = [
+    {
+      role: "ADMIN",
+      label: "Admin General",
+      email: "admin@ingeniero.tech",
+      pass: "AdminPassword2026!",
+      color: "border-cyan-500/50 text-cyan-300 bg-cyan-950/60",
+    },
+    {
+      role: "SPEAKER",
+      label: "Docente / Speaker",
+      email: "docente@ingeniero.tech",
+      pass: "DocentePassword2026!",
+      color: "border-indigo-500/50 text-indigo-300 bg-indigo-950/60",
+    },
+    {
+      role: "STAFF",
+      label: "Staff de Puerta",
+      email: "staff@ingeniero.tech",
+      pass: "StaffPassword2026!",
+      color: "border-emerald-500/50 text-emerald-300 bg-emerald-950/60",
+    },
+  ];
+
+  const handleSelectDemo = (account: typeof DEMO_ACCOUNTS[0]) => {
+    setEmail(account.email);
+    setPassword(account.pass);
+    setSelectedDemoRole(account.role);
     setDemoFilled(true);
     setTimeout(() => setDemoFilled(false), 2000);
+  };
+
+  const handleFillDemo = () => {
+    handleSelectDemo(DEMO_ACCOUNTS[0]);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -275,32 +306,45 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          {/* Compact Demo Credentials Bar */}
-          <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
-            <div className="text-[11px] font-mono text-slate-400">
-              <span className="text-slate-500 uppercase text-[9px] font-bold block">
-                CUENTA DEMO LOCAL
+          {/* Multi-Role Quick Access Demo Bar */}
+          <div className="mt-6 pt-4 border-t border-slate-800/80 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1.5">
+                <KeyRound className="w-3 h-3 text-cyan-400" />
+                <span>Acceso Rápido por Rol (Demo)</span>
               </span>
-              admin@ingeniero.tech • <span className="text-cyan-400">AdminPassword2026!</span>
+              {demoFilled && (
+                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Credenciales cargadas</span>
+                </span>
+              )}
             </div>
 
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-700 hover:border-cyan-500/60 text-cyan-400 hover:text-white text-[11px] font-bold transition-all cursor-pointer shadow-sm"
-            >
-              {demoFilled ? (
-                <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">Listo</span>
-                </>
-              ) : (
-                <>
-                  <KeyRound className="w-3.5 h-3.5" />
-                  <span>Autocompletar</span>
-                </>
-              )}
-            </button>
+            <div className="grid grid-cols-3 gap-1.5">
+              {DEMO_ACCOUNTS.map((acc) => {
+                const isSelected = selectedDemoRole === acc.role;
+                return (
+                  <button
+                    key={acc.role}
+                    type="button"
+                    onClick={() => handleSelectDemo(acc)}
+                    className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                      isSelected
+                        ? `${acc.color} shadow-sm ring-1 ring-cyan-500/30`
+                        : "bg-slate-950 border-slate-800/80 hover:border-slate-700 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <span className="text-[9px] font-mono font-bold uppercase block tracking-wider">
+                      {acc.role}
+                    </span>
+                    <span className="text-xs font-bold text-white block truncate">
+                      {acc.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </MotionFadeIn>

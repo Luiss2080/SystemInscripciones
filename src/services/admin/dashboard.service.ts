@@ -7,7 +7,10 @@ const ACTIVE_REGISTRATION_STATUSES = ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"
  * Fetches live operational metrics, recent registrations, pipeline breakdown,
  * and active workshops from PostgreSQL for the admin dashboard.
  */
-export async function getAdminDashboardData() {
+export async function getAdminDashboardData(speakerId?: string) {
+  const eventWhere = speakerId ? { deletedAt: null, speakerId } : { deletedAt: null };
+  const regWhere = speakerId ? { deletedAt: null, event: { speakerId } } : { deletedAt: null };
+
   const [
     totalEvents,
     openEvents,
@@ -23,30 +26,30 @@ export async function getAdminDashboardData() {
     activeWorkshops,
     allActiveEventsCapacity,
   ] = await Promise.all([
-    prisma.event.count({ where: { deletedAt: null } }),
-    prisma.event.count({ where: { deletedAt: null, status: "OPEN" } }),
-    prisma.registration.count({ where: { deletedAt: null } }),
-    prisma.registration.count({ where: { deletedAt: null, status: "CONFIRMED" } }),
-    prisma.registration.count({ where: { deletedAt: null, status: "ATTENDED" } }),
-    prisma.registration.count({ where: { deletedAt: null, status: "PENDING_PAYMENT" } }),
-    prisma.certificate.count(),
+    prisma.event.count({ where: eventWhere }),
+    prisma.event.count({ where: { ...eventWhere, status: "OPEN" } }),
+    prisma.registration.count({ where: regWhere }),
+    prisma.registration.count({ where: { ...regWhere, status: "CONFIRMED" } }),
+    prisma.registration.count({ where: { ...regWhere, status: "ATTENDED" } }),
+    prisma.registration.count({ where: { ...regWhere, status: "PENDING_PAYMENT" } }),
+    prisma.certificate.count(speakerId ? { where: { registration: { event: { speakerId } } } } : undefined),
     prisma.registration.count({
       where: {
-        deletedAt: null,
+        ...regWhere,
         status: "ATTENDED",
         certificate: { is: null },
       },
     }),
     prisma.payment.aggregate({
-      where: { status: "APPROVED" },
+      where: speakerId ? { status: "APPROVED", registration: { event: { speakerId } } } : { status: "APPROVED" },
       _sum: { amount: true },
     }),
     prisma.payment.aggregate({
-      where: { status: "PENDING" },
+      where: speakerId ? { status: "PENDING", registration: { event: { speakerId } } } : { status: "PENDING" },
       _sum: { amount: true },
     }),
     prisma.registration.findMany({
-      where: { deletedAt: null },
+      where: regWhere,
       orderBy: { createdAt: "desc" },
       take: 7,
       include: {
@@ -55,7 +58,7 @@ export async function getAdminDashboardData() {
       },
     }),
     prisma.event.findMany({
-      where: { deletedAt: null },
+      where: eventWhere,
       orderBy: { startDate: "asc" },
       take: 5,
       include: {
@@ -69,7 +72,7 @@ export async function getAdminDashboardData() {
       },
     }),
     prisma.event.findMany({
-      where: { deletedAt: null },
+      where: eventWhere,
       select: {
         maxCapacity: true,
         _count: {

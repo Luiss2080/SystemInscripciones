@@ -9,7 +9,10 @@ export type AdminBadgeVariant =
   | "approved"
   | "rejected"
   | "info"
-  | "neutral";
+  | "neutral"
+  | "admin"
+  | "speaker"
+  | "staff";
 
 interface AdminBadgeProps {
   variant?: AdminBadgeVariant;
@@ -77,6 +80,24 @@ const BADGE_STYLES: Record<
     text: "text-slate-400",
     dot: "bg-slate-500",
   },
+  admin: {
+    bg: "bg-cyan-950/80",
+    border: "border-cyan-700/70",
+    text: "text-cyan-300",
+    dot: "bg-cyan-400",
+  },
+  speaker: {
+    bg: "bg-indigo-950/80",
+    border: "border-indigo-700/70",
+    text: "text-indigo-300",
+    dot: "bg-indigo-400",
+  },
+  staff: {
+    bg: "bg-emerald-950/80",
+    border: "border-emerald-700/70",
+    text: "text-emerald-300",
+    dot: "bg-emerald-400",
+  },
 };
 
 export function AdminBadge({
@@ -119,6 +140,12 @@ export function getStatusBadgeVariant(status: string): AdminBadgeVariant {
       return "approved";
     case "REJECTED":
       return "rejected";
+    case "ADMIN":
+      return "admin";
+    case "SPEAKER":
+      return "speaker";
+    case "STAFF":
+      return "staff";
     default:
       return "neutral";
   }

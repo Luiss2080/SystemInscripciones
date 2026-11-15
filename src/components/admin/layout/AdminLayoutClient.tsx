@@ -21,12 +21,15 @@ import {
   Clock,
   ChevronRight,
   PlusCircle,
+  Shield,
+  GraduationCap,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
   adminName?: string;
   adminEmail?: string;
+  adminRole?: string;
 }
 
 interface NavItem {
@@ -44,37 +47,102 @@ interface NavSection {
   items: NavItem[];
 }
 
-const NAV_SECTIONS: NavSection[] = [
-  {
-    title: "OPERACIONES",
-    badge: "3",
-    items: [
-      { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-      { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, tag: "Check-in" },
-      { href: "/admin/eventos", label: "Talleres & Eventos", icon: Calendar, tag: "Catálogo" },
-    ],
-  },
-  {
-    title: "GESTIÓN & PADRÓN",
-    badge: "2",
-    items: [
-      { href: "/admin/asistentes", label: "Asistentes & Pagos", icon: Users, tag: "Padrón" },
-      { href: "/admin/certificados", label: "Certificados Digitales", icon: Award, tag: "Acreditación" },
-    ],
-  },
-  {
-    title: "SISTEMA & ENLACES",
-    items: [
-      { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
-      { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
-    ],
-  },
-];
+function getNavSectionsForRole(role: string): NavSection[] {
+  if (role === "SPEAKER") {
+    return [
+      {
+        title: "PORTAL DOCENTE",
+        badge: "CÁTEDRA",
+        items: [
+          { href: "/admin", label: "Dashboard Docente", icon: LayoutDashboard, exact: true },
+          { href: "/admin/eventos", label: "Mis Talleres Asignados", icon: Calendar, tag: "Temarios" },
+        ],
+      },
+      {
+        title: "ALUMNOS & ACREDITACIÓN",
+        badge: "ALUMNOS",
+        items: [
+          { href: "/admin/asistentes", label: "Padrón de Mis Alumnos", icon: Users, tag: "Inscritos" },
+          { href: "/admin/certificados", label: "Certificados de Mis Cursos", icon: Award, tag: "Diplomas" },
+        ],
+      },
+      {
+        title: "SISTEMA & ENLACES",
+        items: [
+          { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
+          { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+        ],
+      },
+    ];
+  }
+
+  if (role === "STAFF") {
+    return [
+      {
+        title: "CONTROL DE ACCESO",
+        badge: "PUERTA",
+        items: [
+          { href: "/admin/checkin", label: "Escáner QR en Vivo", icon: QrCode, tag: "Check-in" },
+          { href: "/admin", label: "Métricas de Aforo", icon: LayoutDashboard, exact: true },
+        ],
+      },
+      {
+        title: "ACREDITACIÓN EN PUERTA",
+        items: [
+          { href: "/admin/asistentes", label: "Padrón & Check-in Manual", icon: Users, tag: "Validar" },
+        ],
+      },
+      {
+        title: "SISTEMA & ENLACES",
+        items: [
+          { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+          { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
+        ],
+      },
+    ];
+  }
+
+  // Default: ADMIN
+  return [
+    {
+      title: "OPERACIONES",
+      badge: "3",
+      items: [
+        { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+        { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, tag: "Check-in" },
+        { href: "/admin/eventos", label: "Talleres & Eventos", icon: Calendar, tag: "Catálogo" },
+      ],
+    },
+    {
+      title: "GESTIÓN & PADRÓN",
+      badge: "2",
+      items: [
+        { href: "/admin/asistentes", label: "Asistentes & Pagos", icon: Users, tag: "Padrón" },
+        { href: "/admin/certificados", label: "Certificados Digitales", icon: Award, tag: "Acreditación" },
+      ],
+    },
+    {
+      title: "SEGURIDAD & ROLES",
+      badge: "RBAC",
+      items: [
+        { href: "/admin/usuarios", label: "Gestión de Roles & Usuarios", icon: Shield, tag: "Roles" },
+      ],
+    },
+    {
+      title: "SISTEMA & ENLACES",
+      items: [
+        { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
+        { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+      ],
+    },
+  ];
+}
 
 export function AdminLayoutClient({
   children,
   adminName = "Administrador",
   adminEmail = "admin@ingeniero.tech",
+  adminRole = "ADMIN",
 }: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -114,17 +182,57 @@ export function AdminLayoutClient({
 
   // Determine current active section title for top header breadcrumbs
   const getActiveTitle = () => {
-    if (pathname === "/admin") return { section: "OPERACIONES", title: "Dashboard Consola" };
-    if (pathname.startsWith("/admin/checkin")) return { section: "OPERACIONES", title: "Escáner QR & Check-in" };
+    if (pathname === "/admin") {
+      if (adminRole === "SPEAKER") return { section: "DOCENTE", title: "Dashboard Académico" };
+      if (adminRole === "STAFF") return { section: "LOGÍSTICA", title: "Métricas de Aforo" };
+      return { section: "OPERACIONES", title: "Dashboard Consola" };
+    }
+    if (pathname.startsWith("/admin/checkin")) return { section: "LOGÍSTICA", title: "Escáner QR & Check-in" };
     if (pathname.startsWith("/admin/eventos/nuevo")) return { section: "OPERACIONES", title: "Programar Nuevo Taller" };
-    if (pathname.startsWith("/admin/eventos")) return { section: "OPERACIONES", title: "Gestión de Talleres" };
-    if (pathname.startsWith("/admin/asistentes")) return { section: "GESTIÓN", title: "Asistentes & Pagos" };
-    if (pathname.startsWith("/admin/certificados")) return { section: "GESTIÓN", title: "Certificados Digitales" };
-    return { section: "ADMIN", title: "Consola de Control" };
+    if (pathname.startsWith("/admin/eventos")) {
+      return { section: "ACADÉMICO", title: adminRole === "SPEAKER" ? "Mis Talleres Asignados" : "Gestión de Talleres" };
+    }
+    if (pathname.startsWith("/admin/asistentes")) {
+      return { section: "PADRÓN", title: adminRole === "SPEAKER" ? "Padrón de Mis Alumnos" : "Asistentes & Pagos" };
+    }
+    if (pathname.startsWith("/admin/certificados")) {
+      return { section: "ACREDITACIÓN", title: "Certificados Digitales" };
+    }
+    if (pathname.startsWith("/admin/usuarios")) {
+      return { section: "SEGURIDAD", title: "Gestión de Roles & Usuarios" };
+    }
+    return { section: "PANEL", title: "Consola de Control" };
   };
 
   const activeInfo = getActiveTitle();
   const adminInitial = adminName.trim().charAt(0).toUpperCase() || "A";
+  const navSections = getNavSectionsForRole(adminRole);
+
+  const roleMeta = {
+    ADMIN: {
+      badge: "ADMIN PRO",
+      badgeStyle: "bg-cyan-950 text-cyan-400 border-cyan-800/60",
+      roleDesc: "Administrador General",
+      avatarGrad: "from-cyan-600 to-blue-600",
+    },
+    SPEAKER: {
+      badge: "DOCENTE",
+      badgeStyle: "bg-indigo-950 text-indigo-300 border-indigo-700/60",
+      roleDesc: "Docente / Ponente",
+      avatarGrad: "from-indigo-600 to-purple-600",
+    },
+    STAFF: {
+      badge: "STAFF",
+      badgeStyle: "bg-emerald-950 text-emerald-300 border-emerald-700/60",
+      roleDesc: "Personal de Logística",
+      avatarGrad: "from-emerald-600 to-teal-600",
+    },
+  }[adminRole as "ADMIN" | "SPEAKER" | "STAFF"] || {
+    badge: adminRole,
+    badgeStyle: "bg-cyan-950 text-cyan-400 border-cyan-800/60",
+    roleDesc: "Usuario Autorizado",
+    avatarGrad: "from-cyan-600 to-blue-600",
+  };
 
   const renderSidebarContent = (isMobile = false) => (
     <div className="flex flex-col h-full bg-[#070b12] text-slate-200">
@@ -142,12 +250,12 @@ export function AdminLayoutClient({
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-sm tracking-tight text-white">DevCon</span>
               <span className="font-extrabold text-sm tracking-tight text-cyan-400">Admin</span>
-              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/60">
-                PRO
+              <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold border ${roleMeta.badgeStyle}`}>
+                {roleMeta.badge}
               </span>
             </div>
             <p className="text-[10px] font-mono text-slate-400 tracking-wider">
-              SysEng Operations
+              {roleMeta.roleDesc}
             </p>
           </div>
         </Link>
@@ -165,7 +273,7 @@ export function AdminLayoutClient({
 
       {/* Navigation Sections */}
       <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6 scrollbar-thin">
-        {NAV_SECTIONS.map((section) => (
+        {navSections.map((section) => (
           <div key={section.title} className="space-y-1">
             <div className="px-2.5 py-1 flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase">
@@ -244,7 +352,7 @@ export function AdminLayoutClient({
 
         <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/90 border border-slate-800">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center font-bold text-white text-xs shrink-0 shadow-sm">
+            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${roleMeta.avatarGrad} flex items-center justify-center font-bold text-white text-xs shrink-0 shadow-sm`}>
               {adminInitial}
             </div>
             <div className="min-w-0">
@@ -258,7 +366,7 @@ export function AdminLayoutClient({
           <button
             type="button"
             onClick={handleLogout}
-            title="Cerrar sesión de administrador"
+            title="Cerrar sesión"
             className="p-1.5 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -325,6 +433,9 @@ export function AdminLayoutClient({
               <h1 className="text-sm sm:text-base font-black tracking-tight text-white flex items-center gap-2">
                 <span>{activeInfo.title}</span>
               </h1>
+              <span className={`hidden md:inline-block px-2 py-0.5 rounded-full text-[9px] font-mono font-bold border ${roleMeta.badgeStyle}`}>
+                {roleMeta.badge}
+              </span>
             </div>
           </div>
 
@@ -338,22 +449,36 @@ export function AdminLayoutClient({
               </div>
             )}
 
-            {/* Quick Contextual Action: Nuevo Taller or QR Scanner */}
-            <Link
-              href="/admin/checkin"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-800/60 hover:border-cyan-500/70 text-cyan-300 text-xs font-bold transition-all shadow-xs"
-            >
-              <QrCode className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Escáner QR</span>
-            </Link>
+            {/* Quick Contextual Action based on Role */}
+            {(adminRole === "ADMIN" || adminRole === "STAFF") && (
+              <Link
+                href="/admin/checkin"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-800/60 hover:border-cyan-500/70 text-cyan-300 text-xs font-bold transition-all shadow-xs"
+              >
+                <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Escáner QR</span>
+              </Link>
+            )}
 
-            <Link
-              href="/admin/eventos/nuevo"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-sm shadow-cyan-500/25"
-            >
-              <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>+ Nuevo Taller</span>
-            </Link>
+            {adminRole === "ADMIN" && (
+              <Link
+                href="/admin/eventos/nuevo"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-sm shadow-cyan-500/25"
+              >
+                <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>+ Nuevo Taller</span>
+              </Link>
+            )}
+
+            {adminRole === "SPEAKER" && (
+              <Link
+                href="/admin/eventos"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 text-indigo-300 text-xs font-bold transition-all shadow-sm"
+              >
+                <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Mis Cursos</span>
+              </Link>
+            )}
 
             <div className="w-px h-6 bg-slate-800 hidden sm:block" />
 

@@ -37,8 +37,28 @@ export default async function AdminDashboardPage() {
     redirect("/admin/login");
   }
 
-  const data = await getAdminDashboardData();
+  const isSpeaker = session.role === "SPEAKER";
+  const isStaff = session.role === "STAFF";
+  const data = await getAdminDashboardData(isSpeaker ? session.id : undefined);
   const shortAdminName = session.fullName.split(" - ")[0]?.trim() || session.fullName;
+
+  const headerConfig = isSpeaker
+    ? {
+        badge: `PORTAL DOCENTE • ${data.totalEvents} TALLERES ASIGNADOS`,
+        title: "Bienvenido Docente,",
+        desc: "Panel de control académico: estado de tus talleres asignados, alumnos inscritos y seguimiento de asistencia.",
+      }
+    : isStaff
+    ? {
+        badge: "CONTROL DE ACCESO • PUERTA & CHECK-IN",
+        title: "Bienvenido Operador,",
+        desc: "Consola de logística en vivo: validaciones de códigos QR en puerta y monitoreo de aforo.",
+      }
+    : {
+        badge: `CONSOLA OPERATIVA • ${data.totalEvents} EVENTOS EN BD`,
+        title: "Bienvenido,",
+        desc: "Monitoreo en vivo de inscripciones, recaudación, aforos QR y certificaciones en PostgreSQL 18.",
+      };
 
   const attendanceRate =
     data.totalRegistrations > 0
@@ -104,34 +124,48 @@ export default async function AdminDashboardPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={Activity}
-        badgeText={`CONSOLA OPERATIVA • ${data.totalEvents} EVENTOS EN BD`}
-        title="Bienvenido,"
+        badgeText={headerConfig.badge}
+        title={headerConfig.title}
         accentTitle={shortAdminName}
-        description="Monitoreo en vivo de inscripciones, recaudación, aforos QR y certificaciones en PostgreSQL 18."
+        description={headerConfig.desc}
         actions={
           <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <Link
-              href="/admin/checkin"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20 hover:scale-[1.02]"
-            >
-              <QrCode className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Escanear QR</span>
-            </Link>
+            {(isStaff || !isSpeaker) && (
+              <Link
+                href="/admin/checkin"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20 hover:scale-[1.02]"
+              >
+                <QrCode className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Escanear QR</span>
+              </Link>
+            )}
+
+            {!isSpeaker && !isStaff && (
+              <Link
+                href="/admin/eventos/nuevo"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+              >
+                <PlusCircle className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Nuevo Taller</span>
+              </Link>
+            )}
+
+            {isSpeaker && (
+              <Link
+                href="/admin/eventos"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 text-indigo-300 text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+              >
+                <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Mis Talleres ({data.totalEvents})</span>
+              </Link>
+            )}
 
             <Link
-              href="/admin/eventos/nuevo"
+              href="/admin/asistentes"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
             >
-              <PlusCircle className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Nuevo Taller</span>
-            </Link>
-
-            <Link
-              href="/admin/certificados"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-200 hover:text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
-            >
-              <Award className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{data.pendingCertificatesCount} por Emitir</span>
+              <Users className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{isSpeaker ? "Mis Alumnos" : "Padrón"} ({data.totalRegistrations})</span>
             </Link>
           </div>
         }
