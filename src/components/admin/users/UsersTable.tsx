@@ -71,6 +71,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   // Modals & Operation States
   const [selectedUser, setSelectedUser] = useState<UserRecord | null>(null);
   const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isUpdatingRoleId, setIsUpdatingRoleId] = useState<string | null>(null);
   const [isSubmittingNewUser, setIsSubmittingNewUser] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
@@ -269,6 +270,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         ]}
         onReset={handleResetFilters}
         isFiltered={isFiltered}
+        onOpenFilterModal={() => setIsFilterModalOpen(true)}
       />
 
       {/* Main Table Card Tray */}
