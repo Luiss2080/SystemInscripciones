@@ -1,25 +1,23 @@
 import net from "net";
 import { spawn } from "child_process";
 
-function getAvailablePort(startPort = 3000) {
-  return new Promise((resolve, reject) => {
+function isPortAvailable(port) {
+  return new Promise((resolve) => {
     const server = net.createServer();
-    server.unref();
-
-    server.on("error", (err) => {
-      if (err.code === "EADDRINUSE") {
-        resolve(getAvailablePort(startPort + 1));
-      } else {
-        reject(err);
-      }
+    server.once("error", () => resolve(false));
+    server.once("listening", () => {
+      server.close(() => resolve(true));
     });
-
-    server.listen(startPort, () => {
-      server.close(() => {
-        resolve(startPort);
-      });
-    });
+    server.listen(port, "0.0.0.0");
   });
+}
+
+async function getAvailablePort(startPort = 3000) {
+  let port = startPort;
+  while (!(await isPortAvailable(port))) {
+    port++;
+  }
+  return port;
 }
 
 async function start() {
