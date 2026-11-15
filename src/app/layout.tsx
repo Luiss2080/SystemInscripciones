@@ -16,6 +16,13 @@ export const metadata: Metadata = {
   title: "DevCon & Workshops | Talleres y Conferencias para Ingenieros",
   description:
     "Plataforma oficial de capacitación, acreditación con código QR y certificación digital para talleres y conferencias de Ingeniería de Sistemas.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon" },
+    ],
+    apple: "/apple-icon",
+  },
 };
 
 export default function RootLayout({
