@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { AttendeesTable } from "@/components/admin/attendees/AttendeesTable";
 import { AdminPageHeader } from "@/components/admin/ui";
 import { formatRevenue } from "@/lib/utils/format";
-import { Users } from "lucide-react";
+import { Users, CheckCircle2, ShieldCheck, Clock, CreditCard } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -67,37 +67,60 @@ export default async function AdminAttendeesPage() {
             ? "Listado oficial de participantes inscritos en tus talleres asignados: seguimiento de asistencia, datos de contacto y acreditación."
             : "Filtra por taller o estado, aprueba comprobantes de pago, acredita asistencia mediante QR y gestiona el padrón oficial de participantes."
         }
-        actions={
-          <div className="flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 shadow-sm">
-            <div>
-              <span className="text-slate-400 block text-[9px]">TOTAL</span>
-              <strong className="text-white font-black tabular-nums">{attendees.length}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">CONF.</span>
-              <strong className="text-emerald-300 font-black tabular-nums">{confirmedCount}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">ASIST.</span>
-              <strong className="text-cyan-400 font-black tabular-nums">{attendedCount}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">PEND.</span>
-              <strong className="text-amber-300 font-black tabular-nums">{pendingCount}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">CAJA APROBADA</span>
-              <strong className="text-emerald-300 font-black tabular-nums">
-                {formatRevenue(revenueTotal)}
-              </strong>
-            </div>
-          </div>
-        }
       />
+
+      {/* Fila Adicional de Estadísticas de Padrón */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Total Inscritos</span>
+            <strong className="text-xl font-black text-white font-mono tabular-nums">{attendees.length}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+            <Users className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Confirmados</span>
+            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{confirmedCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+            <CheckCircle2 className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Acreditados QR</span>
+            <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{attendedCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+            <ShieldCheck className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Pendientes Pago</span>
+            <strong className="text-xl font-black text-amber-300 font-mono tabular-nums">{pendingCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-amber-950/80 border border-amber-800/60 flex items-center justify-center text-amber-400">
+            <Clock className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Caja Aprobada</span>
+            <strong className="text-xl font-black text-emerald-300 font-mono tabular-nums">{formatRevenue(revenueTotal)}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+            <CreditCard className="w-4 h-4" />
+          </div>
+        </div>
+      </div>
 
       {/* Main Standardized Table & Filter Section */}
       <AttendeesTable initialAttendees={attendees} events={events} />
