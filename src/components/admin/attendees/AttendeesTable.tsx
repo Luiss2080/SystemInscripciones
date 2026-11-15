@@ -406,22 +406,22 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                     >
                       {/* Ticket & Fecha */}
                       <td className="py-3 px-4 whitespace-nowrap">
-                        <div className="space-y-0.5">
+                        <div className="space-y-1">
                           {attendee.ticket ? (
                             <Link
                               href={`/tickets/${attendee.ticket.ticketCode}`}
                               target="_blank"
-                              className="inline-flex items-center gap-1 font-mono font-bold text-cyan-400 hover:text-cyan-300 hover:underline"
+                              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-cyan-950/60 border border-cyan-800/60 font-mono font-bold text-[11px] text-cyan-300 hover:text-white hover:border-cyan-400 transition-all shadow-xs"
                             >
                               <span>{attendee.ticket.ticketCode}</span>
                               <ExternalLink className="w-3 h-3 opacity-60" />
                             </Link>
                           ) : (
-                            <span className="font-mono text-slate-500 text-[11px]">
+                            <span className="font-mono text-slate-500 text-[11px] px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800">
                               Sin ticket
                             </span>
                           )}
-                          <div className="text-[10px] font-mono text-slate-400">
+                          <div className="text-[10px] font-mono text-slate-400 pl-0.5">
                             {formatShortDate(attendee.createdAt)}
                           </div>
                         </div>
@@ -430,7 +430,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                       {/* Asistente */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2.5 min-w-[200px]">
-                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-700 to-blue-700 text-white font-bold text-[11px] flex items-center justify-center shrink-0 shadow-xs">
+                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 border border-cyan-500/30 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-sm shadow-cyan-950/40">
                             {initial}
                           </div>
                           <div className="min-w-0">
@@ -446,10 +446,10 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
 
                       {/* Evento */}
                       <td className="py-3 px-4 max-w-xs">
-                        <span className="text-slate-300 font-medium line-clamp-1">
+                        <span className="text-white font-bold block leading-snug line-clamp-1 group-hover:text-cyan-300 transition-colors">
                           {attendee.event.title}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400 block truncate">
+                        <span className="text-[10px] font-mono text-slate-400 block truncate mt-0.5">
                           {attendee.attendeeOccupation}
                           {attendee.attendeeOrganization ? ` • ${attendee.attendeeOrganization}` : ""}
                         </span>
@@ -475,7 +475,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                       {/* Check-in QR timestamp */}
                       <td className="py-3 px-4 text-center whitespace-nowrap">
                         {attendee.attendedAt ? (
-                          <div className="inline-flex items-center gap-1 text-[11px] font-mono text-cyan-400 font-bold">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-[11px] font-mono text-cyan-300 font-bold">
                             <CheckCircle2 className="w-3 h-3 text-cyan-400" />
                             <span>{formatShortTime(attendee.attendedAt)}</span>
                           </div>
@@ -494,7 +494,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                             type="button"
                             onClick={() => setSelectedAttendee(attendee)}
                             title="Ver detalles completos del participante"
-                            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
+                            className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
                           >
                             <Eye className="w-3.5 h-3.5" />
                           </button>
@@ -506,7 +506,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                               onClick={() => handleApprovePayment(attendee.id)}
                               disabled={approvingId === attendee.id}
                               title="Aprobar pago y emitir ticket QR"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-[11px] font-bold transition-all cursor-pointer shadow-xs"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
                             >
                               {approvingId === attendee.id ? (
                                 <Loader2 className="w-3 h-3 animate-spin" />
