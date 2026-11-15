@@ -137,23 +137,20 @@ export function AdminFilterBar({
           </div>
         )}
 
-        {/* Dedicated Filter Modal Trigger Button with Funnel Icon */}
+        {/* Dedicated Filter Modal Trigger Button with Funnel Icon right next to Sort */}
         {onOpenFilterModal && (
           <button
             type="button"
             onClick={onOpenFilterModal}
-            className={`w-full sm:w-auto px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-xs ${
+            className={`w-10 h-9 rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-xs ${
               isFiltered
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/60 shadow-cyan-500/10"
-                : "bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 hover:border-cyan-500/50"
+                ? "bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-cyan-500/25"
+                : "bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border-slate-700/80 hover:border-cyan-500/50"
             }`}
-            title="Abrir modal de filtros"
+            title="Abrir filtros avanzados"
+            aria-label="Abrir filtros avanzados"
           >
-            <Filter className={`w-3.5 h-3.5 ${isFiltered ? "text-cyan-400" : "text-slate-400"}`} />
-            <span className="font-mono text-[11px]">Filtros</span>
-            {isFiltered && (
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            )}
+            <Filter className="w-4 h-4 stroke-[2.2]" />
           </button>
         )}
 
