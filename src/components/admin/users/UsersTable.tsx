@@ -424,7 +424,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                             type="button"
                             onClick={() => setSelectedUser(user)}
                             title="Ver ficha completa del usuario"
-                            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
+                            className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
                           >
                             <Eye className="w-3.5 h-3.5" />
                           </button>
@@ -435,7 +435,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                               value={user.role}
                               disabled={isUpdatingRoleId === user.id}
                               onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                              className="appearance-none px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-[11px] font-mono font-bold text-slate-300 focus:outline-none focus:border-cyan-500 cursor-pointer disabled:opacity-50"
+                              className="appearance-none px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-[11px] font-mono font-bold text-slate-300 focus:outline-none focus:border-cyan-500 cursor-pointer disabled:opacity-50 shadow-xs transition-colors"
                               title="Cambiar rol de usuario"
                             >
                               <option value="ADMIN" className="bg-slate-900 text-white">ADMIN</option>
