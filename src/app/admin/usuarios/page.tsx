@@ -48,30 +48,50 @@ export default async function AdminUsersPage() {
         title="Gestión de Usuarios y"
         accentTitle="Roles del Sistema"
         description="Administración centralizada de identidades, privilegios de acceso y asignaciones docentes en el ecosistema de talleres y conferencias."
-        actions={
-          <div className="flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 shadow-sm">
-            <div>
-              <span className="text-slate-400 block text-[9px]">TOTAL CUENTAS</span>
-              <strong className="text-white font-black tabular-nums">{users.length}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">ADMINS</span>
-              <strong className="text-cyan-400 font-black tabular-nums">{adminCount}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">DOCENTES</span>
-              <strong className="text-indigo-400 font-black tabular-nums">{speakerCount}</strong>
-            </div>
-            <div className="w-px h-6 bg-slate-800" />
-            <div>
-              <span className="text-slate-400 block text-[9px]">STAFF PUERTA</span>
-              <strong className="text-emerald-400 font-black tabular-nums">{staffCount}</strong>
-            </div>
-          </div>
-        }
       />
+
+      {/* Fila Adicional de Estadísticas de Usuarios */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Total Cuentas</span>
+            <strong className="text-xl font-black text-white font-mono tabular-nums">{users.length}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+            <Users className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Administradores</span>
+            <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">{adminCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+            <Shield className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Docentes / Ponentes</span>
+            <strong className="text-xl font-black text-indigo-400 font-mono tabular-nums">{speakerCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-indigo-950/80 border border-indigo-800/60 flex items-center justify-center text-indigo-400">
+            <GraduationCap className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Operadores Staff</span>
+            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{staffCount}</strong>
+          </div>
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+            <UserCheck className="w-4 h-4" />
+          </div>
+        </div>
+      </div>
 
       {/* Main Standardized Table & Filter Section */}
       <UsersTable initialUsers={users} />
