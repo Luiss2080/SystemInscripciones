@@ -216,7 +216,7 @@ export function QRScanner({
             </div>
           )}
 
-          {/* Manual Input + Quick Queue Chips from PostgreSQL */}
+          {/* Manual Input + Quick Queue Chips */}
           <div className="space-y-3 pt-3 border-t border-slate-800/80">
             <div>
               <label className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1.5">
