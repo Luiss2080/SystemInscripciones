@@ -140,15 +140,18 @@ export function AdminFilterBar({
             <button
               type="button"
               onClick={onOpenFilterModal}
-              className={`h-9 w-10 min-w-[40px] rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-xs ${
+              className={`relative h-9 w-10 min-w-[40px] rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-xs ${
                 isFiltered
-                  ? "bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/25"
-                  : "bg-slate-900 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border-slate-700/80 hover:border-cyan-500/50"
+                  ? "bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/30 ring-2 ring-cyan-400/30"
+                  : "bg-slate-900/90 hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 border-slate-700/80 hover:border-cyan-500/50"
               }`}
               title="Abrir filtros avanzados"
               aria-label="Abrir filtros avanzados"
             >
               <Filter className="w-4 h-4 stroke-[2.2]" />
+              {isFiltered && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 border-2 border-[#0b0e14] animate-pulse" />
+              )}
             </button>
           )}
 

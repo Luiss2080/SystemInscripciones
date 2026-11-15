@@ -402,28 +402,36 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {paginatedEvents.map((e) => {
+                  {paginatedEvents.map((e, idx) => {
                     const priceLabel = formatCurrency(Number(e.price), e.currency);
                     const fillPct =
                       e.maxCapacity > 0
                         ? Math.min(100, Math.round((e._count.registrations / e.maxCapacity) * 100))
                         : 0;
+                    const media = getWorkshopMedia(e.slug, idx);
 
                     return (
-                      <tr key={e.id} className="hover:bg-slate-900/50 transition-colors">
+                      <tr key={e.id} className="hover:bg-slate-900/50 transition-colors group">
                         <td className="py-3 px-4 max-w-sm">
-                          <span className="font-bold text-white block truncate">
-                            {e.title}
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-400">
-                            {e.modality} • {e.academicHours} hrs
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 border border-cyan-500/30 text-white flex items-center justify-center shrink-0 shadow-sm shadow-cyan-950/40">
+                              <Calendar className="w-4 h-4 text-cyan-200" />
+                            </div>
+                            <div className="min-w-0">
+                              <span className="font-bold text-white block truncate group-hover:text-cyan-300 transition-colors">
+                                {e.title}
+                              </span>
+                              <span className="text-[10px] font-mono text-slate-400 block truncate mt-0.5">
+                                {media.categoryLabel} • {e.modality} • {e.academicHours} hrs
+                              </span>
+                            </div>
+                          </div>
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
-                          <span className="font-mono text-cyan-400 block font-bold text-[11px]">
+                          <span className="inline-block px-2 py-0.5 rounded-lg bg-cyan-950/60 border border-cyan-800/60 font-mono font-bold text-cyan-300 text-[11px]">
                             {e.eventType}
                           </span>
-                          <span className="text-[10px] font-mono text-slate-400">
+                          <span className="text-[10px] font-mono text-slate-400 block mt-1">
                             {formatShortDate(e.startDate)}
                           </span>
                         </td>
@@ -431,7 +439,7 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                           <span className="font-mono font-bold text-white text-xs">
                             {e._count.registrations} / {e.maxCapacity}
                           </span>
-                          <div className="w-20 mx-auto mt-1">
+                          <div className="w-24 mx-auto mt-1.5">
                             <AnimatedProgressBar percentage={fillPct} />
                           </div>
                         </td>
@@ -450,7 +458,7 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                               type="button"
                               onClick={() => setSelectedEvent(e)}
                               title="Ver ficha técnica"
-                              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer"
+                              className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer shadow-xs"
                             >
                               <Eye className="w-3.5 h-3.5" />
                             </button>
@@ -458,7 +466,7 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                               href={`/eventos/${e.slug}`}
                               target="_blank"
                               title="Ver landing pública"
-                              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all"
+                              className="p-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all shadow-xs"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Link>
