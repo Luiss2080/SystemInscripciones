@@ -18,7 +18,7 @@ export function Preloader() {
     const logMessages = [
       "> [ OK ] Inicializando plataforma académica de ingeniería v2.4.0",
       "> [ OK ] Cargando catálogo de talleres y conferencias especializadas",
-      "> [ OK ] Conectando servidor de bases de datos PostgreSQL de cursos y alumnos...",
+      "> [ OK ] Conectando repositorio central de cursos y participantes...",
       "> [ OK ] Verificando módulos de certificación y validación QR",
       "> [ OK ] Entorno listo para capacitación técnica de alto rendimiento",
     ];
