@@ -31,6 +31,7 @@ import {
   Briefcase,
   Ticket,
   Calendar,
+  Filter,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -79,6 +80,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
 
   // Selected attendee for details modal
   const [selectedAttendee, setSelectedAttendee] = useState<AttendeeRecord | null>(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const showToast = (msg: string) => {
     setActionFeedback(msg);
@@ -285,7 +287,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
               setCurrentPage(1);
             },
             options: [
-              { label: "Todos los Talleres (BD)", value: "ALL" },
+              { label: "Todos los Talleres", value: "ALL" },
               ...events.map((e) => ({ label: e.title, value: e.id })),
             ],
           },
@@ -303,6 +305,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
         ]}
         onReset={handleResetFilters}
         isFiltered={isFiltered}
+        onOpenFilterModal={() => setIsFilterModalOpen(true)}
       />
 
       {/* Main Table Card Tray */}
@@ -694,6 +697,107 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
             </div>
           </div>
         )}
+      </AdminModal>
+
+      {/* Modal de Filtros Avanzados */}
+      <AdminModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filtros del Padrón de Asistentes"
+        subtitle="Configura los criterios de búsqueda y refinamiento de registros"
+        icon={Filter}
+      >
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Taller o Programa
+            </label>
+            <select
+              value={eventFilter}
+              onChange={(e) => {
+                setEventFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
+            >
+              <option value="ALL">Todos los Talleres</option>
+              {events.map((e) => (
+                <option key={e.id} value={e.id}>
+                  {e.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Estado de la Inscripción
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: "ALL", label: "Todos los Estados" },
+                { id: "CONFIRMED", label: "Confirmados" },
+                { id: "ATTENDED", label: "Acreditados QR" },
+                { id: "PENDING_PAYMENT", label: "Pendientes Pago" },
+              ].map((st) => (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => {
+                    setStatusFilter(st.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all text-left flex items-center justify-between cursor-pointer ${
+                    statusFilter === st.id
+                      ? "bg-cyan-500/20 text-cyan-300 border-cyan-500 font-bold"
+                      : "bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700"
+                  }`}
+                >
+                  <span>{st.label}</span>
+                  {statusFilter === st.id && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Criterio de Ordenamiento
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
+            >
+              <option value="recent">Más Recientes (por fecha de inscripción)</option>
+              <option value="oldest">Más Antiguos (por fecha de inscripción)</option>
+              <option value="name_asc">Nombre del Participante (A - Z)</option>
+              <option value="name_desc">Nombre del Participante (Z - A)</option>
+            </select>
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+            >
+              Restablecer Filtros
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
+            >
+              Aplicar Filtros
+            </button>
+          </div>
+        </div>
       </AdminModal>
     </div>
   );
