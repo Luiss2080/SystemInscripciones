@@ -22,7 +22,6 @@ import {
   ChevronRight,
   PlusCircle,
   Shield,
-  GraduationCap,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {

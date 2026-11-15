@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { UsersTable } from "@/components/admin/users/UsersTable";
 import { AdminPageHeader } from "@/components/admin/ui";
-import { Shield, UserCheck, GraduationCap, Users } from "lucide-react";
+import { Shield } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 

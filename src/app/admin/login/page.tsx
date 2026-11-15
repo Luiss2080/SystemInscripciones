@@ -67,10 +67,6 @@ export default function AdminLoginPage() {
     setTimeout(() => setDemoFilled(false), 2000);
   };
 
-  const handleFillDemo = () => {
-    handleSelectDemo(DEMO_ACCOUNTS[0]);
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);

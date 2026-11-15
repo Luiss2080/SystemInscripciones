@@ -17,18 +17,12 @@ import {
 import {
   Users,
   Shield,
-  UserCheck,
-  GraduationCap,
   Download,
   RotateCcw,
   Eye,
   CheckCircle2,
-  Calendar,
-  Mail,
   Loader2,
   PlusCircle,
-  KeyRound,
-  Lock,
 } from "lucide-react";
 
 export interface UserRecord {
