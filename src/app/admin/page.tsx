@@ -55,9 +55,9 @@ export default async function AdminDashboardPage() {
         desc: "Consola de logística en vivo: validaciones de códigos QR en puerta y monitoreo de aforo.",
       }
     : {
-        badge: `CONSOLA OPERATIVA • ${data.totalEvents} EVENTOS EN BD`,
+        badge: `CONSOLA OPERATIVA • ${data.totalEvents} PROGRAMAS ACTIVOS`,
         title: "Bienvenido,",
-        desc: "Monitoreo en vivo de inscripciones, recaudación, aforos QR y certificaciones en PostgreSQL 18.",
+        desc: "Monitoreo en tiempo real de inscripciones, recaudación, aforos y emisión de certificados.",
       };
 
   const attendanceRate =
