@@ -28,6 +28,7 @@ import {
   Clock,
   User,
   Sparkles,
+  Filter,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -68,6 +69,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
 
   // Selected certificate for preview modal
   const [selectedRecord, setSelectedRecord] = useState<CertificateRecord | null>(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const showToast = (msg: string) => {
     setFeedbackMsg(msg);
@@ -263,6 +265,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
         ]}
         onReset={handleResetFilters}
         isFiltered={isFiltered}
+        onOpenFilterModal={() => setIsFilterModalOpen(true)}
       />
 
       {/* Main Table Card Tray */}
