@@ -44,7 +44,7 @@ export default async function AdminUsersPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={Shield}
-        badgeText="CONTROL DE ACCESO & RBAC • POSTGRESQL 18"
+        badgeText="SEGURIDAD Y CONTROL DE ACCESO • GESTIÓN RBAC"
         title="Gestión de Usuarios y"
         accentTitle="Roles del Sistema"
         description="Administración centralizada de identidades, privilegios de acceso y asignaciones docentes en el ecosistema de talleres y conferencias."

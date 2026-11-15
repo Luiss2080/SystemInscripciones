@@ -31,13 +31,13 @@ export default async function AdminCheckinPage() {
         badgeText={
           isStaff
             ? "CONTROL DE ACCESO EN PUERTA • OPERADOR STAFF"
-            : "CONTROL DE ACCESO EN VIVO • POSTGRESQL 18"
+            : "CONTROL DE ACCESO EN VIVO • SISTEMA DE VALIDACIÓN"
         }
         title="Escáner y Validación de"
         accentTitle="Tickets QR"
         description={
           isStaff
-            ? "Acreditación física de asistentes en puerta mediante escáner de cámara o ingreso de código #TCK. Sincronización instantánea con PostgreSQL."
+            ? "Acreditación física de asistentes en puerta mediante escáner de cámara o ingreso de código #TCK. Sincronización instantánea del aforo."
             : "Acreditación instantánea de participantes por lectura de cámara web o código de folio #TCK. Sincronización en tiempo real."
         }
         actions={

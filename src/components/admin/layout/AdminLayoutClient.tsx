@@ -327,9 +327,9 @@ export function AdminLayoutClient({
         <div className="flex items-center justify-between px-1.5 text-[10px] font-mono">
           <div className="inline-flex items-center gap-1.5 font-bold text-emerald-400">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>PostgreSQL 18</span>
+            <span>Sistema en Línea</span>
           </div>
-          <span className="text-slate-400">Localhost</span>
+          <span className="text-slate-400 text-[9px] uppercase tracking-wider">Producción</span>
         </div>
 
         <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/90 border border-slate-800">

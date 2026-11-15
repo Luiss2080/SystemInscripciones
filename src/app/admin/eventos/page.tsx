@@ -66,14 +66,14 @@ export default async function AdminEventsPage() {
         badgeText={
           isSpeaker
             ? `CÁTEDRA DOCENTE • ${rawEvents.length} PROGRAMAS ASIGNADOS`
-            : `CATÁLOGO ACADÉMICO • ${rawEvents.length} PROGRAMAS EN BD`
+            : `CATÁLOGO ACADÉMICO • ${rawEvents.length} PROGRAMAS ACTIVOS`
         }
         title={isSpeaker ? "Mis Talleres y" : "Talleres y"}
         accentTitle={isSpeaker ? "Cursos Asignados" : "Conferencias"}
         description={
           isSpeaker
             ? "Control de tus talleres técnicos: temarios, modalidades, cupos asignados y acceso a la landing pública."
-            : "Control centralizado de aforos, tarifas, temarios, modalidades y acceso directo a landings públicas en PostgreSQL 18."
+            : "Control centralizado de aforos, tarifas, temarios, modalidades y acceso a landings públicas."
         }
         actions={
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
