@@ -109,7 +109,7 @@ export function AdminFilterBar({
                 ))}
               </select>
               <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                <Filter className="w-3 h-3" />
+                <ChevronDown className="w-3.5 h-3.5" />
               </div>
             </div>
           </div>
