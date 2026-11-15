@@ -30,6 +30,7 @@ import {
   List,
   BookOpen,
   MapPin,
+  Filter,
 } from "lucide-react";
 
 export interface EventItem {
@@ -69,6 +70,7 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
 
   // Selected event for details modal
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   // Filter & Sort Pipeline
   const query = searchTerm.toLowerCase().trim();
@@ -180,6 +182,7 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
         ]}
         onReset={handleResetFilters}
         isFiltered={isFiltered}
+        onOpenFilterModal={() => setIsFilterModalOpen(true)}
       />
 
       {/* Main Container Tray */}
@@ -585,6 +588,106 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
             </div>
           </div>
         )}
+      </AdminModal>
+
+      {/* Modal de Filtros Avanzados para Talleres */}
+      <AdminModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filtros del Catálogo de Talleres"
+        subtitle="Refina programas por tipo, modalidad y criterios de orden"
+        icon={Filter}
+      >
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Tipo de Programa
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: "ALL", label: "Todos los Tipos" },
+                { id: "WORKSHOP", label: "Talleres Prácticos" },
+                { id: "CONFERENCE", label: "Conferencias" },
+                { id: "BOOTCAMP", label: "Bootcamps" },
+              ].map((tp) => (
+                <button
+                  key={tp.id}
+                  type="button"
+                  onClick={() => {
+                    setTypeFilter(tp.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all text-left flex items-center justify-between cursor-pointer ${
+                    typeFilter === tp.id
+                      ? "bg-cyan-500/20 text-cyan-300 border-cyan-500 font-bold"
+                      : "bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700"
+                  }`}
+                >
+                  <span>{tp.label}</span>
+                  {typeFilter === tp.id && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Modalidad de Cursado
+            </label>
+            <select
+              value={modalityFilter}
+              onChange={(e) => {
+                setModalityFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
+            >
+              <option value="ALL">Todas las Modalidades</option>
+              <option value="VIRTUAL">Virtual en Vivo</option>
+              <option value="PRESENCIAL">Presencial Auditorio</option>
+              <option value="HIBRIDO">Híbrido</option>
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Criterio de Ordenamiento
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
+            >
+              <option value="date_asc">Fecha de Inicio (Próximos)</option>
+              <option value="date_desc">Fecha de Inicio (Lejanos)</option>
+              <option value="occupancy_desc">Mayor Ocupación</option>
+              <option value="capacity_desc">Mayor Capacidad</option>
+              <option value="name_asc">Nombre del Taller (A - Z)</option>
+            </select>
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+            >
+              Restablecer Filtros
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
+            >
+              Aplicar Filtros
+            </button>
+          </div>
+        </div>
       </AdminModal>
     </div>
   );
