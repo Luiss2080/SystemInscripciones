@@ -58,7 +58,7 @@ export default async function AdminAttendeesPage() {
             ? `CÁTEDRA DOCENTE • ${attendees.length} ALUMNOS ASIGNADOS`
             : isStaff
             ? "ACREDITACIÓN EN PUERTA • PADRÓN GENERAL"
-            : "PADRÓN EN VIVO • POSTGRESQL 18"
+            : "PADRÓN OFICIAL • GESTIÓN DE PARTICIPANTES"
         }
         title={isSpeaker ? "Padrón de Mis Alumnos y" : "Asistentes y"}
         accentTitle={isSpeaker ? "Asistencias" : "Control de Pagos"}

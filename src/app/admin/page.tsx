@@ -228,7 +228,7 @@ export default async function AdminDashboardPage() {
                   </span>
                 </h2>
                 <p className="text-[11px] text-slate-400">
-                  Tickets generados en tiempo real desde PostgreSQL
+                  Últimos registros confirmados en el sistema
                 </p>
               </div>
 
