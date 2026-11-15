@@ -366,9 +366,9 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                       {/* Folio & Fecha */}
                       <td className="py-3 px-4 whitespace-nowrap">
                         {hasCert ? (
-                          <div className="space-y-0.5">
+                          <div className="space-y-1">
                             <div className="flex items-center gap-1.5">
-                              <span className="font-mono font-black text-cyan-400 text-xs">
+                              <span className="px-2 py-0.5 rounded-lg bg-cyan-950/60 border border-cyan-800/60 font-mono font-black text-cyan-300 text-xs shadow-xs">
                                 {r.certificate!.certificateCode}
                               </span>
                               <button
@@ -384,17 +384,17 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                                 )}
                               </button>
                             </div>
-                            <p className="text-[10px] font-mono text-slate-400">
+                            <p className="text-[10px] font-mono text-slate-400 pl-0.5">
                               Emitido: {formatShortDate(r.certificate!.issuedAt)}
                             </p>
                           </div>
                         ) : (
-                          <div className="space-y-0.5">
-                            <span className="inline-flex items-center gap-1 font-mono text-[11px] text-amber-400/90 font-bold">
+                          <div className="space-y-1">
+                            <span className="inline-flex items-center gap-1 font-mono text-[11px] text-amber-400 font-bold px-2 py-0.5 rounded-lg bg-amber-950/50 border border-amber-800/60">
                               <Clock className="w-3 h-3" />
-                              <span>Pendiente de emisión</span>
+                              <span>Listo para emitir</span>
                             </span>
-                            <p className="text-[10px] font-mono text-slate-400">
+                            <p className="text-[10px] font-mono text-slate-400 pl-0.5">
                               Asistencia acreditada
                             </p>
                           </div>
@@ -404,7 +404,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                       {/* Participante */}
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2.5 min-w-[200px]">
-                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-700 to-blue-700 text-white font-bold text-[11px] flex items-center justify-center shrink-0 shadow-xs">
+                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 border border-cyan-500/30 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-sm shadow-cyan-950/40">
                             {initial}
                           </div>
                           <div className="min-w-0">
@@ -420,11 +420,11 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
 
                       {/* Programa */}
                       <td className="py-3 px-4 max-w-xs">
-                        <span className="text-slate-300 font-medium line-clamp-1">
+                        <span className="text-white font-bold block leading-snug line-clamp-1 group-hover:text-cyan-300 transition-colors">
                           {r.event.title}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          ID: {r.id.slice(0, 8)}...
+                        <span className="text-[10px] font-mono text-slate-400 block truncate mt-0.5">
+                          Folio Ref: {r.id.slice(0, 8)}...
                         </span>
                       </td>
 
