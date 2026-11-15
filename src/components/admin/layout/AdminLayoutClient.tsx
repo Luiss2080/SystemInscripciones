@@ -36,13 +36,11 @@ interface NavItem {
   label: string;
   icon: typeof LayoutDashboard;
   exact?: boolean;
-  tag?: string;
   external?: boolean;
 }
 
 interface NavSection {
   title: string;
-  badge?: string;
   items: NavItem[];
 }
 
@@ -50,26 +48,24 @@ function getNavSectionsForRole(role: string): NavSection[] {
   if (role === "SPEAKER") {
     return [
       {
-        title: "PORTAL DOCENTE",
-        badge: "CÁTEDRA",
+        title: "DOCENCIA",
         items: [
-          { href: "/admin", label: "Dashboard Docente", icon: LayoutDashboard, exact: true },
-          { href: "/admin/eventos", label: "Mis Talleres Asignados", icon: Calendar, tag: "Temarios" },
+          { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+          { href: "/admin/eventos", label: "Mis Talleres", icon: Calendar },
         ],
       },
       {
-        title: "ALUMNOS & ACREDITACIÓN",
-        badge: "ALUMNOS",
+        title: "ALUMNOS",
         items: [
-          { href: "/admin/asistentes", label: "Padrón de Mis Alumnos", icon: Users, tag: "Inscritos" },
-          { href: "/admin/certificados", label: "Certificados de Mis Cursos", icon: Award, tag: "Diplomas" },
+          { href: "/admin/asistentes", label: "Mis Alumnos", icon: Users },
+          { href: "/admin/certificados", label: "Certificados", icon: Award },
         ],
       },
       {
-        title: "SISTEMA & ENLACES",
+        title: "ENLACES",
         items: [
-          { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
-          { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+          { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
+          { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
         ],
       },
     ];
@@ -78,24 +74,23 @@ function getNavSectionsForRole(role: string): NavSection[] {
   if (role === "STAFF") {
     return [
       {
-        title: "CONTROL DE ACCESO",
-        badge: "PUERTA",
+        title: "CONTROL ACCESO",
         items: [
-          { href: "/admin/checkin", label: "Escáner QR en Vivo", icon: QrCode, tag: "Check-in" },
-          { href: "/admin", label: "Métricas de Aforo", icon: LayoutDashboard, exact: true },
+          { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
+          { href: "/admin", label: "Métricas", icon: LayoutDashboard, exact: true },
         ],
       },
       {
-        title: "ACREDITACIÓN EN PUERTA",
+        title: "ACREDITACIÓN",
         items: [
-          { href: "/admin/asistentes", label: "Padrón & Check-in Manual", icon: Users, tag: "Validar" },
+          { href: "/admin/asistentes", label: "Asistentes", icon: Users },
         ],
       },
       {
-        title: "SISTEMA & ENLACES",
+        title: "ENLACES",
         items: [
-          { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
-          { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
+          { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
+          { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
         ],
       },
     ];
@@ -105,33 +100,30 @@ function getNavSectionsForRole(role: string): NavSection[] {
   return [
     {
       title: "OPERACIONES",
-      badge: "3",
       items: [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-        { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, tag: "Check-in" },
-        { href: "/admin/eventos", label: "Talleres & Eventos", icon: Calendar, tag: "Catálogo" },
+        { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
+        { href: "/admin/eventos", label: "Talleres", icon: Calendar },
       ],
     },
     {
-      title: "GESTIÓN & PADRÓN",
-      badge: "2",
+      title: "GESTIÓN",
       items: [
-        { href: "/admin/asistentes", label: "Asistentes & Pagos", icon: Users, tag: "Padrón" },
-        { href: "/admin/certificados", label: "Certificados Digitales", icon: Award, tag: "Acreditación" },
+        { href: "/admin/asistentes", label: "Asistentes", icon: Users },
+        { href: "/admin/certificados", label: "Certificados", icon: Award },
       ],
     },
     {
-      title: "SEGURIDAD & ROLES",
-      badge: "RBAC",
+      title: "SEGURIDAD",
       items: [
-        { href: "/admin/usuarios", label: "Gestión de Roles & Usuarios", icon: Shield, tag: "Roles" },
+        { href: "/admin/usuarios", label: "Usuarios", icon: Shield },
       ],
     },
     {
-      title: "SISTEMA & ENLACES",
+      title: "ENLACES",
       items: [
-        { href: "/", label: "Ver Web Pública", icon: ExternalLink, external: true },
-        { href: "/verificar", label: "Verificador Oficial QR", icon: ShieldCheck, external: true },
+        { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
+        { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
       ],
     },
   ];
