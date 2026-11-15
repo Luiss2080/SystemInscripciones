@@ -50,7 +50,7 @@ async function main() {
   });
 
   // 3. Personal de Logística & Control de Acceso (Staff)
-  const staff1 = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "staff@ingeniero.tech",
       fullName: "Lic. Mariana Vega - Coordinadora de Acreditación & Puerta",
