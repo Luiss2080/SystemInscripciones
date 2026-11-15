@@ -616,6 +616,81 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
           </div>
         )}
       </AdminModal>
+
+      {/* Modal de Filtros de Certificados */}
+      <AdminModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filtros de Certificados Digitales"
+        subtitle="Refina el listado por estado de emisión y criterios de ordenación"
+        icon={Filter}
+      >
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Estado de Emisión del Certificado
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: "ALL" as const, label: "Todos" },
+                { id: "ISSUED" as const, label: "Emitidos" },
+                { id: "PENDING" as const, label: "Pendientes" },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => {
+                    setFilterMode(m.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer ${
+                    filterMode === m.id
+                      ? "bg-cyan-500/20 text-cyan-300 border-cyan-500 font-bold"
+                      : "bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700"
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Criterio de Ordenamiento
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
+            >
+              <option value="recent">Más Recientes (asistencia acreditada)</option>
+              <option value="name_asc">Nombre del Participante (A - Z)</option>
+              <option value="name_desc">Nombre del Participante (Z - A)</option>
+            </select>
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+            >
+              Restablecer Filtros
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
+            >
+              Aplicar Filtros
+            </button>
+          </div>
+        </div>
+      </AdminModal>
     </div>
   );
 }
