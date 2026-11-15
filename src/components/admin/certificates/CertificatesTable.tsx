@@ -290,7 +290,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 text-xs font-bold transition-all cursor-pointer shadow-xs"
-                title="Actualizar datos de PostgreSQL"
+                title="Actualizar listado de certificados"
               >
                 <RotateCcw
                   className={`w-3.5 h-3.5 text-cyan-400 ${

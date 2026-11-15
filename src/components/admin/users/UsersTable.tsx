@@ -304,7 +304,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 text-xs font-bold transition-all cursor-pointer shadow-xs"
-                title="Actualizar datos de PostgreSQL"
+                title="Actualizar lista de usuarios"
               >
                 <RotateCcw
                   className={`w-3.5 h-3.5 text-cyan-400 ${
@@ -433,7 +433,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                               disabled={isUpdatingRoleId === user.id}
                               onChange={(e) => handleRoleChange(user.id, e.target.value)}
                               className="appearance-none px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-[11px] font-mono font-bold text-slate-300 focus:outline-none focus:border-cyan-500 cursor-pointer disabled:opacity-50"
-                              title="Cambiar rol en PostgreSQL"
+                              title="Cambiar rol de usuario"
                             >
                               <option value="ADMIN" className="bg-slate-900 text-white">ADMIN</option>
                               <option value="SPEAKER" className="bg-slate-900 text-white">SPEAKER</option>
@@ -562,7 +562,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         isOpen={isNewUserModalOpen}
         onClose={() => setIsNewUserModalOpen(false)}
         title="Crear Nueva Cuenta de Usuario"
-        subtitle="Asignación de privilegios en PostgreSQL 18"
+        subtitle="Asignación de privilegios y credenciales de acceso"
         icon={PlusCircle}
       >
         <form onSubmit={handleCreateUser} className="space-y-4">

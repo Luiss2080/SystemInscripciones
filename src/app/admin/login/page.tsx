@@ -182,7 +182,7 @@ export default function AdminLoginPage() {
                     Control de Cupos & Pagos
                   </span>
                   <span className="text-[10px] text-slate-500">
-                    Validación en PostgreSQL 18
+                    Gestión en tiempo real
                   </span>
                 </div>
               </div>

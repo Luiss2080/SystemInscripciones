@@ -68,10 +68,10 @@ export function NewEventForm() {
     <div className="max-w-5xl mx-auto space-y-5">
       <AdminPageHeader
         icon={PlusCircle}
-        badgeText="PROGRAMACIÓN ACADÉMICA • POSTGRESQL 18"
+        badgeText="PROGRAMACIÓN ACADÉMICA • NUEVO EVENTO"
         title="Programar Nuevo"
         accentTitle="Taller o Conferencia"
-        description="Define temarios técnicos, cupos máximos, tarifa y modalidad para habilitar el registro con ticket QR automático en la base de datos."
+        description="Define temarios técnicos, cupos máximos, tarifa y modalidad para habilitar el registro con ticket QR automático."
         actions={
           <Link
             href="/admin/eventos"
