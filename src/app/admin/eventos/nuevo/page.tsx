@@ -10,5 +10,10 @@ export default async function NewEventPage() {
     redirect("/admin/login");
   }
 
+  // Only ADMIN can create events
+  if (session.role !== "ADMIN") {
+    redirect("/admin/eventos");
+  }
+
   return <NewEventForm />;
 }

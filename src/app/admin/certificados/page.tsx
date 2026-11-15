@@ -14,11 +14,17 @@ export default async function AdminCertificatesPage() {
     redirect("/admin/login");
   }
 
+  const isSpeaker = session.role === "SPEAKER";
+  const isStaff = session.role === "STAFF";
+
+  const certFilter = {
+    status: "ATTENDED" as const,
+    deletedAt: null,
+    ...(isSpeaker ? { event: { speakerId: session.id } } : {}),
+  };
+
   const attendedRecords = await prisma.registration.findMany({
-    where: {
-      status: "ATTENDED",
-      deletedAt: null,
-    },
+    where: certFilter,
     orderBy: { attendedAt: "desc" },
     include: {
       event: { select: { id: true, title: true, academicHours: true } },
@@ -41,10 +47,20 @@ export default async function AdminCertificatesPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={Award}
-        badgeText="ACREDITACIÓN & VALIDEZ QR • POSTGRESQL 18"
-        title="Emisión de"
-        accentTitle="Certificados Digitales"
-        description="Gestión oficial de folios criptográficos para participantes con asistencia acreditada (ATTENDED). Emisión en 1-clic y verificación pública inmediata."
+        badgeText={
+          isSpeaker
+            ? `CÁTEDRA DOCENTE • CERTIFICADOS DE MIS ALUMNOS`
+            : isStaff
+            ? `CONTROL OPERATIVO • ACREDITACIONES Y FOLIOS QR`
+            : `ACREDITACIÓN & VALIDEZ QR • POSTGRESQL 18`
+        }
+        title={isSpeaker ? "Certificados de" : "Emisión de"}
+        accentTitle={isSpeaker ? "Mis Cursos" : "Certificados Digitales"}
+        description={
+          isSpeaker
+            ? "Gestión oficial de folios y acreditación académica para los alumnos que asistieron a tus talleres y conferencias."
+            : "Gestión oficial de folios criptográficos para participantes con asistencia acreditada (ATTENDED). Emisión en 1-clic y verificación pública inmediata."
+        }
         actions={
           <div className="flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 shadow-sm">
             <div>

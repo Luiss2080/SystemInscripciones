@@ -14,9 +14,18 @@ export default async function AdminAttendeesPage() {
     redirect("/admin/login");
   }
 
+  const isSpeaker = session.role === "SPEAKER";
+  const isStaff = session.role === "STAFF";
+
+  const regFilter = isSpeaker ? { deletedAt: null, event: { speakerId: session.id } } : { deletedAt: null };
+  const eventFilter = isSpeaker ? { deletedAt: null, speakerId: session.id } : { deletedAt: null };
+  const payFilter = isSpeaker
+    ? { status: "APPROVED" as const, registration: { event: { speakerId: session.id } } }
+    : { status: "APPROVED" as const };
+
   const [attendees, events, approvedPayments] = await Promise.all([
     prisma.registration.findMany({
-      where: { deletedAt: null },
+      where: regFilter,
       orderBy: { createdAt: "desc" },
       include: {
         event: { select: { id: true, title: true } },
@@ -24,12 +33,12 @@ export default async function AdminAttendeesPage() {
       },
     }),
     prisma.event.findMany({
-      where: { deletedAt: null },
+      where: eventFilter,
       orderBy: { startDate: "asc" },
       select: { id: true, title: true },
     }),
     prisma.payment.aggregate({
-      where: { status: "APPROVED" },
+      where: payFilter,
       _sum: { amount: true },
     }),
   ]);
@@ -44,10 +53,20 @@ export default async function AdminAttendeesPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={Users}
-        badgeText="PADRÓN EN VIVO • POSTGRESQL 18"
-        title="Asistentes y"
-        accentTitle="Control de Pagos"
-        description="Filtra por taller o estado, aprueba comprobantes de pago, acredita asistencia mediante QR y gestiona el padrón oficial de participantes."
+        badgeText={
+          isSpeaker
+            ? `CÁTEDRA DOCENTE • ${attendees.length} ALUMNOS ASIGNADOS`
+            : isStaff
+            ? "ACREDITACIÓN EN PUERTA • PADRÓN GENERAL"
+            : "PADRÓN EN VIVO • POSTGRESQL 18"
+        }
+        title={isSpeaker ? "Padrón de Mis Alumnos y" : "Asistentes y"}
+        accentTitle={isSpeaker ? "Asistencias" : "Control de Pagos"}
+        description={
+          isSpeaker
+            ? "Listado oficial de participantes inscritos en tus talleres asignados: seguimiento de asistencia, datos de contacto y acreditación."
+            : "Filtra por taller o estado, aprueba comprobantes de pago, acredita asistencia mediante QR y gestiona el padrón oficial de participantes."
+        }
         actions={
           <div className="flex flex-wrap items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono shrink-0 shadow-sm">
             <div>

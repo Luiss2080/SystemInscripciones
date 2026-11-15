@@ -16,6 +16,8 @@ export default async function AdminCheckinPage() {
     redirect("/admin/login");
   }
 
+  const isStaff = session.role === "STAFF";
+
   const [initialHistory, pendingQueue] = await Promise.all([
     getRecentCheckinLogs(8),
     getPendingCheckinQueue(6),
@@ -26,10 +28,18 @@ export default async function AdminCheckinPage() {
       {/* Standard Module Header */}
       <AdminPageHeader
         icon={QrCode}
-        badgeText="CONTROL DE ACCESO EN VIVO • POSTGRESQL 18"
+        badgeText={
+          isStaff
+            ? "CONTROL DE ACCESO EN PUERTA • OPERADOR STAFF"
+            : "CONTROL DE ACCESO EN VIVO • POSTGRESQL 18"
+        }
         title="Escáner y Validación de"
         accentTitle="Tickets QR"
-        description="Acreditación instantánea de participantes por lectura de cámara web o código de folio #TCK. Sincronización en tiempo real."
+        description={
+          isStaff
+            ? "Acreditación física de asistentes en puerta mediante escáner de cámara o ingreso de código #TCK. Sincronización instantánea con PostgreSQL."
+            : "Acreditación instantánea de participantes por lectura de cámara web o código de folio #TCK. Sincronización en tiempo real."
+        }
         actions={
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-300 shadow-sm">
