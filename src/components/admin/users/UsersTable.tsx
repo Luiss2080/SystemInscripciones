@@ -13,6 +13,7 @@ import {
   AdminEmptyState,
   AdminBadge,
   AdminModal,
+  AdminSelect,
 } from "@/components/admin/ui";
 import {
   Users,
@@ -693,18 +694,19 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Criterio de Ordenamiento
             </label>
-            <select
+            <AdminSelect
               value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
+              onChange={(val) => {
+                setSortBy(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="recent">Más Recientes (creación de cuenta)</option>
-              <option value="name_asc">Nombre de Usuario (A - Z)</option>
-              <option value="events_desc">Mayor Cantidad de Talleres</option>
-            </select>
+              options={[
+                { label: "Más Recientes (creación de cuenta)", value: "recent" },
+                { label: "Nombre de Usuario (A - Z)", value: "name_asc" },
+                { label: "Mayor Cantidad de Talleres", value: "events_desc" },
+              ]}
+              title="Criterio de Ordenamiento"
+            />
           </div>
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
