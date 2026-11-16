@@ -660,18 +660,19 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Criterio de Ordenamiento
             </label>
-            <select
+            <AdminSelect
               value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
+              onChange={(val) => {
+                setSortBy(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="recent">Más Recientes (asistencia acreditada)</option>
-              <option value="name_asc">Nombre del Participante (A - Z)</option>
-              <option value="name_desc">Nombre del Participante (Z - A)</option>
-            </select>
+              options={[
+                { label: "Más Recientes (asistencia acreditada)", value: "recent" },
+                { label: "Nombre del Participante (A - Z)", value: "name_asc" },
+                { label: "Nombre del Participante (Z - A)", value: "name_desc" },
+              ]}
+              title="Criterio de Ordenamiento"
+            />
           </div>
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
