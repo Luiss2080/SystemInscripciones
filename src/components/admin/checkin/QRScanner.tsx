@@ -24,14 +24,11 @@ import {
   Mail,
   Copy,
   Check,
-  ExternalLink,
   Ticket,
   Building,
   Briefcase,
   Eye,
   Calendar,
-  Sparkles,
-  User,
   MessageSquare,
 } from "lucide-react";
 
