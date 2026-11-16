@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import QRCode from "qrcode";
 import { issueCertificate } from "@/actions/admin/registrations";
 import { formatShortDate } from "@/lib/utils/format";
 import {
@@ -30,6 +31,12 @@ import {
   User,
   Sparkles,
   Filter,
+  Mail,
+  Printer,
+  QrCode,
+  Hash,
+  FileCheck,
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -42,6 +49,10 @@ interface CertificateRecord {
     id: string;
     title: string;
     academicHours: number;
+    slug?: string;
+    eventType?: string;
+    startDate?: Date | string;
+    speaker?: { fullName: string } | null;
   };
   certificate: {
     certificateCode: string;
@@ -71,6 +82,41 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
   // Selected certificate for preview modal
   const [selectedRecord, setSelectedRecord] = useState<CertificateRecord | null>(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [modalQrUrl, setModalQrUrl] = useState<string>("");
+  const [copiedFolio, setCopiedFolio] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  useEffect(() => {
+    if (selectedRecord?.certificate?.certificateCode) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const verifyUrl = `${origin}/verificar/${selectedRecord.certificate.certificateCode}`;
+      QRCode.toDataURL(verifyUrl, {
+        width: 220,
+        margin: 1.5,
+        color: {
+          dark: "#050b18",
+          light: "#ffffff",
+        },
+      })
+        .then((url) => setModalQrUrl(url))
+        .catch((err) => console.error("Error generating QR:", err));
+    } else {
+      setModalQrUrl("");
+    }
+  }, [selectedRecord]);
+
+  const handleCopyFolioModal = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedFolio(true);
+    setTimeout(() => setCopiedFolio(false), 2000);
+  };
+
+  const handleCopyLinkModal = (code: string) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    navigator.clipboard.writeText(`${origin}/verificar/${code}`);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
 
   const showToast = (msg: string) => {
     setFeedbackMsg(msg);
