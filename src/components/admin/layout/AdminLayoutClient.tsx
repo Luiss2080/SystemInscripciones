@@ -154,6 +154,38 @@ export function AdminLayoutClient({
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>("");
+  const navSections = getNavSectionsForRole(adminRole);
+
+  // Collapsible state for animated sidebar categories (must be before any early return)
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    OPERACIONES: true,
+    GESTIÓN: true,
+    SEGURIDAD: true,
+    ENLACES: true,
+    DOCENCIA: true,
+    ALUMNOS: true,
+    "CONTROL ACCESO": true,
+    ACREDITACIÓN: true,
+  });
+
+  const toggleSection = (sectionTitle: string) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [sectionTitle]: !prev[sectionTitle],
+    }));
+  };
+
+  // Auto-expand section if user navigates to an item within it
+  useEffect(() => {
+    navSections.forEach((section) => {
+      const hasActive = section.items.some((item) =>
+        item.exact ? pathname === item.href : pathname.startsWith(item.href)
+      );
+      if (hasActive) {
+        setOpenSections((prev) => ({ ...prev, [section.title]: true }));
+      }
+    });
+  }, [pathname, navSections]);
 
   // Deterministic live clock on client only to prevent SSR hydration mismatches
   useEffect(() => {
@@ -260,38 +292,6 @@ export function AdminLayoutClient({
 
   const activeInfo = getActiveTitle();
   const adminInitial = adminName.trim().charAt(0).toUpperCase() || "A";
-  const navSections = getNavSectionsForRole(adminRole);
-
-  // Collapsible state for animated sidebar categories
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    OPERACIONES: true,
-    GESTIÓN: true,
-    SEGURIDAD: true,
-    ENLACES: true,
-    DOCENCIA: true,
-    ALUMNOS: true,
-    "CONTROL ACCESO": true,
-    ACREDITACIÓN: true,
-  });
-
-  const toggleSection = (sectionTitle: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [sectionTitle]: !prev[sectionTitle],
-    }));
-  };
-
-  // Auto-expand section if user navigates to an item within it
-  useEffect(() => {
-    navSections.forEach((section) => {
-      const hasActive = section.items.some((item) =>
-        item.exact ? pathname === item.href : pathname.startsWith(item.href)
-      );
-      if (hasActive) {
-        setOpenSections((prev) => ({ ...prev, [section.title]: true }));
-      }
-    });
-  }, [pathname, navSections]);
 
   const roleMeta = {
     ADMIN: {
