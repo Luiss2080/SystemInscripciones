@@ -128,18 +128,26 @@ export async function getRecentCheckinLogs(limit = 8) {
     orderBy: { attendedAt: "desc" },
     take: limit,
     include: {
-      event: { select: { title: true } },
-      ticket: { select: { ticketCode: true } },
+      event: { select: { id: true, title: true, modality: true, academicHours: true } },
+      ticket: { select: { ticketCode: true, qrHash: true } },
     },
   });
 
   return rows
     .filter((r) => Boolean(r.ticket?.ticketCode))
     .map((r) => ({
+      id: r.id,
       code: r.ticket!.ticketCode,
       name: r.attendeeName,
+      email: r.attendeeEmail,
+      phone: r.attendeePhone,
+      occupation: r.attendeeOccupation,
+      organization: r.attendeeOrganization,
       eventTitle: r.event.title,
+      modality: r.event.modality,
+      academicHours: r.event.academicHours,
       status: "ATTENDED" as const,
+      attendedAt: r.attendedAt ? r.attendedAt.toISOString() : null,
       time: formatShortTime(r.attendedAt!),
     }));
 }
@@ -157,16 +165,23 @@ export async function getPendingCheckinQueue(limit = 6) {
     orderBy: { createdAt: "desc" },
     take: limit,
     include: {
-      event: { select: { title: true } },
-      ticket: { select: { ticketCode: true } },
+      event: { select: { id: true, title: true, modality: true, academicHours: true } },
+      ticket: { select: { ticketCode: true, qrHash: true } },
     },
   });
 
   return rows
     .filter((r) => Boolean(r.ticket?.ticketCode))
     .map((r) => ({
+      id: r.id,
       ticketCode: r.ticket!.ticketCode,
       attendeeName: r.attendeeName,
+      attendeeEmail: r.attendeeEmail,
+      attendeePhone: r.attendeePhone,
+      attendeeOccupation: r.attendeeOccupation,
+      attendeeOrganization: r.attendeeOrganization,
       eventTitle: r.event.title,
+      modality: r.event.modality,
+      academicHours: r.event.academicHours,
     }));
 }
