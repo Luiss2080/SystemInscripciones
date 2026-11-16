@@ -785,16 +785,6 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
           </div>
         </div>
       </AdminModal>
-            <button
-              type="button"
-              onClick={() => setIsFilterModalOpen(false)}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
-            >
-              Aplicar Filtros
-            </button>
-          </div>
-        </div>
-      </AdminModal>
     </div>
   );
 }
