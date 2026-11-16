@@ -130,7 +130,7 @@ export default async function AdminCertificatesPage() {
       </div>
 
       {/* Main Standardized Table & Filter Section */}
-      <CertificatesTable initialRecords={attendedRecords} />
+      <CertificatesTable initialRecords={attendedRecords} userRole={session.role} />
     </div>
   );
 }

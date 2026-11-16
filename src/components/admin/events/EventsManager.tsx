@@ -65,9 +65,10 @@ export interface EventItem {
 
 interface EventsManagerProps {
   initialEvents: EventItem[];
+  userRole?: string;
 }
 
-export function EventsManager({ initialEvents }: EventsManagerProps) {
+export function EventsManager({ initialEvents, userRole = "ADMIN" }: EventsManagerProps) {
   const [events] = useState<EventItem[]>(initialEvents);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("ALL");
@@ -206,8 +207,20 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
         {/* Tray Header */}
         <AdminTrayHeader
           icon={Calendar}
-          title="BANDEJA DE PROGRAMAS & CONFERENCIAS"
-          subtitle="> CONTROL DE CUPOS, TARIFAS Y FECHAS EN TIEMPO REAL"
+          title={
+            userRole === "SPEAKER"
+              ? "CATÁLOGO DE MI CÁTEDRA"
+              : userRole === "STAFF"
+              ? "CATÁLOGO DE TALLERES & AFORO EN PUERTA"
+              : "BANDEJA DE PROGRAMAS & CONFERENCIAS"
+          }
+          subtitle={
+            userRole === "SPEAKER"
+              ? "> SUPERVISIÓN ACADÉMICA, AFORO Y SÍLABO DE TUS CURSOS"
+              : userRole === "STAFF"
+              ? "> CONSULTA DE CAPACIDAD Y HORARIOS DE INGRESO"
+              : "> CONTROL DE CUPOS, TARIFAS Y FECHAS EN TIEMPO REAL"
+          }
           totalCount={filteredEvents.length}
           countLabel="PROGRAMAS"
           actions={
@@ -240,13 +253,15 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                 </button>
               </div>
 
-              <Link
-                href="/admin/eventos/nuevo"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20"
-              >
-                <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>+ Nuevo Taller</span>
-              </Link>
+              {userRole === "ADMIN" && (
+                <Link
+                  href="/admin/eventos/nuevo"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-500/20"
+                >
+                  <PlusCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>+ Nuevo Taller</span>
+                </Link>
+              )}
             </div>
           }
         />
@@ -570,6 +585,16 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
                     <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700 uppercase">
                       {selectedEvent.modality}
                     </span>
+                    {userRole === "SPEAKER" && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-700/60 uppercase">
+                        Cátedra Asignada
+                      </span>
+                    )}
+                    {userRole === "STAFF" && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-950 text-teal-300 border border-teal-700/60 uppercase">
+                        Control en Puerta
+                      </span>
+                    )}
                   </div>
                   <AdminBadge
                     variant={selectedEvent.status === "OPEN" ? "open" : "closed"}
