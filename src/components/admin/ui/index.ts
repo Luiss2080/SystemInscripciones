@@ -7,4 +7,5 @@ export * from "./AdminPagination";
 export * from "./AdminEmptyState";
 export * from "./AdminModal";
 export * from "./AdminSelect";
+export * from "./AdminStatCard";
 
