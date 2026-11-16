@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { logoutAdmin } from "@/actions/auth/session";
 import FondoTech from "@/components/shared/FondoTech";
@@ -164,11 +164,13 @@ export function AdminLayoutClient({
 }: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>("");
-  const navSections = getNavSectionsForRole(adminRole);
+  const navSections = useMemo(() => getNavSectionsForRole(adminRole), [adminRole]);
+  const prevPathnameRef = useRef(pathname);
 
-  // Collapsible state for animated sidebar categories (must be before any early return)
+  // Collapsible state for animated sidebar categories
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     OPERACIONES: true,
     GESTIÓN: true,
@@ -187,17 +189,20 @@ export function AdminLayoutClient({
     }));
   };
 
-  // Auto-expand section if user navigates to an item within it
+  // Auto-expand section ONLY when user navigates to a new route
   useEffect(() => {
-    navSections.forEach((section) => {
-      const hasActive = section.items.some((item) => {
-        const [basePath] = item.href.split("?");
-        return pathname === basePath;
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      navSections.forEach((section) => {
+        const hasActive = section.items.some((item) => {
+          const [basePath] = item.href.split("?");
+          return pathname === basePath;
+        });
+        if (hasActive) {
+          setOpenSections((prev) => ({ ...prev, [section.title]: true }));
+        }
       });
-      if (hasActive) {
-        setOpenSections((prev) => ({ ...prev, [section.title]: true }));
-      }
-    });
+    }
   }, [pathname, navSections]);
 
   // Deterministic live clock on client only to prevent SSR hydration mismatches
@@ -322,6 +327,25 @@ export function AdminLayoutClient({
   }[adminRole as "ADMIN" | "SPEAKER" | "STAFF"] || {
     roleDesc: "Usuario Autorizado",
     avatarGrad: "from-cyan-600 to-blue-600",
+  };
+
+  const isItemActive = (href: string) => {
+    const [basePath, queryString] = href.split("?");
+    if (pathname !== basePath) return false;
+
+    if (queryString) {
+      const params = new URLSearchParams(queryString);
+      for (const [key, value] of params.entries()) {
+        if (searchParams.get(key) !== value) return false;
+      }
+      return true;
+    }
+
+    if (searchParams.get("tab") || searchParams.get("status")) {
+      return false;
+    }
+
+    return true;
   };
 
   const renderSidebarContent = (isMobile = false) => (
