@@ -387,10 +387,7 @@ export function AdminLayoutClient({
         {navSections.map((section) => {
           const SectionIcon = section.icon;
           const isSectionOpen = openSections[section.title] ?? true;
-          const hasActiveItem = section.items.some((item) => {
-            const [basePath] = item.href.split("?");
-            return pathname === basePath;
-          });
+          const hasActiveItem = section.items.some((item) => isItemActive(item.href));
 
           return (
             <div key={section.title} className="space-y-1">
@@ -441,8 +438,7 @@ export function AdminLayoutClient({
                   >
                     {section.items.map((item) => {
                       const Icon = item.icon;
-                      const [basePath] = item.href.split("?");
-                      const isActive = pathname === basePath;
+                      const isActive = isItemActive(item.href);
 
                       const linkProps = item.external
                         ? { target: "_blank", rel: "noreferrer" }
