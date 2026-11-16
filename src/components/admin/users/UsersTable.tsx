@@ -431,18 +431,17 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                           </button>
 
                           {/* 2. Quick Role Switcher Dropdown */}
-                          <div className="relative inline-block">
-                            <select
+                          <div className="w-28">
+                            <AdminSelect
                               value={user.role}
-                              disabled={isUpdatingRoleId === user.id}
-                              onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                              className="appearance-none px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-[11px] font-mono font-bold text-slate-300 focus:outline-none focus:border-cyan-500 cursor-pointer disabled:opacity-50 shadow-xs transition-colors"
+                              onChange={(val) => handleRoleChange(user.id, val)}
+                              options={[
+                                { label: "ADMIN", value: "ADMIN" },
+                                { label: "SPEAKER", value: "SPEAKER" },
+                                { label: "STAFF", value: "STAFF" },
+                              ]}
                               title="Cambiar rol de usuario"
-                            >
-                              <option value="ADMIN" className="bg-slate-900 text-white">ADMIN</option>
-                              <option value="SPEAKER" className="bg-slate-900 text-white">SPEAKER</option>
-                              <option value="STAFF" className="bg-slate-900 text-white">STAFF</option>
-                            </select>
+                            />
                           </div>
                         </div>
                       </td>
