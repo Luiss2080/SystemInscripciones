@@ -507,27 +507,28 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         isOpen={selectedUser !== null}
         onClose={() => setSelectedUser(null)}
         title="Ficha Oficial de Usuario y Permisos"
-        subtitle={`ID: ${selectedUser?.id || ""}`}
+        subtitle={selectedUser?.id ? `ID Cuenta: ${selectedUser.id} • PostgreSQL Auth` : ""}
         icon={Shield}
+        maxWidth="max-w-2xl"
         footer={
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-mono">Cambiar rol activo:</span>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs text-slate-400 font-mono">Modificar rol activo:</span>
               {selectedUser && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   {(["ADMIN", "SPEAKER", "STAFF"] as const).map((r) => (
                     <button
                       key={r}
                       type="button"
                       disabled={selectedUser.role === r || isUpdatingRoleId === selectedUser.id}
                       onClick={() => handleRoleChange(selectedUser.id, r)}
-                      className={`px-2 py-1 rounded-md text-[10px] font-mono font-bold uppercase transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer ${
                         selectedUser.role === r
-                          ? "bg-cyan-500 text-slate-950 shadow-sm"
+                          ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                           : "bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800"
                       }`}
                     >
-                      {r}
+                      {isUpdatingRoleId === selectedUser.id && selectedUser.role !== r ? "..." : r}
                     </button>
                   ))}
                 </div>
@@ -545,53 +546,98 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
       >
         {selectedUser && (
           <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-md">
+            {/* User Profile Header */}
+            <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center font-black text-white text-base shadow-lg shadow-cyan-900/40 shrink-0">
                   {selectedUser.fullName.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <h4 className="text-base font-extrabold text-white">
                     {selectedUser.fullName}
                   </h4>
-                  <p className="text-xs text-slate-400 font-mono">
-                    {selectedUser.email}
-                  </p>
+                  <a
+                    href={`mailto:${selectedUser.email}`}
+                    className="text-xs text-cyan-400 font-mono hover:underline inline-flex items-center gap-1"
+                  >
+                    <Mail className="w-3 h-3" />
+                    <span>{selectedUser.email}</span>
+                  </a>
                 </div>
               </div>
-              <AdminBadge
-                variant={selectedUser.role === "ADMIN" ? "admin" : selectedUser.role === "SPEAKER" ? "speaker" : "staff"}
-                label={selectedUser.role}
-              />
+              <div className="flex items-center gap-2 self-start sm:self-center">
+                <AdminBadge
+                  variant={selectedUser.role === "ADMIN" ? "admin" : selectedUser.role === "SPEAKER" ? "speaker" : "staff"}
+                  label={selectedUser.role}
+                />
+              </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold block">
-                Alcance y Privilegios del Rol
-              </span>
+            {/* User ID Box with 1-click Copy */}
+            <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
+              <div className="truncate mr-2">
+                <span className="text-slate-500 uppercase tracking-wider block text-[10px]">Identificador Único (UUID)</span>
+                <span className="text-slate-300 font-bold truncate block">{selectedUser.id}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleCopyUserId(selectedUser.id)}
+                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1 cursor-pointer shrink-0 transition-colors"
+              >
+                {copiedUserId ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedUserId ? "Copiado" : "Copiar"}</span>
+              </button>
+            </div>
+
+            {/* Scope and Privileges Card */}
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Alcance y Privilegios del Rol Asignado</span>
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 font-bold uppercase">
+                  Nivel: {selectedUser.role}
+                </span>
+              </div>
               <p className="text-xs text-slate-300 leading-relaxed font-medium">
                 {ROLE_PERMISSIONS[selectedUser.role]?.desc}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">
-                  Talleres / Eventos Asignados
+            {/* Metadata Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Talleres y Cursos Asignados</span>
                 </span>
                 <p className="text-white font-mono font-bold text-sm">
                   {selectedUser._count.events} cursos dictados
                 </p>
+                <span className="text-[10px] text-slate-500 font-mono">
+                  En catálogo del sistema
+                </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">
-                  Fecha de Registro en BD
+              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <Clock className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Fecha de Creación de Cuenta</span>
                 </span>
                 <p className="text-white font-mono text-xs">
                   {new Date(selectedUser.createdAt).toLocaleString("es-ES")}
                 </p>
+                <span className="text-[10px] text-slate-500 font-mono">
+                  Registrado en PostgreSQL
+                </span>
               </div>
+            </div>
+
+            {/* Security Note */}
+            <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 flex items-center gap-2.5 text-xs text-slate-400 font-mono">
+              <Key className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Protegido con JWT HttpOnly • Verificación por Middleware en cada solicitud.</span>
             </div>
           </div>
         )}
@@ -602,67 +648,99 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         isOpen={isNewUserModalOpen}
         onClose={() => setIsNewUserModalOpen(false)}
         title="Crear Nueva Cuenta de Usuario"
-        subtitle="Asignación de privilegios y credenciales de acceso"
+        subtitle="Asignación de credenciales criptográficas y privilegios RBAC"
         icon={PlusCircle}
+        maxWidth="max-w-xl"
       >
         <form onSubmit={handleCreateUser} className="space-y-4">
-          <div className="space-y-1">
-            <label className="block text-[10px] font-mono font-bold text-slate-300 uppercase">
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Nombre Completo *
             </label>
-            <input
-              type="text"
-              name="fullName"
-              required
-              placeholder="Ej. Ing. Roberto Gómez"
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <Users className="w-4 h-4" />
+              </div>
+              <input
+                type="text"
+                name="fullName"
+                required
+                placeholder="Ej. Ing. Roberto Gómez"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500 placeholder-slate-600 transition-colors"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-[10px] font-mono font-bold text-slate-300 uppercase">
-              Correo Electrónico *
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Correo Electrónico de Acceso *
             </label>
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Ej. roberto.gomez@ingeniero.tech"
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <Mail className="w-4 h-4" />
+              </div>
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="Ej. roberto.gomez@ingeniero.tech"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500 placeholder-slate-600 transition-colors"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-[10px] font-mono font-bold text-slate-300 uppercase">
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Contraseña Temporal *
             </label>
-            <input
-              type="password"
-              name="password"
-              required
-              placeholder="Mínimo 8 caracteres"
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <Lock className="w-4 h-4" />
+              </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                placeholder="Mínimo 8 caracteres"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500 placeholder-slate-600 transition-colors"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white cursor-pointer"
+                title={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-[10px] font-mono font-bold text-slate-300 uppercase">
-              Rol del Sistema *
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
+              Rol Asignado en el Sistema *
             </label>
             <input type="hidden" name="role" value={newUserRole} />
             <AdminSelect
               value={newUserRole}
               onChange={setNewUserRole}
               options={[
-                { label: "ADMIN - Administrador General", value: "ADMIN" },
-                { label: "SPEAKER - Docente / Ponente", value: "SPEAKER" },
-                { label: "STAFF - Control de Acceso & Logística", value: "STAFF" },
+                { label: "ADMIN - Administrador General (Nivel Root)", value: "ADMIN" },
+                { label: "SPEAKER - Docente / Ponente (Gestión Cátedra)", value: "SPEAKER" },
+                { label: "STAFF - Control de Acceso & Logística (Lector QR)", value: "STAFF" },
               ]}
               title="Rol del Sistema"
             />
           </div>
 
-          <div className="pt-2 flex items-center justify-end gap-2">
+          {/* Security Notice */}
+          <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5 text-[11px] text-slate-400 font-mono">
+            <AlertCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+            <span>
+              La contraseña se cifrará de manera irreversible con Bcrypt (cost 10) antes de ser persistida en PostgreSQL.
+            </span>
+          </div>
+
+          <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-slate-800">
             <button
               type="button"
               onClick={() => setIsNewUserModalOpen(false)}
@@ -771,49 +849,93 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         isOpen={isRbacModalOpen}
         onClose={() => setIsRbacModalOpen(false)}
         title="Matriz de Privilegios y Roles (RBAC)"
-        subtitle="Alcance y permisos del sistema en PostgreSQL"
+        subtitle="Alcance y políticas de seguridad basadas en roles en PostgreSQL"
         icon={ShieldCheck}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-3xl"
       >
-        <div className="space-y-4">
-          <p className="text-xs text-slate-400">
-            El sistema implementa Control de Acceso Basado en Roles (RBAC) con tokens JWT HttpOnly y verificación criptográfica por middleware.
+        <div className="space-y-5">
+          <p className="text-xs text-slate-400 leading-relaxed font-mono">
+            El sistema implementa Control de Acceso Basado en Roles (RBAC) con tokens JWT HttpOnly y verificación criptográfica por middleware en cada endpoint.
           </p>
 
-          <div className="space-y-3">
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-800/40">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60">
-                  ADMIN • SUPERUSUARIO
-                </span>
-                <span className="text-[10px] font-mono text-cyan-400 font-bold">NIVEL ROOT</span>
-              </div>
-              <p className="text-xs text-slate-300 font-medium leading-relaxed">
-                Control total del sistema: alta, modificación y baja de talleres, aprobación de pagos bancarios, emisión masiva de certificados y gestión integral de identidades y roles.
+          {/* Matrix Comparison Table */}
+          <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80">
+            <table className="w-full text-left text-xs border-collapse font-mono">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-900/80 text-[11px] text-slate-300">
+                  <th className="py-2.5 px-3.5 font-bold">Módulo / Operación</th>
+                  <th className="py-2.5 px-3.5 font-bold text-cyan-400 text-center">ADMIN (Root)</th>
+                  <th className="py-2.5 px-3.5 font-bold text-indigo-400 text-center">SPEAKER (Docente)</th>
+                  <th className="py-2.5 px-3.5 font-bold text-emerald-400 text-center">STAFF (Puerta)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-850 text-slate-300">
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Catálogo de Talleres (CRUD, Aforos)</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Total (CRUD)</td>
+                  <td className="py-2.5 px-3.5 text-center text-indigo-300">Solo sus cursos</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-500">Solo Lectura</td>
+                </tr>
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Padrón de Asistentes & Registros</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Auditoría Global</td>
+                  <td className="py-2.5 px-3.5 text-center text-indigo-300">Sus Alumnos</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-500">Búsqueda Básica</td>
+                </tr>
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Aprobación de Pagos & Conciliación</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Aprobación / Rechazo</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                </tr>
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Emisión de Certificados QR</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Emisión Inmediata</td>
+                  <td className="py-2.5 px-3.5 text-center text-indigo-300">Consulta sus cursos</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                </tr>
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Escáner QR & Check-in en Puerta</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Acreditación & Override</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Lector Óptico QR</td>
+                </tr>
+                <tr className="hover:bg-slate-900/40">
+                  <td className="py-2.5 px-3.5 font-medium text-white">Gestión de Cuentas & Roles</td>
+                  <td className="py-2.5 px-3.5 text-center text-emerald-400 font-bold">Altas, Bajas & RBAC</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                  <td className="py-2.5 px-3.5 text-center text-slate-600">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Cards for each role */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-800/40 space-y-1">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60 inline-block">
+                ADMIN • ROOT
+              </span>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed">
+                Control absoluto: finanzas, eventos, emisión masiva de folios e identidades.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-indigo-800/40">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-800/60">
-                  SPEAKER • DOCENTE
-                </span>
-                <span className="text-[10px] font-mono text-indigo-400 font-bold">PORTAL CÁTEDRA</span>
-              </div>
-              <p className="text-xs text-slate-300 font-medium leading-relaxed">
-                Gestión académica restringida a sus cursos asignados: consulta de temarios, padrón de alumnos de sus cátedras y seguimiento de asistencia.
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-indigo-800/40 space-y-1">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-800/60 inline-block">
+                SPEAKER • DOCENTE
+              </span>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed">
+                Cátedra: temarios, listas de asistencia de sus cursos y recursos de apoyo.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-emerald-800/40">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800/60">
-                  STAFF • LOGÍSTICA
-                </span>
-                <span className="text-[10px] font-mono text-emerald-400 font-bold">OPERACIONES CAMPO</span>
-              </div>
-              <p className="text-xs text-slate-300 font-medium leading-relaxed">
-                Módulo táctico de campo: acceso al lector óptico QR y acreditación manual por código #TCK para control de aforo y asistencia en puerta.
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-emerald-800/40 space-y-1">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800/60 inline-block">
+                STAFF • LOGÍSTICA
+              </span>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed">
+                Operaciones: lector óptico QR y acreditación rápida #TCK para control de aforo.
               </p>
             </div>
           </div>
