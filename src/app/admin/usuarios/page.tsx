@@ -2,7 +2,7 @@ import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { UsersTable } from "@/components/admin/users/UsersTable";
-import { AdminPageHeader } from "@/components/admin/ui";
+import { AdminPageHeader, AdminStatCard } from "@/components/admin/ui";
 import { Shield, Users, UserCheck, GraduationCap } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function AdminUsersPage() {
   const adminCount = users.filter((u) => u.role === "ADMIN").length;
   const speakerCount = users.filter((u) => u.role === "SPEAKER").length;
   const staffCount = users.filter((u) => u.role === "STAFF").length;
+  const totalSpeakerEvents = users.reduce((acc, u) => acc + u._count.events, 0);
 
   return (
     <div className="space-y-5">
@@ -50,47 +51,51 @@ export default async function AdminUsersPage() {
         description="Administración centralizada de identidades, privilegios de acceso y asignaciones docentes en el ecosistema de talleres y conferencias."
       />
 
-      {/* Fila Adicional de Estadísticas de Usuarios */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Total Cuentas</span>
-            <strong className="text-xl font-black text-white font-mono tabular-nums">{users.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-        </div>
+      {/* Fila Enriquecida de Estadísticas de Usuarios */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <AdminStatCard
+          label="Cuentas Registradas"
+          value={users.length}
+          valueSuffix="activas"
+          icon={Users}
+          badge="RBAC ACTIVO"
+          description="Identidades activas en base de datos"
+          subDetail="3 roles de privilegio configurados"
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Administradores</span>
-            <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">{adminCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Shield className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Superusuarios Admin"
+          value={adminCount}
+          valueSuffix="cuentas"
+          icon={Shield}
+          badge="ACCESO ROOT"
+          description="Acceso total al sistema y finanzas"
+          subDetail="Auditoría, configuración y seguridad"
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Docentes / Ponentes</span>
-            <strong className="text-xl font-black text-indigo-400 font-mono tabular-nums">{speakerCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-indigo-950/80 border border-indigo-800/60 flex items-center justify-center text-indigo-400 shrink-0">
-            <GraduationCap className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Docentes & Speakers"
+          value={speakerCount}
+          valueSuffix="instructores"
+          icon={GraduationCap}
+          badge="CÁTEDRA"
+          description="Gestión académica de participantes"
+          subDetail={`${totalSpeakerEvents} programas asignados en catálogo`}
+          colorVariant="indigo"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Operadores Staff</span>
-            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{staffCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <UserCheck className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Personal de Staff"
+          value={staffCount}
+          valueSuffix="operadores"
+          icon={UserCheck}
+          badge="LOGÍSTICA"
+          description="Operaciones de campo y validación"
+          subDetail="Escáner QR y control de acceso en puerta"
+          colorVariant="emerald"
+        />
       </div>
 
       {/* Main Standardized Table & Filter Section */}

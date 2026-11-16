@@ -2,7 +2,7 @@ import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { AttendeesTable } from "@/components/admin/attendees/AttendeesTable";
-import { AdminPageHeader } from "@/components/admin/ui";
+import { AdminPageHeader, AdminStatCard } from "@/components/admin/ui";
 import { formatRevenue } from "@/lib/utils/format";
 import { Users, CheckCircle2, ShieldCheck, Clock, CreditCard } from "lucide-react";
 
@@ -48,6 +48,13 @@ export default async function AdminAttendeesPage() {
   const pendingCount = attendees.filter((a) => a.status === "PENDING_PAYMENT").length;
   const revenueTotal = Number(approvedPayments._sum.amount ?? 0);
 
+  const confirmedPct = attendees.length > 0
+    ? Math.round(((confirmedCount + attendedCount) / attendees.length) * 100)
+    : 0;
+  const attendanceRate = confirmedCount + attendedCount > 0
+    ? Math.round((attendedCount / (confirmedCount + attendedCount)) * 100)
+    : 0;
+
   return (
     <div className="space-y-5">
       {/* Standard Module Header */}
@@ -69,57 +76,62 @@ export default async function AdminAttendeesPage() {
         }
       />
 
-      {/* Fila Adicional de Estadísticas de Padrón */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Total Inscritos</span>
-            <strong className="text-xl font-black text-white font-mono tabular-nums">{attendees.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-        </div>
+      {/* Fila Enriquecida de Estadísticas de Padrón */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <AdminStatCard
+          label="Padrón Registrado"
+          value={attendees.length}
+          valueSuffix="alumnos"
+          icon={Users}
+          badge="INSCRIPCIONES"
+          description="Participantes registrados en BD"
+          subDetail={`${events.length} talleres con inscritos`}
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Confirmados</span>
-            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{confirmedCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <CheckCircle2 className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Pagos Confirmados"
+          value={confirmedCount}
+          valueSuffix="tickets"
+          icon={CheckCircle2}
+          badge="CONFIRMADOS"
+          description="Inscripciones activas y acreditables"
+          progress={confirmedPct}
+          colorVariant="emerald"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Acreditados QR</span>
-            <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{attendedCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Acreditados en Puerta"
+          value={attendedCount}
+          valueSuffix="en sala"
+          icon={ShieldCheck}
+          badge="CHECK-IN QR"
+          description="Asistencia validada con escáner"
+          progress={attendanceRate}
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Pendientes Pago</span>
-            <strong className="text-xl font-black text-amber-300 font-mono tabular-nums">{pendingCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-amber-950/80 border border-amber-800/60 flex items-center justify-center text-amber-400 shrink-0">
-            <Clock className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Pendientes de Pago"
+          value={pendingCount}
+          valueSuffix="por revisar"
+          icon={Clock}
+          badge="EN COLA"
+          description="Comprobantes pendientes de validación"
+          subDetail="Requieren aprobación en bandeja"
+          colorVariant="amber"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3 col-span-2 sm:col-span-1">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Caja Aprobada</span>
-            <strong className="text-xl font-black text-emerald-300 font-mono tabular-nums">{formatRevenue(revenueTotal)}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <CreditCard className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Caja Aprobada Neta"
+          value={formatRevenue(revenueTotal)}
+          icon={CreditCard}
+          badge="CONCILIADO"
+          description="Ingresos verificados en moneda BOB"
+          subDetail="Depósitos y transferencias QR"
+          colorVariant="emerald"
+          className="sm:col-span-2 lg:col-span-1"
+        />
       </div>
 
       {/* Main Standardized Table & Filter Section */}
