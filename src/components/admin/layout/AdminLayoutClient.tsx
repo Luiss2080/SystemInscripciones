@@ -26,6 +26,10 @@ import {
   Activity,
   Layers,
   GraduationCap,
+  CreditCard,
+  History,
+  FileCheck2,
+  Mail,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
@@ -57,15 +61,15 @@ function getNavSectionsForRole(role: string): NavSection[] {
         icon: GraduationCap,
         items: [
           { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-          { href: "/admin/eventos", label: "Mis Talleres", icon: Calendar },
+          { href: "/admin/eventos", label: "Mis Talleres", icon: Calendar, exact: true },
         ],
       },
       {
         title: "ALUMNOS",
         icon: Users,
         items: [
-          { href: "/admin/asistentes", label: "Mis Alumnos", icon: Users },
-          { href: "/admin/certificados", label: "Certificados", icon: Award },
+          { href: "/admin/asistentes", label: "Mis Alumnos", icon: Users, exact: true },
+          { href: "/admin/certificados", label: "Certificados", icon: Award, exact: true },
         ],
       },
       {
@@ -73,7 +77,8 @@ function getNavSectionsForRole(role: string): NavSection[] {
         icon: ExternalLink,
         items: [
           { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
-          { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
+          { href: "/verificar", label: "Verificador QR", icon: FileCheck2, external: true },
+          { href: "/contacto", label: "Contacto", icon: Mail, external: true },
         ],
       },
     ];
@@ -85,52 +90,58 @@ function getNavSectionsForRole(role: string): NavSection[] {
         title: "CONTROL ACCESO",
         icon: QrCode,
         items: [
-          { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
-          { href: "/admin", label: "Métricas", icon: LayoutDashboard, exact: true },
+          { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, exact: true },
+          { href: "/admin", label: "Métricas en Vivo", icon: LayoutDashboard, exact: true },
         ],
       },
       {
         title: "ACREDITACIÓN",
         icon: Users,
         items: [
-          { href: "/admin/asistentes", label: "Asistentes", icon: Users },
+          { href: "/admin/asistentes", label: "Padrón Asistentes", icon: Users, exact: true },
+          { href: "/admin/checkin", label: "Validación Manual", icon: ShieldCheck, exact: true },
         ],
       },
       {
         title: "ENLACES",
         icon: ExternalLink,
         items: [
-          { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
+          { href: "/verificar", label: "Verificador QR", icon: FileCheck2, external: true },
           { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
+          { href: "/contacto", label: "Contacto Soporte", icon: Mail, external: true },
         ],
       },
     ];
   }
 
-  // Default: ADMIN
+  // Default: ADMIN (all categories have at least 3-4 options)
   return [
     {
       title: "OPERACIONES",
       icon: Activity,
       items: [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-        { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
-        { href: "/admin/eventos", label: "Talleres", icon: Calendar },
+        { href: "/admin/checkin", label: "Escáner QR", icon: QrCode, exact: true },
+        { href: "/admin/eventos", label: "Talleres", icon: Calendar, exact: true },
+        { href: "/admin/eventos/nuevo", label: "Nuevo Taller", icon: PlusCircle, exact: true },
       ],
     },
     {
       title: "GESTIÓN",
       icon: Layers,
       items: [
-        { href: "/admin/asistentes", label: "Asistentes", icon: Users },
-        { href: "/admin/certificados", label: "Certificados", icon: Award },
+        { href: "/admin/asistentes", label: "Asistentes", icon: Users, exact: true },
+        { href: "/admin/asistentes?status=PENDING_PAYMENT", label: "Control de Pagos", icon: CreditCard },
+        { href: "/admin/certificados", label: "Certificados", icon: Award, exact: true },
       ],
     },
     {
       title: "SEGURIDAD",
       icon: Shield,
       items: [
-        { href: "/admin/usuarios", label: "Usuarios", icon: Shield },
+        { href: "/admin/usuarios", label: "Usuarios", icon: Users, exact: true },
+        { href: "/admin/usuarios?tab=roles", label: "Roles & RBAC", icon: ShieldCheck },
+        { href: "/admin/checkin", label: "Bitácora Acceso", icon: History, exact: true },
       ],
     },
     {
@@ -138,7 +149,8 @@ function getNavSectionsForRole(role: string): NavSection[] {
       icon: ExternalLink,
       items: [
         { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
-        { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
+        { href: "/verificar", label: "Verificador QR", icon: FileCheck2, external: true },
+        { href: "/contacto", label: "Contacto Soporte", icon: Mail, external: true },
       ],
     },
   ];
@@ -178,9 +190,10 @@ export function AdminLayoutClient({
   // Auto-expand section if user navigates to an item within it
   useEffect(() => {
     navSections.forEach((section) => {
-      const hasActive = section.items.some((item) =>
-        item.exact ? pathname === item.href : pathname.startsWith(item.href)
-      );
+      const hasActive = section.items.some((item) => {
+        const [basePath] = item.href.split("?");
+        return pathname === basePath;
+      });
       if (hasActive) {
         setOpenSections((prev) => ({ ...prev, [section.title]: true }));
       }
