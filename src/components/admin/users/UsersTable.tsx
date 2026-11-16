@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { updateUserRole, createNewUser } from "@/actions/admin/users";
 import { formatShortDate } from "@/lib/utils/format";
@@ -25,6 +25,7 @@ import {
   Loader2,
   PlusCircle,
   Filter,
+  ShieldCheck,
 } from "lucide-react";
 
 export interface UserRecord {
