@@ -12,6 +12,7 @@ import {
   AdminEmptyState,
   AdminBadge,
   AdminModal,
+  AdminSelect,
 } from "@/components/admin/ui";
 import {
   AnimatedProgressBar,
@@ -644,39 +645,41 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Modalidad de Cursado
             </label>
-            <select
+            <AdminSelect
               value={modalityFilter}
-              onChange={(e) => {
-                setModalityFilter(e.target.value);
+              onChange={(val) => {
+                setModalityFilter(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="ALL">Todas las Modalidades</option>
-              <option value="VIRTUAL">Virtual en Vivo</option>
-              <option value="PRESENCIAL">Presencial Auditorio</option>
-              <option value="HIBRIDO">Híbrido</option>
-            </select>
+              options={[
+                { label: "Todas las Modalidades", value: "ALL" },
+                { label: "Virtual en Vivo", value: "VIRTUAL" },
+                { label: "Presencial Auditorio", value: "PRESENCIAL" },
+                { label: "Híbrido", value: "HIBRIDO" },
+              ]}
+              title="Modalidad de Cursado"
+            />
           </div>
 
           <div className="space-y-1.5">
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Criterio de Ordenamiento
             </label>
-            <select
+            <AdminSelect
               value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
+              onChange={(val) => {
+                setSortBy(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="date_asc">Fecha de Inicio (Próximos)</option>
-              <option value="date_desc">Fecha de Inicio (Lejanos)</option>
-              <option value="occupancy_desc">Mayor Ocupación</option>
-              <option value="capacity_desc">Mayor Capacidad</option>
-              <option value="name_asc">Nombre del Taller (A - Z)</option>
-            </select>
+              options={[
+                { label: "Fecha de Inicio (Próximos)", value: "date_asc" },
+                { label: "Fecha de Inicio (Lejanos)", value: "date_desc" },
+                { label: "Mayor Ocupación", value: "occupancy_desc" },
+                { label: "Mayor Capacidad", value: "capacity_desc" },
+                { label: "Nombre del Taller (A - Z)", value: "name_asc" },
+              ]}
+              title="Criterio de Ordenamiento"
+            />
           </div>
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
