@@ -26,6 +26,15 @@ import {
   PlusCircle,
   Filter,
   ShieldCheck,
+  Mail,
+  Lock,
+  EyeOff,
+  Copy,
+  Check,
+  Key,
+  BookOpen,
+  Clock,
+  AlertCircle,
 } from "lucide-react";
 
 export interface UserRecord {
@@ -85,8 +94,16 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isUpdatingRoleId, setIsUpdatingRoleId] = useState<string | null>(null);
   const [isSubmittingNewUser, setIsSubmittingNewUser] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [copiedUserId, setCopiedUserId] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleCopyUserId = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedUserId(true);
+    setTimeout(() => setCopiedUserId(false), 2000);
+  };
 
   const showToast = (msg: string) => {
     setFeedbackMsg(msg);
