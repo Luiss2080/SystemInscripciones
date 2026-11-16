@@ -35,8 +35,6 @@ import {
   Printer,
   QrCode,
   Hash,
-  FileCheck,
-  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -87,6 +85,7 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
   const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     if (selectedRecord?.certificate?.certificateCode) {
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const verifyUrl = `${origin}/verificar/${selectedRecord.certificate.certificateCode}`;
@@ -98,11 +97,18 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
           light: "#ffffff",
         },
       })
-        .then((url) => setModalQrUrl(url))
+        .then((url) => {
+          if (isMounted) setModalQrUrl(url);
+        })
         .catch((err) => console.error("Error generating QR:", err));
     } else {
-      setModalQrUrl("");
+      Promise.resolve().then(() => {
+        if (isMounted) setModalQrUrl("");
+      });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [selectedRecord]);
 
   const handleCopyFolioModal = (code: string) => {
