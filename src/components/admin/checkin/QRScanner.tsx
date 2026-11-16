@@ -569,33 +569,29 @@ export function QRScanner({
         }
       >
         {selectedCheckin && (() => {
-          const ticketCode =
-            "ticketCode" in selectedCheckin ? selectedCheckin.ticketCode : selectedCheckin.code;
-          const attendeeName =
-            "attendeeName" in selectedCheckin
-              ? selectedCheckin.attendeeName
-              : selectedCheckin.name || "Participante";
-          const email =
-            "attendeeEmail" in selectedCheckin
-              ? selectedCheckin.attendeeEmail
-              : selectedCheckin.email;
-          const phone =
-            "attendeePhone" in selectedCheckin
-              ? selectedCheckin.attendeePhone
-              : selectedCheckin.phone;
-          const occupation =
-            "attendeeOccupation" in selectedCheckin
-              ? selectedCheckin.attendeeOccupation
-              : selectedCheckin.occupation;
-          const organization =
-            "attendeeOrganization" in selectedCheckin
-              ? selectedCheckin.attendeeOrganization
-              : selectedCheckin.organization;
+          const isPendingItem = "ticketCode" in selectedCheckin;
+          const ticketCode = isPendingItem
+            ? selectedCheckin.ticketCode
+            : selectedCheckin.code;
+          const attendeeName = isPendingItem
+            ? selectedCheckin.attendeeName
+            : selectedCheckin.name || "Participante";
+          const email = isPendingItem
+            ? selectedCheckin.attendeeEmail
+            : selectedCheckin.email;
+          const phone = isPendingItem
+            ? selectedCheckin.attendeePhone
+            : selectedCheckin.phone;
+          const occupation = isPendingItem
+            ? selectedCheckin.attendeeOccupation
+            : selectedCheckin.occupation;
+          const organization = isPendingItem
+            ? selectedCheckin.attendeeOrganization
+            : selectedCheckin.organization;
           const eventTitle = selectedCheckin.eventTitle || "Taller Técnico";
           const modality = selectedCheckin.modality || "Presencial";
           const academicHours = selectedCheckin.academicHours || 6;
-          const isAttended =
-            "status" in selectedCheckin ? selectedCheckin.status === "ATTENDED" : false;
+          const isAttended = !isPendingItem && selectedCheckin.status === "ATTENDED";
 
           return (
             <div className="space-y-4">
