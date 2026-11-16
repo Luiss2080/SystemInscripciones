@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { AdminSelect } from "./AdminSelect";
 
 interface AdminPaginationProps {
   currentPage: number;
