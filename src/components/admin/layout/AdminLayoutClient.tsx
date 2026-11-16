@@ -20,9 +20,12 @@ import {
   ShieldCheck,
   Clock,
   ChevronRight,
+  ChevronDown,
   PlusCircle,
   Shield,
   Activity,
+  Layers,
+  GraduationCap,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
@@ -42,6 +45,7 @@ interface NavItem {
 
 interface NavSection {
   title: string;
+  icon: typeof LayoutDashboard;
   items: NavItem[];
 }
 
@@ -50,6 +54,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
     return [
       {
         title: "DOCENCIA",
+        icon: GraduationCap,
         items: [
           { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
           { href: "/admin/eventos", label: "Mis Talleres", icon: Calendar },
@@ -57,6 +62,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
       },
       {
         title: "ALUMNOS",
+        icon: Users,
         items: [
           { href: "/admin/asistentes", label: "Mis Alumnos", icon: Users },
           { href: "/admin/certificados", label: "Certificados", icon: Award },
@@ -64,6 +70,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
       },
       {
         title: "ENLACES",
+        icon: ExternalLink,
         items: [
           { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
           { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
@@ -76,6 +83,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
     return [
       {
         title: "CONTROL ACCESO",
+        icon: QrCode,
         items: [
           { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
           { href: "/admin", label: "Métricas", icon: LayoutDashboard, exact: true },
@@ -83,12 +91,14 @@ function getNavSectionsForRole(role: string): NavSection[] {
       },
       {
         title: "ACREDITACIÓN",
+        icon: Users,
         items: [
           { href: "/admin/asistentes", label: "Asistentes", icon: Users },
         ],
       },
       {
         title: "ENLACES",
+        icon: ExternalLink,
         items: [
           { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
           { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
@@ -101,6 +111,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
   return [
     {
       title: "OPERACIONES",
+      icon: Activity,
       items: [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
         { href: "/admin/checkin", label: "Escáner QR", icon: QrCode },
@@ -109,6 +120,7 @@ function getNavSectionsForRole(role: string): NavSection[] {
     },
     {
       title: "GESTIÓN",
+      icon: Layers,
       items: [
         { href: "/admin/asistentes", label: "Asistentes", icon: Users },
         { href: "/admin/certificados", label: "Certificados", icon: Award },
@@ -116,12 +128,14 @@ function getNavSectionsForRole(role: string): NavSection[] {
     },
     {
       title: "SEGURIDAD",
+      icon: Shield,
       items: [
         { href: "/admin/usuarios", label: "Usuarios", icon: Shield },
       ],
     },
     {
       title: "ENLACES",
+      icon: ExternalLink,
       items: [
         { href: "/", label: "Web Pública", icon: ExternalLink, external: true },
         { href: "/verificar", label: "Verificador QR", icon: ShieldCheck, external: true },
