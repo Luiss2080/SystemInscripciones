@@ -561,105 +561,259 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
         isOpen={selectedRecord !== null}
         onClose={() => setSelectedRecord(null)}
         title="Ficha Oficial de Certificación Digital"
-        subtitle={selectedRecord?.certificate?.certificateCode || "Acreditación pendiente"}
+        subtitle={
+          selectedRecord?.certificate?.certificateCode
+            ? `Folio Oficial: ${selectedRecord.certificate.certificateCode} • Registrado en PostgreSQL`
+            : "Acreditación confirmada • Pendiente de emisión de folio"
+        }
         icon={Award}
+        maxWidth="max-w-3xl"
         footer={
-          <div className="flex items-center justify-between w-full">
-            <div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
+            <div className="flex flex-wrap items-center gap-2">
+              {selectedRecord?.certificate && (
+                <>
+                  <Link
+                    href={`/verificar/${selectedRecord.certificate.certificateCode}`}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold transition-all"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Ver en Verificador Público</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyLinkModal(selectedRecord.certificate!.certificateCode)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer"
+                  >
+                    {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedLink ? "Enlace Copiado" : "Copiar Enlace"}</span>
+                  </button>
+                </>
+              )}
+            </div>
+            <div className="flex items-center justify-end gap-2">
               {selectedRecord?.certificate && (
                 <Link
                   href={`/verificar/${selectedRecord.certificate.certificateCode}`}
                   target="_blank"
-                  className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:underline font-mono font-bold"
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all inline-flex items-center gap-1.5 cursor-pointer"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Abrir Diploma en Verificador Público</span>
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Imprimir Diploma</span>
                 </Link>
               )}
+              <button
+                type="button"
+                onClick={() => setSelectedRecord(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              >
+                Cerrar Ficha
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setSelectedRecord(null)}
-              className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
-            >
-              Cerrar Ficha
-            </button>
           </div>
         }
       >
         {selectedRecord && (
           <div className="space-y-4">
             {/* Header Diploma Preview Card */}
-            <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-800/60 space-y-3 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Certificación Académica de Ingeniería</span>
-                </span>
-                <AdminBadge
-                  variant={selectedRecord.certificate ? "approved" : "pending_payment"}
-                  label={selectedRecord.certificate ? "OFICIAL" : "PENDIENTE"}
-                />
-              </div>
+            <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-[#0c1426] via-[#080e1c] to-[#040813] border-2 border-cyan-500/30 relative overflow-hidden shadow-2xl space-y-5">
+              {/* Decorative Corner Glows */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-              <div className="space-y-1">
-                <h4 className="text-lg font-black text-white">
-                  {selectedRecord.attendeeName}
-                </h4>
-                <p className="text-xs text-slate-300 font-medium">
-                  {selectedRecord.event.title}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
-                <span>Carga: {selectedRecord.event.academicHours} Horas Académicas</span>
-                {selectedRecord.certificate && (
-                  <span className="text-cyan-400 font-bold">
-                    Folio: {selectedRecord.certificate.certificateCode}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Quick Actions in Modal */}
-            {!selectedRecord.certificate && (
-              <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/50 flex items-center justify-between">
-                <div>
-                  <h5 className="text-xs font-bold text-amber-300">
-                    Emisión Inmediata
-                  </h5>
-                  <p className="text-[11px] text-amber-400/80">
-                    El participante ya tiene asistencia confirmada. Puedes generar el folio ahora.
-                  </p>
+              {/* Credential Header Row */}
+              <div className="flex flex-wrap items-center justify-between gap-3 relative z-10 border-b border-slate-800/80 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-950/90 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)] shrink-0">
+                    <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-extrabold block">
+                      DEVCON WORKSHOPS • SISTEMA DE CERTIFICACIÓN
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      Acreditación Académica de Ingeniería
+                    </span>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await handleIssue(selectedRecord.id);
-                    setSelectedRecord((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            certificate: {
-                              certificateCode: "EMITIDO",
-                              issuedAt: new Date().toISOString(),
-                            },
-                          }
-                        : null
-                    );
-                  }}
-                  disabled={issuingId === selectedRecord.id}
-                  className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shrink-0"
-                >
-                  {issuingId === selectedRecord.id ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <Sparkles className="w-3.5 h-3.5" />
-                  )}
-                  <span>Emitir</span>
-                </button>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-800/60 hidden sm:inline-flex items-center gap-1">
+                    <Hash className="w-3 h-3" />
+                    <span>SHA-256</span>
+                  </span>
+                  <AdminBadge
+                    variant={selectedRecord.certificate ? "approved" : "pending_payment"}
+                    label={selectedRecord.certificate ? "OFICIAL & VÁLIDO" : "PENDIENTE"}
+                  />
+                </div>
               </div>
-            )}
+
+              {/* Student Identity & Diploma Text */}
+              <div className="space-y-1.5 relative z-10">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold">
+                  Otorgado formalmente en reconocimiento a:
+                </span>
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-cyan-200">
+                  {selectedRecord.attendeeName}
+                </h2>
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-mono text-slate-300">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/80 border border-slate-800">
+                    <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>{selectedRecord.attendeeEmail}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-800/50 text-emerald-300">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Asistencia Presencial Verificada</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Course Title and Hours */}
+              <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800/90 space-y-2 relative z-10">
+                <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest block font-bold">
+                  Por haber completado y acreditado el programa de alta especialización:
+                </span>
+                <h4 className="text-sm sm:text-base font-extrabold text-white">
+                  {selectedRecord.event.title}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+                  <span>
+                    Carga Académica:{" "}
+                    <strong className="text-cyan-300">
+                      {selectedRecord.event.academicHours} Horas Curriculares
+                    </strong>
+                  </span>
+                  <span>
+                    Cátedra / Docente:{" "}
+                    <strong className="text-white">
+                      {selectedRecord.event.speaker?.fullName || "Ingeniería de Sistemas DevCon"}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              {/* Lower Section: Security Metadata + Real QR Code */}
+              {selectedRecord.certificate ? (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-slate-800/80 relative z-10">
+                  {/* Left 2 Cols: Folio Code and Cryptographic Log */}
+                  <div className="sm:col-span-2 space-y-3">
+                    <div className="p-3.5 rounded-xl bg-slate-950/90 border border-cyan-500/30 flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block font-bold">
+                          Folio Criptográfico Inmutable
+                        </span>
+                        <span className="text-sm font-mono font-black text-white tracking-wider">
+                          {selectedRecord.certificate.certificateCode}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyFolioModal(selectedRecord.certificate!.certificateCode)}
+                        className="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-800 text-cyan-300 hover:text-white hover:bg-cyan-900 text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                      >
+                        {copiedFolio ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                        <span>{copiedFolio ? "Copiado" : "Copiar Folio"}</span>
+                      </button>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-800/70 space-y-1.5 text-xs font-mono text-slate-400">
+                      <div className="flex items-center justify-between">
+                        <span>Emisión Oficial:</span>
+                        <strong className="text-slate-200">
+                          {new Date(selectedRecord.certificate.issuedAt).toLocaleString("es-ES")}
+                        </strong>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Check-in en Puerta:</span>
+                        <strong className="text-slate-200">
+                          {selectedRecord.attendedAt
+                            ? new Date(selectedRecord.attendedAt).toLocaleString("es-ES")
+                            : "Asistencia verificada"}
+                        </strong>
+                      </div>
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-800/60 text-[11px]">
+                        <span className="flex items-center gap-1">
+                          <Hash className="w-3 h-3 text-cyan-400" />
+                          <span>Seguridad:</span>
+                        </span>
+                        <span className="text-cyan-400 font-bold">
+                          Verificado Criptográficamente en PostgreSQL
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Col: Visual QR Code Card */}
+                  <div className="flex flex-col items-center justify-center p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 text-center">
+                    {modalQrUrl ? (
+                      <div className="p-1.5 bg-white rounded-lg shadow-lg mb-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={modalQrUrl}
+                          alt={`QR ${selectedRecord.certificate.certificateCode}`}
+                          className="w-24 h-24 sm:w-28 sm:h-28 object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-24 h-24 rounded-lg bg-slate-900 flex items-center justify-center mb-2">
+                        <QrCode className="w-8 h-8 text-slate-600 animate-pulse" />
+                      </div>
+                    )}
+                    <span className="text-[10px] font-mono text-slate-300 uppercase tracking-wider font-bold">
+                      Escaneo de Validez
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono">
+                      Verificación Pública QR
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                /* Immediate Issue Banner */
+                <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
+                      <span>Participante Elegible para Certificación Inmediata</span>
+                    </span>
+                    <p className="text-xs text-amber-400/80 leading-relaxed">
+                      El participante ya cuenta con asistencia confirmada al taller. Puedes generar su folio criptográfico e inscribirlo en PostgreSQL ahora mismo.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await handleIssue(selectedRecord.id);
+                      setSelectedRecord((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              certificate: {
+                                certificateCode: "EMITIDO",
+                                issuedAt: new Date().toISOString(),
+                              },
+                            }
+                          : null
+                      );
+                    }}
+                    disabled={issuingId === selectedRecord.id}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-500/20 shrink-0"
+                  >
+                    {issuingId === selectedRecord.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Award className="w-4 h-4" />
+                    )}
+                    <span>Emitir Certificado Ahora</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </AdminModal>

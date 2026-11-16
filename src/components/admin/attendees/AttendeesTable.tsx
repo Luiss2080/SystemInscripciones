@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import QRCode from "qrcode";
 import { manualCheckin } from "@/actions/admin/checkin";
 import { approvePayment } from "@/actions/admin/registrations";
-import { formatShortTime, formatShortDate } from "@/lib/utils/format";
+import { formatShortTime, formatShortDate, formatCurrency } from "@/lib/utils/format";
 import {
   AdminFilterBar,
   AdminTrayHeader,
@@ -33,6 +34,15 @@ import {
   Ticket,
   Calendar,
   Filter,
+  Mail,
+  Copy,
+  MessageSquare,
+  ShieldCheck,
+  QrCode,
+  Sparkles,
+  Hash,
+  Clock,
+  FileCheck,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -49,9 +59,23 @@ interface AttendeeRecord {
   event: {
     id: string;
     title: string;
+    price?: number;
+    currency?: string;
+    modality?: string;
+    academicHours?: number;
+    startDate?: Date | string;
   };
   ticket: {
     ticketCode: string;
+    qrHash?: string;
+  } | null;
+  payment?: {
+    id: string;
+    amount: number;
+    proofFileUrl: string | null;
+    status: string;
+    verifiedAt: Date | string | null;
+    createdAt: Date | string;
   } | null;
 }
 
@@ -89,6 +113,33 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
   // Selected attendee for details modal
   const [selectedAttendee, setSelectedAttendee] = useState<AttendeeRecord | null>(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [modalQrUrl, setModalQrUrl] = useState<string>("");
+  const [copiedTicketCode, setCopiedTicketCode] = useState(false);
+
+  useEffect(() => {
+    if (selectedAttendee?.ticket?.ticketCode) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const ticketUrl = `${origin}/tickets/${selectedAttendee.ticket.ticketCode}`;
+      QRCode.toDataURL(ticketUrl, {
+        width: 220,
+        margin: 1.5,
+        color: {
+          dark: "#050b18",
+          light: "#ffffff",
+        },
+      })
+        .then((url) => setModalQrUrl(url))
+        .catch((err) => console.error("Error generating Ticket QR:", err));
+    } else {
+      setModalQrUrl("");
+    }
+  }, [selectedAttendee]);
+
+  const handleCopyTicketModal = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedTicketCode(true);
+    setTimeout(() => setCopiedTicketCode(false), 2000);
+  };
 
   const showToast = (msg: string) => {
     setActionFeedback(msg);
@@ -587,47 +638,58 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
         isOpen={selectedAttendee !== null}
         onClose={() => setSelectedAttendee(null)}
         title="Ficha Oficial del Participante"
-        subtitle={`Registro ID: ${selectedAttendee?.id || ""}`}
+        subtitle={
+          selectedAttendee?.ticket?.ticketCode
+            ? `Ticket Digital: #${selectedAttendee.ticket.ticketCode} • Acreditación Activa`
+            : `Registro ID: ${selectedAttendee?.id.slice(0, 8)}... • En trámite`
+        }
         icon={Users}
+        maxWidth="max-w-2xl"
         footer={
-          <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
             <div>
               {selectedAttendee?.ticket && (
                 <Link
                   href={`/tickets/${selectedAttendee.ticket.ticketCode}`}
                   target="_blank"
-                  className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:underline font-mono font-bold"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold transition-all"
                 >
                   <Ticket className="w-3.5 h-3.5" />
                   <span>Ver Ticket Digital #{selectedAttendee.ticket.ticketCode}</span>
                 </Link>
               )}
             </div>
-            <button
-              type="button"
-              onClick={() => setSelectedAttendee(null)}
-              className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
-            >
-              Cerrar Ficha
-            </button>
+            <div className="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedAttendee(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              >
+                Cerrar Ficha
+              </button>
+            </div>
           </div>
         }
       >
         {selectedAttendee && (
           <div className="space-y-4">
             {/* Header info */}
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-600 text-white font-bold text-sm flex items-center justify-center">
+            <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 text-white font-black text-base flex items-center justify-center shadow-lg shadow-cyan-900/40 shrink-0">
                   {selectedAttendee.attendeeName.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-sm">
+                  <h4 className="font-extrabold text-white text-base">
                     {selectedAttendee.attendeeName}
                   </h4>
-                  <p className="text-xs text-slate-400 font-mono">
-                    {selectedAttendee.attendeeEmail}
-                  </p>
+                  <a
+                    href={`mailto:${selectedAttendee.attendeeEmail}`}
+                    className="text-xs text-cyan-400 font-mono hover:underline inline-flex items-center gap-1"
+                  >
+                    <Mail className="w-3 h-3" />
+                    <span>{selectedAttendee.attendeeEmail}</span>
+                  </a>
                 </div>
               </div>
               <AdminBadge
@@ -639,18 +701,31 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
             {/* Details Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-                  <Phone className="w-3 h-3 text-cyan-400" />
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <Phone className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Teléfono / WhatsApp</span>
                 </span>
-                <p className="text-white font-mono font-bold">
-                  {selectedAttendee.attendeePhone || "No especificado"}
-                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-white font-mono font-bold">
+                    {selectedAttendee.attendeePhone || "No especificado"}
+                  </p>
+                  {selectedAttendee.attendeePhone && (
+                    <a
+                      href={`https://wa.me/${selectedAttendee.attendeePhone.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                    >
+                      <MessageSquare className="w-3 h-3" />
+                      <span>Chat</span>
+                    </a>
+                  )}
+                </div>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-                  <Briefcase className="w-3 h-3 text-cyan-400" />
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Ocupación / Rol</span>
                 </span>
                 <p className="text-white font-medium">
@@ -659,8 +734,8 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
               </div>
 
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-                  <Building className="w-3 h-3 text-cyan-400" />
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <Building className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Organización / Universidad</span>
                 </span>
                 <p className="text-white font-medium">
@@ -669,8 +744,8 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
               </div>
 
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-                  <Calendar className="w-3 h-3 text-cyan-400" />
+                <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                  <Calendar className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Fecha de Inscripción</span>
                 </span>
                 <p className="text-white font-mono">
@@ -681,28 +756,186 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
 
             {/* Event Info */}
             <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-mono text-slate-400 uppercase block">
-                Programa Académico Asignado
-              </span>
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 uppercase">
+                <span>Programa Académico Asignado</span>
+                {selectedAttendee.event.modality && (
+                  <span className="text-cyan-400 font-bold">
+                    {selectedAttendee.event.modality}
+                  </span>
+                )}
+              </div>
               <p className="text-sm font-bold text-cyan-300">
                 {selectedAttendee.event.title}
               </p>
+              <div className="flex flex-wrap items-center gap-3 pt-1 text-xs font-mono text-slate-400">
+                {selectedAttendee.event.academicHours && (
+                  <span>Carga: {selectedAttendee.event.academicHours}h académicas</span>
+                )}
+                {selectedAttendee.event.price !== undefined && (
+                  <span>
+                    Arancel:{" "}
+                    <strong className="text-emerald-300 font-bold">
+                      {formatCurrency(selectedAttendee.event.price, selectedAttendee.event.currency || "BOB")}
+                    </strong>
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* Check-in status note */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-slate-400 font-mono">Estado de Acreditación QR:</span>
-              {selectedAttendee.attendedAt ? (
-                <span className="text-cyan-400 font-mono font-bold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>{new Date(selectedAttendee.attendedAt).toLocaleString("es-ES")}</span>
-                </span>
-              ) : (
-                <span className="text-amber-400 font-mono font-bold">
-                  Pendiente de ingreso al evento
-                </span>
-              )}
-            </div>
+            {/* Ticket & QR Section */}
+            {selectedAttendee.ticket ? (
+              <div className="p-4 rounded-xl bg-slate-950/90 border border-cyan-500/30 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block font-bold">
+                      Ticket de Acceso & Acreditación
+                    </span>
+                    <span className="text-sm font-mono font-black text-white tracking-wider">
+                      #{selectedAttendee.ticket.ticketCode}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyTicketModal(selectedAttendee.ticket!.ticketCode)}
+                    className="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-800 text-cyan-300 hover:text-white text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer transition-colors self-start sm:self-auto"
+                  >
+                    {copiedTicketCode ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                    <span>{copiedTicketCode ? "Copiado" : "Copiar Código"}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-800/80 items-center">
+                  <div className="sm:col-span-2 space-y-2">
+                    <div className="text-xs font-mono">
+                      <span className="text-slate-400 block mb-1">Estado de Ingreso:</span>
+                      {selectedAttendee.attendedAt ? (
+                        <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-bold flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                          <span>
+                            Acreditado: {new Date(selectedAttendee.attendedAt).toLocaleString("es-ES")}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-800/40 text-amber-300 flex items-center justify-between gap-2">
+                          <span className="text-xs">Pendiente de ingreso en puerta</span>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              await handleManualCheckin(selectedAttendee.id);
+                              setSelectedAttendee((prev) =>
+                                prev
+                                  ? {
+                                      ...prev,
+                                      status: "ATTENDED",
+                                      attendedAt: new Date().toISOString(),
+                                    }
+                                  : null
+                              );
+                            }}
+                            disabled={checkingInId === selectedAttendee.id}
+                            className="px-2.5 py-1 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-bold cursor-pointer transition-colors shrink-0 flex items-center gap-1"
+                          >
+                            {checkingInId === selectedAttendee.id ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <CheckCircle2 className="w-3 h-3" />
+                            )}
+                            <span>Check-in</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                    {modalQrUrl ? (
+                      <div className="p-1 bg-white rounded-md mb-1">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={modalQrUrl}
+                          alt="Ticket QR"
+                          className="w-16 h-16 object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded bg-slate-800 flex items-center justify-center mb-1">
+                        <QrCode className="w-6 h-6 text-slate-600 animate-pulse" />
+                      </div>
+                    )}
+                    <span className="text-[9px] font-mono text-slate-400">QR Puerta</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Payment Pending Notice */
+              <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-amber-400" />
+                    <span>Pago Bancario Pendiente de Aprobación</span>
+                  </span>
+                  <p className="text-[11px] text-amber-400/80">
+                    Una vez aprobado el comprobante, el sistema emitirá el ticket digital y código QR único.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await handleApprovePayment(selectedAttendee.id);
+                    setSelectedAttendee((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            status: "CONFIRMED",
+                          }
+                        : null
+                    );
+                  }}
+                  disabled={approvingId === selectedAttendee.id}
+                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
+                >
+                  {approvingId === selectedAttendee.id ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Check className="w-3.5 h-3.5" />
+                  )}
+                  <span>Aprobar Pago</span>
+                </button>
+              </div>
+            )}
+
+            {/* Payment Proof Section if available */}
+            {selectedAttendee.payment && (
+              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-400 uppercase flex items-center gap-1.5">
+                    <CreditCard className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Registro Financiero:</span>
+                  </span>
+                  <span className="text-emerald-300 font-bold">
+                    BOB {selectedAttendee.payment.amount.toFixed(2)}
+                  </span>
+                </div>
+                {selectedAttendee.payment.proofFileUrl && (
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/60 text-xs">
+                    <span className="text-slate-400 font-mono">Comprobante adjunto:</span>
+                    <a
+                      href={selectedAttendee.payment.proofFileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:underline font-mono font-bold inline-flex items-center gap-1"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Ver Comprobante Original</span>
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </AdminModal>

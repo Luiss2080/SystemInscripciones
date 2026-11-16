@@ -32,6 +32,12 @@ import {
   BookOpen,
   MapPin,
   Filter,
+  Copy,
+  Check,
+  Calendar,
+  Sparkles,
+  GraduationCap,
+  FileText,
 } from "lucide-react";
 
 export interface EventItem {
@@ -51,6 +57,10 @@ export interface EventItem {
   currency: string;
   academicHours: number;
   status: string;
+  speaker?: {
+    fullName: string;
+    email?: string;
+  } | null;
   _count: {
     registrations: number;
   };
@@ -72,6 +82,14 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
   // Selected event for details modal
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [copiedLanding, setCopiedLanding] = useState(false);
+
+  const handleCopyLanding = (slug: string) => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    navigator.clipboard.writeText(`${origin}/eventos/${slug}`);
+    setCopiedLanding(true);
+    setTimeout(() => setCopiedLanding(false), 2000);
+  };
 
   // Filter & Sort Pipeline
   const query = searchTerm.toLowerCase().trim();
@@ -498,105 +516,172 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
         isOpen={selectedEvent !== null}
         onClose={() => setSelectedEvent(null)}
         title="Ficha Técnica del Programa"
-        subtitle={selectedEvent?.slug ? `/eventos/${selectedEvent.slug}` : ""}
+        subtitle={selectedEvent?.slug ? `/eventos/${selectedEvent.slug} • Catálogo DevCon` : ""}
         icon={BookOpen}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-3xl"
         footer={
-          <div className="flex items-center justify-between w-full">
-            <div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
+            <div className="flex flex-wrap items-center gap-2">
               {selectedEvent && (
-                <Link
-                  href={`/eventos/${selectedEvent.slug}`}
-                  target="_blank"
-                  className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:underline font-bold"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Abrir Landing Pública</span>
-                </Link>
+                <>
+                  <Link
+                    href={`/eventos/${selectedEvent.slug}`}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold transition-all"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Abrir Landing Pública</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyLanding(selectedEvent.slug)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer"
+                  >
+                    {copiedLanding ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedLanding ? "Enlace Copiado" : "Copiar Enlace"}</span>
+                  </button>
+                </>
               )}
             </div>
-            <button
-              type="button"
-              onClick={() => setSelectedEvent(null)}
-              className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
-            >
-              Cerrar Ficha
-            </button>
+            <div className="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedEvent(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              >
+                Cerrar Ficha
+              </button>
+            </div>
           </div>
         }
       >
-        {selectedEvent && (
-          <div className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold">
-                  {selectedEvent.eventType} • {selectedEvent.modality}
-                </span>
-                <AdminBadge
-                  variant={selectedEvent.status === "OPEN" ? "open" : "closed"}
-                  label={selectedEvent.status}
-                />
-              </div>
-              <h4 className="text-base font-extrabold text-white">
-                {selectedEvent.title}
-              </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                {selectedEvent.description}
-              </p>
-            </div>
+        {selectedEvent && (() => {
+          const occPct = selectedEvent.maxCapacity > 0
+            ? Math.min(100, Math.round((selectedEvent._count.registrations / selectedEvent.maxCapacity) * 100))
+            : 0;
+          const seatsLeft = Math.max(0, selectedEvent.maxCapacity - selectedEvent._count.registrations);
 
-            {/* Quick Metrics */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                <span className="text-[10px] font-mono text-slate-400 block">AFORO</span>
-                <strong className="text-white font-mono text-sm">
-                  {selectedEvent._count.registrations}/{selectedEvent.maxCapacity}
-                </strong>
-              </div>
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                <span className="text-[10px] font-mono text-slate-400 block">CARGA</span>
-                <strong className="text-cyan-400 font-mono text-sm">
-                  {selectedEvent.academicHours} Horas
-                </strong>
-              </div>
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                <span className="text-[10px] font-mono text-slate-400 block">TARIFA</span>
-                <strong className="text-emerald-300 font-mono text-sm">
-                  {formatCurrency(Number(selectedEvent.price), selectedEvent.currency)}
-                </strong>
-              </div>
-              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                <span className="text-[10px] font-mono text-slate-400 block">FECHA</span>
-                <strong className="text-slate-200 font-mono text-xs">
-                  {formatShortDate(selectedEvent.startDate)}
-                </strong>
-              </div>
-            </div>
-
-            {/* Syllabus */}
-            {selectedEvent.syllabus && (
-              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold block">
-                  Temario & Laboratorios
-                </span>
-                <p className="text-xs text-slate-300 whitespace-pre-line leading-relaxed font-mono">
-                  {selectedEvent.syllabus}
+          return (
+            <div className="space-y-4">
+              {/* Header Box */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60 uppercase">
+                      {selectedEvent.eventType}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700 uppercase">
+                      {selectedEvent.modality}
+                    </span>
+                  </div>
+                  <AdminBadge
+                    variant={selectedEvent.status === "OPEN" ? "open" : "closed"}
+                    label={selectedEvent.status}
+                  />
+                </div>
+                <h4 className="text-base sm:text-lg font-extrabold text-white">
+                  {selectedEvent.title}
+                </h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  {selectedEvent.description}
                 </p>
               </div>
-            )}
 
-            {/* Location / Requirements */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-slate-400 font-mono flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Ubicación o Enlace:</span>
-              </span>
-              <span className="text-slate-200 font-mono font-bold truncate max-w-xs">
-                {selectedEvent.locationOrUrl || "Auditorio Central / Plataforma Privada"}
-              </span>
+              {/* Capacity & Occupancy Bar */}
+              <div className="p-4 rounded-xl bg-slate-950/90 border border-cyan-500/30 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Control de Aforo y Matrícula</span>
+                  </span>
+                  <span className="text-cyan-400 font-extrabold">
+                    {selectedEvent._count.registrations} / {selectedEvent.maxCapacity} cupos ({occPct}%)
+                  </span>
+                </div>
+                <div className="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                  <div
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${occPct}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1">
+                  <span>Asientos disponibles: <strong className="text-white">{seatsLeft} cupos</strong></span>
+                  <span className="text-emerald-400 font-bold">
+                    {seatsLeft === 0 ? "Aforo Completo" : "Inscripciones Abiertas"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Metrics Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 block font-bold">TARIFA</span>
+                  <strong className="text-emerald-300 font-mono text-sm block">
+                    {formatCurrency(Number(selectedEvent.price), selectedEvent.currency)}
+                  </strong>
+                  <span className="text-[9px] text-slate-500 font-mono">Por participante</span>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 block font-bold">CARGA</span>
+                  <strong className="text-cyan-400 font-mono text-sm block">
+                    {selectedEvent.academicHours} Horas
+                  </strong>
+                  <span className="text-[9px] text-slate-500 font-mono">Certificables</span>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 block font-bold">INICIO</span>
+                  <strong className="text-white font-mono text-xs block">
+                    {formatShortDate(selectedEvent.startDate)}
+                  </strong>
+                  <span className="text-[9px] text-slate-500 font-mono">Fecha programada</span>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 block font-bold">DOCENTE</span>
+                  <strong className="text-white font-mono text-xs block truncate">
+                    {selectedEvent.speaker?.fullName || "DevCon Lead"}
+                  </strong>
+                  <span className="text-[9px] text-slate-500 font-mono">Instructor titular</span>
+                </div>
+              </div>
+
+              {/* Syllabus / Temario */}
+              {selectedEvent.syllabus && (
+                <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                  <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Temario & Laboratorios Prácticos</span>
+                  </span>
+                  <p className="text-xs text-slate-300 whitespace-pre-line leading-relaxed font-mono bg-slate-950/80 p-3 rounded-lg border border-slate-850">
+                    {selectedEvent.syllabus}
+                  </p>
+                </div>
+              )}
+
+              {/* Requirements */}
+              {selectedEvent.requirements && (
+                <div className="p-3.5 rounded-xl bg-slate-900/40 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-amber-400 uppercase font-bold block">
+                    Requisitos Previos del Estudiante
+                  </span>
+                  <p className="text-xs text-slate-300 font-mono leading-relaxed">
+                    {selectedEvent.requirements}
+                  </p>
+                </div>
+              )}
+
+              {/* Location / Requirements */}
+              <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-slate-400 font-mono flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Sede o Enlace Virtual:</span>
+                </span>
+                <span className="text-slate-200 font-mono font-bold truncate max-w-sm">
+                  {selectedEvent.locationOrUrl || "Auditorio Central / Plataforma Privada DevCon"}
+                </span>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </AdminModal>
 
       {/* Modal de Filtros Avanzados para Talleres */}
@@ -690,6 +775,16 @@ export function EventsManager({ initialEvents }: EventsManagerProps) {
             >
               Restablecer Filtros
             </button>
+            <button
+              type="button"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
+            >
+              Aplicar Filtros
+            </button>
+          </div>
+        </div>
+      </AdminModal>
             <button
               type="button"
               onClick={() => setIsFilterModalOpen(false)}
