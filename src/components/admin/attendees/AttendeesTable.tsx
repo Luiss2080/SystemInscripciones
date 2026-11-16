@@ -37,12 +37,8 @@ import {
   Mail,
   Copy,
   MessageSquare,
-  ShieldCheck,
   QrCode,
-  Sparkles,
-  Hash,
   Clock,
-  FileCheck,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -117,6 +113,7 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
   const [copiedTicketCode, setCopiedTicketCode] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     if (selectedAttendee?.ticket?.ticketCode) {
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const ticketUrl = `${origin}/tickets/${selectedAttendee.ticket.ticketCode}`;
@@ -128,11 +125,18 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
           light: "#ffffff",
         },
       })
-        .then((url) => setModalQrUrl(url))
+        .then((url) => {
+          if (isMounted) setModalQrUrl(url);
+        })
         .catch((err) => console.error("Error generating Ticket QR:", err));
     } else {
-      setModalQrUrl("");
+      Promise.resolve().then(() => {
+        if (isMounted) setModalQrUrl("");
+      });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [selectedAttendee]);
 
   const handleCopyTicketModal = (code: string) => {

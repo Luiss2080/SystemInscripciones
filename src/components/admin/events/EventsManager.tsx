@@ -34,8 +34,6 @@ import {
   Filter,
   Copy,
   Check,
-  Sparkles,
-  GraduationCap,
   FileText,
 } from "lucide-react";
 
