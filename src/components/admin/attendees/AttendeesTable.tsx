@@ -81,9 +81,10 @@ interface AttendeesTableProps {
     id: string;
     title: string;
   }[];
+  userRole?: string;
 }
 
-export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps) {
+export function AttendeesTable({ initialAttendees, events, userRole = "ADMIN" }: AttendeesTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialStatusFromUrl = searchParams.get("status");
@@ -376,8 +377,20 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
         {/* Tray Header */}
         <AdminTrayHeader
           icon={Users}
-          title="BANDEJA DE ASISTENTES & PEDIDOS"
-          subtitle="> CONSULTA, AUDITORÍA Y ACREDITACIÓN EN TIEMPO REAL"
+          title={
+            userRole === "SPEAKER"
+              ? "ALUMNOS DE MI CÁTEDRA"
+              : userRole === "STAFF"
+              ? "PADRÓN OPERATIVO EN PUERTA"
+              : "BANDEJA DE ASISTENTES & PEDIDOS"
+          }
+          subtitle={
+            userRole === "SPEAKER"
+              ? "> SEGUIMIENTO ACADÉMICO Y ASISTENCIA DE TUS ESTUDIANTES"
+              : userRole === "STAFF"
+              ? "> CONSULTA DE IDENTIDAD Y CONTROL DE INGRESO QR EN PUERTA"
+              : "> CONSULTA, AUDITORÍA Y ACREDITACIÓN EN TIEMPO REAL"
+          }
           totalCount={filteredAttendees.length}
           countLabel="REGISTROS"
           actions={
@@ -564,20 +577,27 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
 
                           {/* 2. Primary Action Button */}
                           {isPendingPay && (
-                            <button
-                              type="button"
-                              onClick={() => handleApprovePayment(attendee.id)}
-                              disabled={approvingId === attendee.id}
-                              title="Aprobar pago y emitir ticket QR"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
-                            >
-                              {approvingId === attendee.id ? (
-                                <Loader2 className="w-3 h-3 animate-spin" />
-                              ) : (
-                                <CreditCard className="w-3 h-3 text-amber-400" />
-                              )}
-                              <span>Aprobar</span>
-                            </button>
+                            userRole === "ADMIN" ? (
+                              <button
+                                type="button"
+                                onClick={() => handleApprovePayment(attendee.id)}
+                                disabled={approvingId === attendee.id}
+                                title="Aprobar pago y emitir ticket QR"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
+                              >
+                                {approvingId === attendee.id ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  <CreditCard className="w-3 h-3 text-amber-400" />
+                                )}
+                                <span>Aprobar</span>
+                              </button>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-950/60 text-amber-400 border border-amber-800/40 text-[10px] font-mono font-bold">
+                                <Clock className="w-3 h-3 text-amber-400" />
+                                <span>Revisión Admin</span>
+                              </span>
+                            )
                           )}
 
                           {isConfirmed && (
@@ -641,7 +661,13 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
       <AdminModal
         isOpen={selectedAttendee !== null}
         onClose={() => setSelectedAttendee(null)}
-        title="Ficha Oficial del Participante"
+        title={
+          userRole === "SPEAKER"
+            ? "Ficha Oficial del Alumno"
+            : userRole === "STAFF"
+            ? "Ficha de Acreditación en Puerta"
+            : "Ficha Oficial del Participante"
+        }
         subtitle={
           selectedAttendee?.ticket?.ticketCode
             ? `Ticket Digital: #${selectedAttendee.ticket.ticketCode} • Acreditación Activa`
@@ -684,9 +710,21 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
                   {selectedAttendee.attendeeName.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-white text-base">
-                    {selectedAttendee.attendeeName}
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-extrabold text-white text-base">
+                      {selectedAttendee.attendeeName}
+                    </h4>
+                    {userRole === "SPEAKER" && (
+                      <span className="px-2 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-700/60 text-indigo-300 font-mono text-[10px] font-bold">
+                        Alumno de mi Cátedra
+                      </span>
+                    )}
+                    {userRole === "STAFF" && (
+                      <span className="px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-700/60 text-cyan-300 font-mono text-[10px] font-bold">
+                        Acceso en Puerta
+                      </span>
+                    )}
+                  </div>
                   <a
                     href={`mailto:${selectedAttendee.attendeeEmail}`}
                     className="text-xs text-cyan-400 font-mono hover:underline inline-flex items-center gap-1"
