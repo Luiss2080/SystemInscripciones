@@ -66,21 +66,19 @@ interface AttendeesTableProps {
 export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialStatusFromUrl = searchParams.get("status");
+
   const [attendees, setAttendees] = useState<AttendeeRecord[]>(initialAttendees);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [statusFilter, setStatusFilter] = useState(
+    initialStatusFromUrl && ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"].includes(initialStatusFromUrl)
+      ? initialStatusFromUrl
+      : "ALL"
+  );
   const [eventFilter, setEventFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("recent");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
-  // Auto-select filter if navigated with e.g. ?status=PENDING_PAYMENT
-  useEffect(() => {
-    const statusParam = searchParams.get("status");
-    if (statusParam && ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"].includes(statusParam)) {
-      setStatusFilter(statusParam);
-    }
-  }, [searchParams]);
 
   // Loading states
   const [checkingInId, setCheckingInId] = useState<string | null>(null);

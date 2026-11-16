@@ -64,9 +64,15 @@ const ROLE_PERMISSIONS: Record<string, { desc: string; color: string; badge: str
 export function UsersTable({ initialUsers }: UsersTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialRoleFromUrl = searchParams.get("role");
+
   const [users, setUsers] = useState<UserRecord[]>(initialUsers);
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("ALL");
+  const [roleFilter, setRoleFilter] = useState(
+    initialRoleFromUrl && ["ADMIN", "SPEAKER", "STAFF"].includes(initialRoleFromUrl)
+      ? initialRoleFromUrl
+      : "ALL"
+  );
   const [sortBy, setSortBy] = useState("recent");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -74,24 +80,13 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   // Modals & Operation States
   const [selectedUser, setSelectedUser] = useState<UserRecord | null>(null);
   const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
-  const [isRbacModalOpen, setIsRbacModalOpen] = useState(false);
+  const [isRbacModalOpen, setIsRbacModalOpen] = useState(searchParams.get("tab") === "roles");
   const [newUserRole, setNewUserRole] = useState("STAFF");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isUpdatingRoleId, setIsUpdatingRoleId] = useState<string | null>(null);
   const [isSubmittingNewUser, setIsSubmittingNewUser] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  // Handle URL searchParams e.g. ?tab=roles or ?role=ADMIN
-  useEffect(() => {
-    if (searchParams.get("tab") === "roles") {
-      setIsRbacModalOpen(true);
-    }
-    const roleParam = searchParams.get("role");
-    if (roleParam && ["ADMIN", "SPEAKER", "STAFF"].includes(roleParam)) {
-      setRoleFilter(roleParam);
-    }
-  }, [searchParams]);
 
   const showToast = (msg: string) => {
     setFeedbackMsg(msg);
