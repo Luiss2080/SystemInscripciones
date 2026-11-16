@@ -22,6 +22,7 @@ import {
   ChevronRight,
   PlusCircle,
   Shield,
+  Activity,
 } from "lucide-react";
 
 interface AdminLayoutClientProps {
@@ -174,34 +175,73 @@ export function AdminLayoutClient({
   // Determine current active section title for top header breadcrumbs
   const getActiveTitle = () => {
     if (pathname === "/admin") {
-      if (adminRole === "SPEAKER") return { section: "DOCENCIA", title: "Dashboard" };
-      if (adminRole === "STAFF") return { section: "ACCESO", title: "Métricas" };
-      return { section: "OPERACIONES", title: "Dashboard" };
+      if (adminRole === "SPEAKER") {
+        return {
+          section: "PORTAL DOCENTE",
+          title: "Panel Académico & Cátedra",
+          icon: Activity,
+        };
+      }
+      if (adminRole === "STAFF") {
+        return {
+          section: "CONTROL OPERATIVO",
+          title: "Monitoreo de Acceso y Aforo",
+          icon: Activity,
+        };
+      }
+      return {
+        section: "CONSOLA GENERAL",
+        title: "Dashboard de Operaciones & Métricas",
+        icon: Activity,
+      };
     }
-    if (pathname.startsWith("/admin/checkin")) return { section: "ACCESO", title: "Escáner QR" };
-    if (pathname.startsWith("/admin/eventos/nuevo")) return { section: "OPERACIONES", title: "Nuevo Taller" };
+    if (pathname.startsWith("/admin/checkin")) {
+      return {
+        section: "CONTROL DE ACCESO",
+        title: "Escáner y Validación de Tickets QR",
+        icon: QrCode,
+      };
+    }
+    if (pathname.startsWith("/admin/eventos/nuevo")) {
+      return {
+        section: "PROGRAMACIÓN ACADÉMICA",
+        title: "Nuevo Taller o Conferencia",
+        icon: PlusCircle,
+      };
+    }
     if (pathname.startsWith("/admin/eventos")) {
       return {
-        section: adminRole === "SPEAKER" ? "DOCENCIA" : "OPERACIONES",
-        title: adminRole === "SPEAKER" ? "Mis Talleres" : "Talleres",
+        section: adminRole === "SPEAKER" ? "CÁTEDRA ASIGNADA" : "CATÁLOGO OFICIAL",
+        title: adminRole === "SPEAKER" ? "Mis Talleres y Conferencias" : "Gestión de Talleres & Conferencias",
+        icon: Calendar,
       };
     }
     if (pathname.startsWith("/admin/asistentes")) {
       return {
-        section: adminRole === "SPEAKER" ? "ALUMNOS" : "GESTIÓN",
-        title: adminRole === "SPEAKER" ? "Mis Alumnos" : "Asistentes",
+        section: adminRole === "SPEAKER" ? "PADRÓN DOCENTE" : "PADRÓN OFICIAL",
+        title: adminRole === "SPEAKER" ? "Padrón de Mis Alumnos Asignados" : "Asistentes y Control de Pagos",
+        icon: Users,
       };
     }
     if (pathname.startsWith("/admin/certificados")) {
       return {
-        section: adminRole === "SPEAKER" ? "ALUMNOS" : "GESTIÓN",
-        title: "Certificados",
+        section: "ACREDITACIÓN OFICIAL",
+        title: "Certificados Digitales & Folios Criptográficos",
+        icon: Award,
       };
     }
     if (pathname.startsWith("/admin/usuarios")) {
-      return { section: "SEGURIDAD", title: "Usuarios" };
+      return {
+        section: "SEGURIDAD & ROLES",
+        title: "Gestión de Usuarios y Accesos (RBAC)",
+        icon: Shield,
+      };
     }
-    return { section: "PANEL", title: "Consola" };
+    return {
+      section: "PANEL DE CONTROL",
+      title: "Consola de Operaciones",
+      icon: LayoutDashboard,
+    };
   };
 
   const activeInfo = getActiveTitle();
@@ -210,26 +250,18 @@ export function AdminLayoutClient({
 
   const roleMeta = {
     ADMIN: {
-      badge: "ADMIN PRO",
-      badgeStyle: "bg-cyan-950 text-cyan-400 border-cyan-800/60",
       roleDesc: "Administrador General",
       avatarGrad: "from-cyan-600 to-blue-600",
     },
     SPEAKER: {
-      badge: "DOCENTE",
-      badgeStyle: "bg-indigo-950 text-indigo-300 border-indigo-700/60",
       roleDesc: "Docente / Ponente",
       avatarGrad: "from-indigo-600 to-purple-600",
     },
     STAFF: {
-      badge: "STAFF",
-      badgeStyle: "bg-emerald-950 text-emerald-300 border-emerald-700/60",
       roleDesc: "Personal de Logística",
       avatarGrad: "from-emerald-600 to-teal-600",
     },
   }[adminRole as "ADMIN" | "SPEAKER" | "STAFF"] || {
-    badge: adminRole,
-    badgeStyle: "bg-cyan-950 text-cyan-400 border-cyan-800/60",
     roleDesc: "Usuario Autorizado",
     avatarGrad: "from-cyan-600 to-blue-600",
   };
