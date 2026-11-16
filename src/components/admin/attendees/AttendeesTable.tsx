@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { manualCheckin } from "@/actions/admin/checkin";
 import { approvePayment } from "@/actions/admin/registrations";
@@ -65,6 +65,7 @@ interface AttendeesTableProps {
 
 export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [attendees, setAttendees] = useState<AttendeeRecord[]>(initialAttendees);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -72,6 +73,14 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
   const [sortBy, setSortBy] = useState("recent");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
+  // Auto-select filter if navigated with e.g. ?status=PENDING_PAYMENT
+  useEffect(() => {
+    const statusParam = searchParams.get("status");
+    if (statusParam && ["CONFIRMED", "PENDING_PAYMENT", "ATTENDED"].includes(statusParam)) {
+      setStatusFilter(statusParam);
+    }
+  }, [searchParams]);
 
   // Loading states
   const [checkingInId, setCheckingInId] = useState<string | null>(null);
