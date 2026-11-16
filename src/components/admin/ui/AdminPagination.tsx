@@ -137,21 +137,21 @@ export function AdminPagination({
       {/* Page Size Selector */}
       {onPageSizeChange && (
         <div className="flex items-center gap-2 font-mono">
-          <span className="hidden lg:inline text-slate-500">Filas por pág:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => {
-              onPageSizeChange(Number(e.target.value));
-              onPageChange(1);
-            }}
-            className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200 font-mono focus:border-cyan-500 focus:outline-none cursor-pointer"
-          >
-            {pageSizeOptions.map((size) => (
-              <option key={size} value={size} className="bg-slate-900 text-white">
-                {size} / pág
-              </option>
-            ))}
-          </select>
+          <span className="hidden lg:inline text-slate-500">Filas:</span>
+          <div className="w-28">
+            <AdminSelect
+              value={pageSize.toString()}
+              onChange={(val) => {
+                onPageSizeChange(Number(val));
+                onPageChange(1);
+              }}
+              options={pageSizeOptions.map((size) => ({
+                label: `${size} / pág`,
+                value: size.toString(),
+              }))}
+              title="Filas por página"
+            />
+          </div>
         </div>
       )}
     </div>
