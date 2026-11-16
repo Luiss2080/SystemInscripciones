@@ -2,10 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import QRCode from "qrcode";
+import Link from "next/link";
 import { validateAndCheckinTicket } from "@/actions/admin/checkin";
 import { MotionFadeIn } from "@/components/shared/MotionPrimitives";
 import { formatShortTime } from "@/lib/utils/format";
 import { Html5Qrcode } from "html5-qrcode";
+import { AdminModal, AdminBadge } from "@/components/admin/ui";
 import {
   QrCode,
   Camera,
@@ -17,20 +20,48 @@ import {
   ShieldCheck,
   Keyboard,
   Zap,
+  Phone,
+  Mail,
+  Copy,
+  Check,
+  ExternalLink,
+  Ticket,
+  Building,
+  Briefcase,
+  Eye,
+  Calendar,
+  Sparkles,
+  User,
+  MessageSquare,
 } from "lucide-react";
 
 interface ScanHistoryEntry {
+  id?: string;
   code: string;
   name?: string;
+  email?: string;
+  phone?: string;
+  occupation?: string;
+  organization?: string | null;
   eventTitle?: string;
+  modality?: string;
+  academicHours?: number;
   status: "ATTENDED" | "DUPLICATE";
+  attendedAt?: Date | string | null;
   time: string;
 }
 
 interface PendingTicketItem {
+  id?: string;
   ticketCode: string;
   attendeeName: string;
+  attendeeEmail?: string;
+  attendeePhone?: string;
+  attendeeOccupation?: string;
+  attendeeOrganization?: string | null;
   eventTitle: string;
+  modality?: string;
+  academicHours?: number;
 }
 
 interface QRScannerProps {
@@ -58,6 +89,51 @@ export function QRScanner({
   const [history, setHistory] = useState<ScanHistoryEntry[]>(initialHistory);
   const [queue, setQueue] = useState<PendingTicketItem[]>(pendingQueue);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+
+  // Selected check-in record for details modal
+  const [selectedCheckin, setSelectedCheckin] = useState<ScanHistoryEntry | PendingTicketItem | null>(null);
+  const [modalQrUrl, setModalQrUrl] = useState<string>("");
+  const [copiedModalCode, setCopiedModalCode] = useState(false);
+  const [isProcessingModalCheckin, setIsProcessingModalCheckin] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const ticketCode = selectedCheckin
+      ? "ticketCode" in selectedCheckin
+        ? selectedCheckin.ticketCode
+        : selectedCheckin.code
+      : null;
+
+    if (ticketCode) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const ticketUrl = `${origin}/tickets/${ticketCode}`;
+      QRCode.toDataURL(ticketUrl, {
+        width: 220,
+        margin: 1.5,
+        color: {
+          dark: "#050b18",
+          light: "#ffffff",
+        },
+      })
+        .then((url) => {
+          if (isMounted) setModalQrUrl(url);
+        })
+        .catch((err) => console.error("Error generating Ticket QR:", err));
+    } else {
+      Promise.resolve().then(() => {
+        if (isMounted) setModalQrUrl("");
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCheckin]);
+
+  const handleCopyTicketModal = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedModalCode(true);
+    setTimeout(() => setCopiedModalCode(false), 2000);
+  };
 
   const handleProcessCode = async (code: string) => {
     const trimmed = code.trim();
@@ -252,24 +328,36 @@ export function QRScanner({
               <div className="space-y-1.5">
                 <span className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
                   <Zap className="w-3 h-3 text-cyan-400" />
-                  <span>Asistentes Confirmados en Espera (clic para validar)</span>
+                  <span>Asistentes Confirmados en Espera (clic para validar o inspeccionar)</span>
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {queue.map((item) => (
-                    <button
+                    <div
                       key={item.ticketCode}
-                      type="button"
-                      onClick={() => handleProcessCode(item.ticketCode)}
-                      disabled={loading}
-                      title={`${item.attendeeName} • ${item.eventTitle}`}
-                      className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-500/15 border border-slate-800 hover:border-cyan-500/50 text-[11px] font-mono text-slate-300 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+                      className="inline-flex items-center rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 transition-all overflow-hidden"
                     >
-                      <span className="text-cyan-400 font-bold">{item.ticketCode}</span>
-                      <span className="text-slate-500">•</span>
-                      <span className="truncate max-w-[120px] font-sans font-semibold">
-                        {item.attendeeName.split(" ")[0]}
-                      </span>
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleProcessCode(item.ticketCode)}
+                        disabled={loading}
+                        title={`Acreditar en Puerta: ${item.attendeeName} • ${item.eventTitle}`}
+                        className="px-2.5 py-1 text-[11px] font-mono text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/15 transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        <span className="text-cyan-400 font-bold">{item.ticketCode}</span>
+                        <span className="text-slate-500">•</span>
+                        <span className="truncate max-w-[120px] font-sans font-semibold">
+                          {item.attendeeName.split(" ")[0]}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCheckin(item)}
+                        title="Ver Ficha Oficial de Acreditación"
+                        className="p-1.5 text-slate-500 hover:text-cyan-400 hover:bg-slate-800 border-l border-slate-800/80 transition-colors cursor-pointer"
+                      >
+                        <Eye className="w-3 h-3" />
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
