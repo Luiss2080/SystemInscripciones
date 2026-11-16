@@ -90,46 +90,46 @@ export default async function AdminEventsPage() {
 
       {/* Fila Adicional de Estadísticas de Talleres */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Total Programas</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Total Programas</span>
             <strong className="text-xl font-black text-white font-mono tabular-nums">{rawEvents.length}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <Layers className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Con Cupos Abiertos</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Con Cupos Abiertos</span>
             <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{openCount}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <Calendar className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Inscritos / Aforo</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Inscritos / Aforo</span>
             <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">
               {totalOccupied} <span className="text-xs text-slate-400 font-normal">/ {totalCapacity}</span>
             </strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
             <Users className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Tasa de Ocupación</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Tasa de Ocupación</span>
             <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">
               {totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0}%
             </strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <CheckCircle2 className="w-4 h-4" />
           </div>
         </div>

@@ -44,42 +44,42 @@ export default async function AdminCheckinPage() {
 
       {/* Fila Adicional de Estadísticas de Control de Acceso */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Acreditados Recientes</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Acreditados Recientes</span>
             <strong className="text-xl font-black text-white font-mono tabular-nums">{initialHistory.length}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
             <ShieldCheck className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Confirmados en Cola</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Confirmados en Cola</span>
             <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">{pendingQueue.length}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <Users className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Lector Óptico QR</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Lector Óptico QR</span>
             <strong className="text-sm font-black text-white font-mono uppercase">En Espera</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-blue-950/80 border border-blue-800/60 flex items-center justify-center text-blue-400">
+          <div className="w-8 h-8 rounded-xl bg-blue-950/80 border border-blue-800/60 flex items-center justify-center text-blue-400 shrink-0">
             <QrCode className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Sincronización</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Sincronización</span>
             <strong className="text-sm font-black text-emerald-400 font-mono uppercase">Tiempo Real</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
             <ShieldCheck className="w-4 h-4" />
           </div>
         </div>

@@ -65,42 +65,42 @@ export default async function AdminCertificatesPage() {
 
       {/* Fila Adicional de Estadísticas de Certificados */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Alumnos Elegibles</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Alumnos Elegibles</span>
             <strong className="text-xl font-black text-white font-mono tabular-nums">{attendedRecords.length}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <Users className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Emitidos</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Emitidos</span>
             <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{issuedCount}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
             <CheckCircle2 className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Pendientes de Folio</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Pendientes de Folio</span>
             <strong className="text-xl font-black text-amber-300 font-mono tabular-nums">{pendingCount}</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-amber-950/80 border border-amber-800/60 flex items-center justify-center text-amber-400">
+          <div className="w-8 h-8 rounded-xl bg-amber-950/80 border border-amber-800/60 flex items-center justify-center text-amber-400 shrink-0">
             <Clock className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">Horas Acreditadas</span>
+        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Horas Acreditadas</span>
             <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{certifiedHours}h</strong>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
+          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
             <Award className="w-4 h-4" />
           </div>
         </div>
