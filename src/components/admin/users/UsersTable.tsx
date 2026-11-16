@@ -72,6 +72,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   // Modals & Operation States
   const [selectedUser, setSelectedUser] = useState<UserRecord | null>(null);
   const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+  const [newUserRole, setNewUserRole] = useState("STAFF");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isUpdatingRoleId, setIsUpdatingRoleId] = useState<string | null>(null);
   const [isSubmittingNewUser, setIsSubmittingNewUser] = useState(false);
@@ -612,15 +613,17 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
             <label className="block text-[10px] font-mono font-bold text-slate-300 uppercase">
               Rol del Sistema *
             </label>
-            <select
-              name="role"
-              defaultValue="STAFF"
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500 font-mono"
-            >
-              <option value="ADMIN">ADMIN - Administrador General</option>
-              <option value="SPEAKER">SPEAKER - Docente / Ponente</option>
-              <option value="STAFF">STAFF - Control de Acceso & Logística</option>
-            </select>
+            <input type="hidden" name="role" value={newUserRole} />
+            <AdminSelect
+              value={newUserRole}
+              onChange={setNewUserRole}
+              options={[
+                { label: "ADMIN - Administrador General", value: "ADMIN" },
+                { label: "SPEAKER - Docente / Ponente", value: "SPEAKER" },
+                { label: "STAFF - Control de Acceso & Logística", value: "STAFF" },
+              ]}
+              title="Rol del Sistema"
+            />
           </div>
 
           <div className="pt-2 flex items-center justify-end gap-2">

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AdminPageHeader } from "@/components/admin/ui";
+import { AdminPageHeader, AdminSelect } from "@/components/admin/ui";
 
 function slugifyTitle(value: string): string {
   return value
@@ -39,6 +39,8 @@ export function NewEventForm() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [slug, setSlug] = useState("");
   const [slugEditedManually, setSlugEditedManually] = useState(false);
+  const [eventType, setEventType] = useState("WORKSHOP");
+  const [modality, setModality] = useState("VIRTUAL");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugEditedManually) {
@@ -134,20 +136,32 @@ export function NewEventForm() {
 
               <div>
                 <label className={LABEL_CLASS}>Tipo de Evento</label>
-                <select name="eventType" className={INPUT_CLASS}>
-                  <option value="WORKSHOP">Taller Práctico (Hands-On)</option>
-                  <option value="CONFERENCE">Conferencia Magistral</option>
-                  <option value="BOOTCAMP">Bootcamp Intensivo</option>
-                </select>
+                <input type="hidden" name="eventType" value={eventType} />
+                <AdminSelect
+                  value={eventType}
+                  onChange={setEventType}
+                  options={[
+                    { label: "Taller Práctico (Hands-On)", value: "WORKSHOP" },
+                    { label: "Conferencia Magistral", value: "CONFERENCE" },
+                    { label: "Bootcamp Intensivo", value: "BOOTCAMP" },
+                  ]}
+                  title="Tipo de Evento"
+                />
               </div>
 
               <div>
                 <label className={LABEL_CLASS}>Modalidad</label>
-                <select name="modality" className={INPUT_CLASS}>
-                  <option value="VIRTUAL">Virtual (Meet / Zoom)</option>
-                  <option value="PRESENTIAL">Presencial</option>
-                  <option value="HYBRID">Híbrido</option>
-                </select>
+                <input type="hidden" name="modality" value={modality} />
+                <AdminSelect
+                  value={modality}
+                  onChange={setModality}
+                  options={[
+                    { label: "Virtual (Meet / Zoom)", value: "VIRTUAL" },
+                    { label: "Presencial", value: "PRESENTIAL" },
+                    { label: "Híbrido", value: "HYBRID" },
+                  ]}
+                  title="Modalidad"
+                />
               </div>
 
               <div>
