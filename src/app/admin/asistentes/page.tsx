@@ -175,7 +175,7 @@ export default async function AdminAttendeesPage() {
       </div>
 
       {/* Main Standardized Table & Filter Section */}
-      <AttendeesTable initialAttendees={attendees} events={events} />
+      <AttendeesTable initialAttendees={attendees} events={events} userRole={session.role} />
     </div>
   );
 }

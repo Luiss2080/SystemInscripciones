@@ -429,6 +429,26 @@ export function QRScanner({
                   </span>
                 )}
               </div>
+
+              {/* Quick Modal Button */}
+              <div className="pt-2 mt-2 border-t border-slate-800/60 flex items-center justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCheckin({
+                      code: scanResult.ticketCode || "",
+                      name: scanResult.attendeeName,
+                      eventTitle: scanResult.eventTitle,
+                      status: scanResult.success ? "ATTENDED" : "DUPLICATE",
+                      time: formatShortTime(new Date()),
+                    });
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-850 text-cyan-300 text-xs font-mono font-bold border border-slate-700/80 hover:border-cyan-500/50 flex items-center gap-1.5 cursor-pointer transition-all"
+                >
+                  <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Ver Ficha Oficial de Acreditación</span>
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -463,10 +483,11 @@ export function QRScanner({
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.25, delay: Math.min(idx * 0.03, 0.2) }}
-                    className="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/40 transition-colors flex items-center justify-between text-xs gap-2.5"
+                    onClick={() => setSelectedCheckin(item)}
+                    className="p-2.5 rounded-xl bg-slate-900/70 border border-slate-800/80 hover:border-cyan-500/50 hover:bg-slate-900/90 transition-all flex items-center justify-between text-xs gap-2.5 cursor-pointer group"
                   >
                     <div className="min-w-0">
-                      <p className="font-bold text-white truncate">
+                      <p className="font-bold text-white truncate group-hover:text-cyan-300 transition-colors">
                         {item.name || "Participante"}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] font-mono">
@@ -478,19 +499,22 @@ export function QRScanner({
                         )}
                       </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <span
-                        className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                          item.status === "ATTENDED"
-                            ? "bg-emerald-950 text-emerald-300 border border-emerald-700/60"
-                            : "bg-amber-950 text-amber-300 border border-amber-700/60"
-                        }`}
-                      >
-                        {item.status === "ATTENDED" ? "OK" : "DUPLICADO"}
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-500 block mt-0.5 tabular-nums">
-                        {item.time}
-                      </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="text-right">
+                        <span
+                          className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                            item.status === "ATTENDED"
+                              ? "bg-emerald-950 text-emerald-300 border border-emerald-700/60"
+                              : "bg-amber-950 text-amber-300 border border-amber-700/60"
+                          }`}
+                        >
+                          {item.status === "ATTENDED" ? "OK" : "DUPLICADO"}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-500 block mt-0.5 tabular-nums">
+                          {item.time}
+                        </span>
+                      </div>
+                      <Eye className="w-3.5 h-3.5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
                     </div>
                   </motion.div>
                 ))}
@@ -507,6 +531,253 @@ export function QRScanner({
           </div>
         </div>
       </MotionFadeIn>
+
+      {/* Modal de Acreditación y Validación en Puerta */}
+      <AdminModal
+        isOpen={selectedCheckin !== null}
+        onClose={() => setSelectedCheckin(null)}
+        title="Ficha Oficial de Acreditación en Puerta"
+        subtitle={
+          selectedCheckin
+            ? `Ticket #${"ticketCode" in selectedCheckin ? selectedCheckin.ticketCode : selectedCheckin.code} • Operaciones Staff`
+            : ""
+        }
+        icon={ShieldCheck}
+        maxWidth="max-w-2xl"
+        footer={
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
+            <div>
+              {selectedCheckin && (
+                <Link
+                  href={`/tickets/${"ticketCode" in selectedCheckin ? selectedCheckin.ticketCode : selectedCheckin.code}`}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 hover:text-cyan-200 text-xs font-mono font-bold transition-all"
+                >
+                  <Ticket className="w-3.5 h-3.5" />
+                  <span>Ver Ticket Digital</span>
+                </Link>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => setSelectedCheckin(null)}
+              className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+            >
+              Cerrar Ficha
+            </button>
+          </div>
+        }
+      >
+        {selectedCheckin && (() => {
+          const ticketCode =
+            "ticketCode" in selectedCheckin ? selectedCheckin.ticketCode : selectedCheckin.code;
+          const attendeeName =
+            "attendeeName" in selectedCheckin
+              ? selectedCheckin.attendeeName
+              : selectedCheckin.name || "Participante";
+          const email =
+            "attendeeEmail" in selectedCheckin
+              ? selectedCheckin.attendeeEmail
+              : selectedCheckin.email;
+          const phone =
+            "attendeePhone" in selectedCheckin
+              ? selectedCheckin.attendeePhone
+              : selectedCheckin.phone;
+          const occupation =
+            "attendeeOccupation" in selectedCheckin
+              ? selectedCheckin.attendeeOccupation
+              : selectedCheckin.occupation;
+          const organization =
+            "attendeeOrganization" in selectedCheckin
+              ? selectedCheckin.attendeeOrganization
+              : selectedCheckin.organization;
+          const eventTitle = selectedCheckin.eventTitle || "Taller Técnico";
+          const modality = selectedCheckin.modality || "Presencial";
+          const academicHours = selectedCheckin.academicHours || 6;
+          const isAttended =
+            "status" in selectedCheckin ? selectedCheckin.status === "ATTENDED" : false;
+
+          return (
+            <div className="space-y-4">
+              {/* Profile Card */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white font-black text-base flex items-center justify-center shadow-lg shadow-emerald-950/40 shrink-0">
+                    {attendeeName.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-white text-base">
+                      {attendeeName}
+                    </h4>
+                    {email ? (
+                      <a
+                        href={`mailto:${email}`}
+                        className="text-xs text-cyan-400 font-mono hover:underline inline-flex items-center gap-1"
+                      >
+                        <Mail className="w-3 h-3" />
+                        <span>{email}</span>
+                      </a>
+                    ) : (
+                      <span className="text-xs text-slate-400 font-mono">Participante Oficial</span>
+                    )}
+                  </div>
+                </div>
+                <AdminBadge
+                  variant={isAttended ? "approved" : "confirmed"}
+                  label={isAttended ? "ACREDITADO (QR)" : "CONFIRMADO"}
+                />
+              </div>
+
+              {/* Details Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                    <Phone className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Teléfono / WhatsApp</span>
+                  </span>
+                  <div className="flex items-center justify-between">
+                    <p className="text-white font-mono font-bold">{phone || "No especificado"}</p>
+                    {phone && (
+                      <a
+                        href={`https://wa.me/${phone.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                      >
+                        <MessageSquare className="w-3 h-3" />
+                        <span>Chat</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                    <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Ocupación / Rol</span>
+                  </span>
+                  <p className="text-white font-medium">{occupation || "Profesional de Ingeniería"}</p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                    <Building className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Organización / Universidad</span>
+                  </span>
+                  <p className="text-white font-medium">{organization || "Independiente"}</p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5 font-bold">
+                    <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Modalidad & Carga</span>
+                  </span>
+                  <p className="text-white font-mono font-bold">{modality} • {academicHours}h académicas</p>
+                </div>
+              </div>
+
+              {/* Program Title */}
+              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase block font-bold">
+                  Programa de Ingeniería Asignado
+                </span>
+                <p className="text-sm font-bold text-cyan-300">{eventTitle}</p>
+              </div>
+
+              {/* Ticket & Live QR Box */}
+              <div className="p-4 rounded-xl bg-slate-950/90 border border-cyan-500/30 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block font-bold">
+                      Ticket Oficial de Acceso
+                    </span>
+                    <span className="text-sm font-mono font-black text-white tracking-wider">
+                      #{ticketCode}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyTicketModal(ticketCode)}
+                    className="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-800 text-cyan-300 hover:text-white text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer transition-colors self-start sm:self-auto"
+                  >
+                    {copiedModalCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedModalCode ? "Copiado" : "Copiar Folio"}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-800/80 items-center">
+                  <div className="sm:col-span-2 space-y-2">
+                    <div className="text-xs font-mono">
+                      <span className="text-slate-400 block mb-1">Estado de Acreditación Operativa:</span>
+                      {isAttended ? (
+                        <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-bold flex items-center gap-2">
+                          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                          <div>
+                            <span className="block text-xs text-white">Ingreso Autorizado & Acreditado</span>
+                            <span className="block text-[11px] text-emerald-400 font-normal">
+                              Validado en consola de puerta por Operador Staff
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-800/40 text-amber-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                          <div>
+                            <span className="block text-xs font-bold text-amber-200">En espera de ingreso físico</span>
+                            <span className="block text-[10px] text-amber-400/80">Listo para validar en puerta</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              setIsProcessingModalCheckin(true);
+                              try {
+                                await handleProcessCode(ticketCode);
+                                setSelectedCheckin((prev) =>
+                                  prev
+                                    ? {
+                                        ...prev,
+                                        status: "ATTENDED" as const,
+                                        time: formatShortTime(new Date()),
+                                      }
+                                    : null
+                                );
+                              } finally {
+                                setIsProcessingModalCheckin(false);
+                              }
+                            }}
+                            disabled={loading || isProcessingModalCheckin}
+                            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0 disabled:opacity-50"
+                          >
+                            {loading || isProcessingModalCheckin ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                            )}
+                            <span>Acreditar Ahora</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                    {modalQrUrl ? (
+                      <div className="p-1.5 bg-white rounded-lg mb-1 shadow-md">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={modalQrUrl} alt="QR Ticket" className="w-20 h-20 object-contain" />
+                      </div>
+                    ) : (
+                      <div className="w-20 h-20 rounded-lg bg-slate-800 flex items-center justify-center mb-1">
+                        <QrCode className="w-6 h-6 text-slate-600 animate-pulse" />
+                      </div>
+                    )}
+                    <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">QR Operativo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+      </AdminModal>
     </div>
   );
 }
