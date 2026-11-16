@@ -921,32 +921,41 @@ export function AttendeesTable({ initialAttendees, events, userRole = "ADMIN" }:
                     <span>Pago Bancario Pendiente de Aprobación</span>
                   </span>
                   <p className="text-[11px] text-amber-400/80">
-                    Una vez aprobado el comprobante, el sistema emitirá el ticket digital y código QR único.
+                    {userRole === "ADMIN"
+                      ? "Una vez aprobado el comprobante, el sistema emitirá el ticket digital y código QR único."
+                      : "Este pago bancario se encuentra en revisión por el Administrador General para emisión de credencial."}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await handleApprovePayment(selectedAttendee.id);
-                    setSelectedAttendee((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            status: "CONFIRMED",
-                          }
-                        : null
-                    );
-                  }}
-                  disabled={approvingId === selectedAttendee.id}
-                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
-                >
-                  {approvingId === selectedAttendee.id ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <Check className="w-3.5 h-3.5" />
-                  )}
-                  <span>Aprobar Pago</span>
-                </button>
+                {userRole === "ADMIN" ? (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await handleApprovePayment(selectedAttendee.id);
+                      setSelectedAttendee((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              status: "CONFIRMED",
+                            }
+                          : null
+                      );
+                    }}
+                    disabled={approvingId === selectedAttendee.id}
+                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
+                  >
+                    {approvingId === selectedAttendee.id ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Check className="w-3.5 h-3.5" />
+                    )}
+                    <span>Aprobar Pago</span>
+                  </button>
+                ) : (
+                  <span className="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-800/60 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>En Revisión Admin</span>
+                  </span>
+                )}
               </div>
             )}
 
