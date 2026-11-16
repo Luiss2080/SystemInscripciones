@@ -21,6 +21,7 @@ export default async function AdminEventsPage() {
     where: eventFilter,
     orderBy: { startDate: "asc" },
     include: {
+      speaker: { select: { fullName: true, email: true } },
       _count: {
         select: {
           registrations: {
@@ -56,6 +57,7 @@ export default async function AdminEventsPage() {
     currency: e.currency,
     academicHours: e.academicHours,
     status: e.status,
+    speaker: e.speaker ? { fullName: e.speaker.fullName, email: e.speaker.email } : null,
     _count: {
       registrations: e._count.registrations,
     },
