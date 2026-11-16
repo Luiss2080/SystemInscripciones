@@ -6,4 +6,5 @@ export * from "./AdminStatusTabs";
 export * from "./AdminPagination";
 export * from "./AdminEmptyState";
 export * from "./AdminModal";
+export * from "./AdminSelect";
 
