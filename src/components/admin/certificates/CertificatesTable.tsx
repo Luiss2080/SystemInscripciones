@@ -60,9 +60,10 @@ interface CertificateRecord {
 
 interface CertificatesTableProps {
   initialRecords: CertificateRecord[];
+  userRole?: string;
 }
 
-export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
+export function CertificatesTable({ initialRecords, userRole = "ADMIN" }: CertificatesTableProps) {
   const router = useRouter();
   const [records, setRecords] = useState<CertificateRecord[]>(initialRecords);
   const [searchTerm, setSearchTerm] = useState("");
@@ -326,8 +327,20 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
         {/* Tray Header */}
         <AdminTrayHeader
           icon={Award}
-          title="BANDEJA DE CERTIFICADOS & ACREDITACIONES"
-          subtitle="> CONTROL OFICIAL DE FOLIOS CRIPTOGRÁFICOS EN TIEMPO REAL"
+          title={
+            userRole === "SPEAKER"
+              ? "CERTIFICADOS DE MI CÁTEDRA"
+              : userRole === "STAFF"
+              ? "PADRÓN DE CERTIFICADOS & FOLIOS"
+              : "BANDEJA DE CERTIFICADOS & ACREDITACIONES"
+          }
+          subtitle={
+            userRole === "SPEAKER"
+              ? "> FOLIOS Y CERTIFICACIONES EMITIDAS PARA TUS ALUMNOS"
+              : userRole === "STAFF"
+              ? "> CONSULTA Y VERIFICACIÓN DE FOLIOS EN TIEMPO REAL"
+              : "> CONTROL OFICIAL DE FOLIOS CRIPTOGRÁFICOS EN TIEMPO REAL"
+          }
           totalCount={filteredRecords.length}
           countLabel="REGISTROS"
           actions={
@@ -512,20 +525,27 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
 
                           {/* 2. Emit button if pending */}
                           {!hasCert && (
-                            <button
-                              type="button"
-                              onClick={() => handleIssue(r.id)}
-                              disabled={issuingId === r.id}
-                              title="Emitir certificado oficial con folio único"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-cyan-500/20"
-                            >
-                              {issuingId === r.id ? (
-                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                              ) : (
-                                <Sparkles className="w-3.5 h-3.5" />
-                              )}
-                              <span>Emitir Folio</span>
-                            </button>
+                            userRole === "STAFF" ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-mono">
+                                <Clock className="w-3 h-3 text-slate-500" />
+                                <span>Por Docente</span>
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleIssue(r.id)}
+                                disabled={issuingId === r.id}
+                                title="Emitir certificado oficial con folio único"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-cyan-500/20"
+                              >
+                                {issuingId === r.id ? (
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <Sparkles className="w-3.5 h-3.5" />
+                                )}
+                                <span>Emitir Folio</span>
+                              </button>
+                            )
                           )}
 
                           {/* 3. Verify Public Link if issued */}
@@ -645,6 +665,16 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {userRole === "SPEAKER" && (
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-indigo-950/80 text-indigo-300 border border-indigo-700/60 inline-flex items-center gap-1">
+                      Docente Responsable
+                    </span>
+                  )}
+                  {userRole === "STAFF" && (
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-teal-950/80 text-teal-300 border border-teal-700/60 inline-flex items-center gap-1">
+                      Auditoría Operativa
+                    </span>
+                  )}
                   <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-800/60 hidden sm:inline-flex items-center gap-1">
                     <Hash className="w-3 h-3" />
                     <span>SHA-256</span>
@@ -788,35 +818,44 @@ export function CertificatesTable({ initialRecords }: CertificatesTableProps) {
                       <span>Participante Elegible para Certificación Inmediata</span>
                     </span>
                     <p className="text-xs text-amber-400/80 leading-relaxed">
-                      El participante ya cuenta con asistencia confirmada al taller. Puedes generar su folio criptográfico e inscribirlo en PostgreSQL ahora mismo.
+                      {userRole === "STAFF"
+                        ? "El participante cuenta con asistencia validada en puerta (ATTENDED). La emisión del folio criptográfico oficial corresponde al Docente titular o Administrador."
+                        : "El participante ya cuenta con asistencia confirmada al taller. Puedes generar su folio criptográfico e inscribirlo en PostgreSQL ahora mismo."}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      await handleIssue(selectedRecord.id);
-                      setSelectedRecord((prev) =>
-                        prev
-                          ? {
-                              ...prev,
-                              certificate: {
-                                certificateCode: "EMITIDO",
-                                issuedAt: new Date().toISOString(),
-                              },
-                            }
-                          : null
-                      );
-                    }}
-                    disabled={issuingId === selectedRecord.id}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-500/20 shrink-0"
-                  >
-                    {issuingId === selectedRecord.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Award className="w-4 h-4" />
-                    )}
-                    <span>Emitir Certificado Ahora</span>
-                  </button>
+                  {userRole === "STAFF" ? (
+                    <span className="px-3.5 py-2 rounded-xl bg-slate-900 border border-amber-800/60 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 shrink-0">
+                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Emisión por Docente</span>
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await handleIssue(selectedRecord.id);
+                        setSelectedRecord((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                certificate: {
+                                  certificateCode: "EMITIDO",
+                                  issuedAt: new Date().toISOString(),
+                                },
+                              }
+                            : null
+                        );
+                      }}
+                      disabled={issuingId === selectedRecord.id}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-500/20 shrink-0"
+                    >
+                      {issuingId === selectedRecord.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Award className="w-4 h-4" />
+                      )}
+                      <span>Emitir Certificado Ahora</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>
