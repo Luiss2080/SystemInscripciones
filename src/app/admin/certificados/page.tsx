@@ -27,7 +27,17 @@ export default async function AdminCertificatesPage() {
     where: certFilter,
     orderBy: { attendedAt: "desc" },
     include: {
-      event: { select: { id: true, title: true, academicHours: true } },
+      event: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          eventType: true,
+          academicHours: true,
+          startDate: true,
+          speaker: { select: { fullName: true } },
+        },
+      },
       certificate: { select: { certificateCode: true, issuedAt: true } },
     },
   });
