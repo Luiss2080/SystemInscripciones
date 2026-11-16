@@ -713,21 +713,18 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Taller o Programa
             </label>
-            <select
+            <AdminSelect
               value={eventFilter}
-              onChange={(e) => {
-                setEventFilter(e.target.value);
+              onChange={(val) => {
+                setEventFilter(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="ALL">Todos los Talleres</option>
-              {events.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.title}
-                </option>
-              ))}
-            </select>
+              options={[
+                { label: "Todos los Talleres", value: "ALL" },
+                ...events.map((e) => ({ label: e.title, value: e.id })),
+              ]}
+              title="Filtrar por Taller"
+            />
           </div>
 
           <div className="space-y-1.5">
@@ -767,19 +764,20 @@ export function AttendeesTable({ initialAttendees, events }: AttendeesTableProps
             <label className="block text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Criterio de Ordenamiento
             </label>
-            <select
+            <AdminSelect
               value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
+              onChange={(val) => {
+                setSortBy(val);
                 setCurrentPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium"
-            >
-              <option value="recent">Más Recientes (por fecha de inscripción)</option>
-              <option value="oldest">Más Antiguos (por fecha de inscripción)</option>
-              <option value="name_asc">Nombre del Participante (A - Z)</option>
-              <option value="name_desc">Nombre del Participante (Z - A)</option>
-            </select>
+              options={[
+                { label: "Más Recientes (por fecha de inscripción)", value: "recent" },
+                { label: "Más Antiguos (por fecha de inscripción)", value: "oldest" },
+                { label: "Nombre del Participante (A - Z)", value: "name_asc" },
+                { label: "Nombre del Participante (Z - A)", value: "name_desc" },
+              ]}
+              title="Criterio de Ordenamiento"
+            />
           </div>
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
