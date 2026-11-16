@@ -262,6 +262,37 @@ export function AdminLayoutClient({
   const adminInitial = adminName.trim().charAt(0).toUpperCase() || "A";
   const navSections = getNavSectionsForRole(adminRole);
 
+  // Collapsible state for animated sidebar categories
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    OPERACIONES: true,
+    GESTIÓN: true,
+    SEGURIDAD: true,
+    ENLACES: true,
+    DOCENCIA: true,
+    ALUMNOS: true,
+    "CONTROL ACCESO": true,
+    ACREDITACIÓN: true,
+  });
+
+  const toggleSection = (sectionTitle: string) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [sectionTitle]: !prev[sectionTitle],
+    }));
+  };
+
+  // Auto-expand section if user navigates to an item within it
+  useEffect(() => {
+    navSections.forEach((section) => {
+      const hasActive = section.items.some((item) =>
+        item.exact ? pathname === item.href : pathname.startsWith(item.href)
+      );
+      if (hasActive) {
+        setOpenSections((prev) => ({ ...prev, [section.title]: true }));
+      }
+    });
+  }, [pathname, navSections]);
+
   const roleMeta = {
     ADMIN: {
       roleDesc: "Administrador General",
@@ -314,55 +345,103 @@ export function AdminLayoutClient({
         )}
       </div>
 
-      {/* Navigation Sections with comfortable, de-compacted spacing */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5 scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        {navSections.map((section) => (
-          <div key={section.title} className="space-y-1.5">
-            <div className="px-3 py-0.5">
-              <span className="text-[11px] font-mono font-bold text-slate-400 tracking-wider uppercase block">
-                {section.title}
-              </span>
-            </div>
+      {/* Navigation Sections with Collapsible Animated Categories */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3.5 scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {navSections.map((section) => {
+          const SectionIcon = section.icon;
+          const isSectionOpen = openSections[section.title] ?? true;
+          const hasActiveItem = section.items.some((item) =>
+            item.exact ? pathname === item.href : pathname.startsWith(item.href)
+          );
 
-            <div className="space-y-1.5">
-              {section.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = item.exact
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href);
-
-                const linkProps = item.external
-                  ? { target: "_blank", rel: "noreferrer" }
-                  : { onClick: () => isMobile && setMobileMenuOpen(false) };
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    {...linkProps}
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all whitespace-nowrap group ${
-                      isActive
-                        ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30 shadow-xs shadow-cyan-500/10"
-                        : "text-slate-300 hover:text-white hover:bg-slate-900/90 border border-transparent"
+          return (
+            <div key={section.title} className="space-y-1">
+              {/* Collapsible Category Header Button */}
+              <button
+                type="button"
+                onClick={() => toggleSection(section.title)}
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl transition-all group cursor-pointer ${
+                  hasActiveItem
+                    ? "bg-cyan-950/40 text-cyan-300 border border-cyan-800/40"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent"
+                }`}
+                aria-expanded={isSectionOpen}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <SectionIcon
+                    className={`w-3.5 h-3.5 shrink-0 transition-colors ${
+                      hasActiveItem ? "text-cyan-400" : "text-slate-500 group-hover:text-cyan-400"
                     }`}
+                  />
+                  <span className="text-[11px] font-mono font-bold tracking-wider uppercase truncate">
+                    {section.title}
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono bg-slate-900 border border-slate-800 text-slate-400 shrink-0">
+                    {section.items.length}
+                  </span>
+                </div>
+
+                <motion.div
+                  animate={{ rotate: isSectionOpen ? 0 : -90 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="shrink-0"
+                >
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
+                </motion.div>
+              </button>
+
+              {/* Animated Collapsible Sub-items */}
+              <AnimatePresence initial={false}>
+                {isSectionOpen && (
+                  <motion.div
+                    key={`section-content-${section.title}`}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.24, ease: [0.04, 0.62, 0.23, 0.98] }}
+                    className="overflow-hidden space-y-1 pl-1"
                   >
-                    <Icon
-                      className={`w-[18px] h-[18px] shrink-0 transition-colors ${
-                        isActive
-                          ? "text-cyan-400"
-                          : "text-slate-400 group-hover:text-cyan-400"
-                      }`}
-                    />
-                    <span className="truncate flex-1">{item.label}</span>
-                    {item.external && (
-                      <ExternalLink className="w-3.5 h-3.5 text-slate-400 opacity-60 shrink-0 ml-auto" />
-                    )}
-                  </Link>
-                );
-              })}
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = item.exact
+                        ? pathname === item.href
+                        : pathname.startsWith(item.href);
+
+                      const linkProps = item.external
+                        ? { target: "_blank", rel: "noreferrer" }
+                        : { onClick: () => isMobile && setMobileMenuOpen(false) };
+
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          {...linkProps}
+                          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all whitespace-nowrap group ${
+                            isActive
+                              ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30 shadow-xs shadow-cyan-500/10"
+                              : "text-slate-300 hover:text-white hover:bg-slate-900/90 border border-transparent"
+                          }`}
+                        >
+                          <Icon
+                            className={`w-[18px] h-[18px] shrink-0 transition-colors ${
+                              isActive
+                                ? "text-cyan-400"
+                                : "text-slate-400 group-hover:text-cyan-400"
+                            }`}
+                          />
+                          <span className="truncate flex-1">{item.label}</span>
+                          {item.external && (
+                            <ExternalLink className="w-3.5 h-3.5 text-slate-400 opacity-60 shrink-0 ml-auto" />
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Sidebar Footer User Card with comfortable padding */}
