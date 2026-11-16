@@ -23,13 +23,33 @@ export default async function AdminAttendeesPage() {
     ? { status: "APPROVED" as const, registration: { event: { speakerId: session.id } } }
     : { status: "APPROVED" as const };
 
-  const [attendees, events, approvedPayments] = await Promise.all([
+  const [rawAttendees, events, approvedPayments] = await Promise.all([
     prisma.registration.findMany({
       where: regFilter,
       orderBy: { createdAt: "desc" },
       include: {
-        event: { select: { id: true, title: true } },
-        ticket: { select: { ticketCode: true } },
+        event: {
+          select: {
+            id: true,
+            title: true,
+            price: true,
+            currency: true,
+            modality: true,
+            academicHours: true,
+            startDate: true,
+          },
+        },
+        ticket: { select: { ticketCode: true, qrHash: true } },
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            proofFileUrl: true,
+            status: true,
+            verifiedAt: true,
+            createdAt: true,
+          },
+        },
       },
     }),
     prisma.event.findMany({
@@ -42,6 +62,26 @@ export default async function AdminAttendeesPage() {
       _sum: { amount: true },
     }),
   ]);
+
+  const attendees = rawAttendees.map((r) => ({
+    ...r,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
+    attendedAt: r.attendedAt ? r.attendedAt.toISOString() : null,
+    event: {
+      ...r.event,
+      price: Number(r.event.price),
+      startDate: r.event.startDate.toISOString(),
+    },
+    payment: r.payment
+      ? {
+          ...r.payment,
+          amount: Number(r.payment.amount),
+          verifiedAt: r.payment.verifiedAt ? r.payment.verifiedAt.toISOString() : null,
+          createdAt: r.payment.createdAt.toISOString(),
+        }
+      : null,
+  }));
 
   const confirmedCount = attendees.filter((a) => a.status === "CONFIRMED").length;
   const attendedCount = attendees.filter((a) => a.status === "ATTENDED").length;
