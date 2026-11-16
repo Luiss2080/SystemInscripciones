@@ -2,7 +2,7 @@ import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { CertificatesTable } from "@/components/admin/certificates/CertificatesTable";
-import { AdminPageHeader } from "@/components/admin/ui";
+import { AdminPageHeader, AdminStatCard } from "@/components/admin/ui";
 import { AnimatedProgressBar } from "@/components/shared/MotionPrimitives";
 import { Award, ShieldCheck, Users, CheckCircle2, Clock } from "lucide-react";
 
@@ -63,47 +63,51 @@ export default async function AdminCertificatesPage() {
         }
       />
 
-      {/* Fila Adicional de Estadísticas de Certificados */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Alumnos Elegibles</span>
-            <strong className="text-xl font-black text-white font-mono tabular-nums">{attendedRecords.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-        </div>
+      {/* Fila Enriquecida de Estadísticas de Certificados */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <AdminStatCard
+          label="Alumnos con Asistencia"
+          value={attendedRecords.length}
+          valueSuffix="acreditados"
+          icon={Users}
+          badge="ASISTENCIA"
+          description="Participantes con estado ATTENDED"
+          subDetail="100% elegibles para certificación"
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Emitidos</span>
-            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">{issuedCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <CheckCircle2 className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Folios Criptográficos"
+          value={issuedCount}
+          valueSuffix="emitidos"
+          icon={CheckCircle2}
+          badge="HASH ÚNICO"
+          description="Certificados firmados digitalmente"
+          progress={coveragePct}
+          colorVariant="emerald"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Pendientes de Folio</span>
-            <strong className="text-xl font-black text-amber-300 font-mono tabular-nums">{pendingCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-amber-950/80 border border-amber-800/60 flex items-center justify-center text-amber-400 shrink-0">
-            <Clock className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Pendientes de Emisión"
+          value={pendingCount}
+          valueSuffix="en espera"
+          icon={Clock}
+          badge="POR GENERAR"
+          description="Alumnos sin certificado emitido aún"
+          subDetail="Generación masiva o individual 1-clic"
+          colorVariant={pendingCount > 0 ? "amber" : "cyan"}
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Horas Acreditadas</span>
-            <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{certifiedHours}h</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Award className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Horas Certificadas"
+          value={certifiedHours}
+          valueSuffix="horas"
+          icon={Award}
+          badge="VALIDEZ ACADÉMICA"
+          description="Carga horaria técnica avalada"
+          subDetail="Verificables mediante código QR público"
+          colorVariant="indigo"
+        />
       </div>
 
       {/* Live Animated Coverage Bar Card */}

@@ -5,8 +5,8 @@ import {
   getPendingCheckinQueue,
 } from "@/services/admin/dashboard.service";
 import { QRScanner } from "@/components/admin/checkin/QRScanner";
-import { AdminPageHeader } from "@/components/admin/ui";
-import { QrCode, ShieldCheck, Users } from "lucide-react";
+import { AdminPageHeader, AdminStatCard } from "@/components/admin/ui";
+import { QrCode, ShieldCheck, Users, Radio, Database } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -42,47 +42,50 @@ export default async function AdminCheckinPage() {
         }
       />
 
-      {/* Fila Adicional de Estadísticas de Control de Acceso */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Acreditados Recientes</span>
-            <strong className="text-xl font-black text-white font-mono tabular-nums">{initialHistory.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-        </div>
+      {/* Fila Enriquecida de Estadísticas de Control de Acceso */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <AdminStatCard
+          label="Acreditaciones Recientes"
+          value={initialHistory.length}
+          valueSuffix="ingresos"
+          icon={ShieldCheck}
+          badge="EN SALA"
+          description="Asistentes acreditados en este módulo"
+          subDetail="Check-in instantáneo con sello de tiempo"
+          colorVariant="emerald"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Confirmados en Cola</span>
-            <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">{pendingQueue.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Confirmados en Espera"
+          value={pendingQueue.length}
+          valueSuffix="en cola"
+          icon={Users}
+          badge="POR INGRESAR"
+          description="Participantes listos para escanear"
+          subDetail="Validación por cámara o código manual"
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Lector Óptico QR</span>
-            <strong className="text-sm font-black text-white font-mono uppercase">En Espera</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-blue-950/80 border border-blue-800/60 flex items-center justify-center text-blue-400 shrink-0">
-            <QrCode className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Sensor Óptico QR"
+          value="ZXing HD"
+          icon={Radio}
+          badge="ACTIVO"
+          description="Decodificador de video en tiempo real"
+          subDetail="Detección de folio #TCK en <100ms"
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Sincronización</span>
-            <strong className="text-sm font-black text-emerald-400 font-mono uppercase">Tiempo Real</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Persistencia & Aforo"
+          value="PostgreSQL"
+          valueSuffix="18"
+          icon={Database}
+          badge="ACID ATÓMICO"
+          description="Sincronización instantánea de asistencia"
+          subDetail="Aforo actualizado en vivo"
+          colorVariant="emerald"
+        />
       </div>
 
       <QRScanner initialHistory={initialHistory} pendingQueue={pendingQueue} />

@@ -2,7 +2,7 @@ import { getAdminSession } from "@/lib/auth/jwt";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { EventsManager } from "@/components/admin/events/EventsManager";
-import { AdminPageHeader } from "@/components/admin/ui";
+import { AdminPageHeader, AdminStatCard } from "@/components/admin/ui";
 import Link from "next/link";
 import { PlusCircle, Layers, Calendar, Users, CheckCircle2 } from "lucide-react";
 
@@ -34,6 +34,9 @@ export default async function AdminEventsPage() {
   const openCount = rawEvents.filter((e) => e.status === "OPEN").length;
   const totalOccupied = rawEvents.reduce((acc, e) => acc + e._count.registrations, 0);
   const totalCapacity = rawEvents.reduce((acc, e) => acc + e.maxCapacity, 0);
+  const occupancyRate = totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0;
+  const totalHours = rawEvents.reduce((acc, e) => acc + e.academicHours, 0);
+  const availableSeats = Math.max(0, totalCapacity - totalOccupied);
 
   // Serialize Decimal objects to plain numbers for Client Components
   const serializedEvents = rawEvents.map((e) => ({
@@ -88,51 +91,51 @@ export default async function AdminEventsPage() {
         }
       />
 
-      {/* Fila Adicional de Estadísticas de Talleres */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Total Programas</span>
-            <strong className="text-xl font-black text-white font-mono tabular-nums">{rawEvents.length}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Layers className="w-4 h-4" />
-          </div>
-        </div>
+      {/* Fila Enriquecida de Estadísticas de Talleres */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <AdminStatCard
+          label="Catálogo Académico"
+          value={rawEvents.length}
+          valueSuffix="programas"
+          icon={Layers}
+          badge="CATÁLOGO"
+          description="Talleres técnicos y masterclasses"
+          subDetail={`${totalHours} horas académicas registradas`}
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Con Cupos Abiertos</span>
-            <strong className="text-xl font-black text-cyan-300 font-mono tabular-nums">{openCount}</strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <Calendar className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Inscripciones Abiertas"
+          value={openCount}
+          valueSuffix="talleres"
+          icon={Calendar}
+          badge="EN VENTA"
+          description="Disponibles en la landing pública"
+          subDetail={`${rawEvents.length - openCount} programas concluidos o cerrados`}
+          colorVariant="cyan"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Inscritos / Aforo</span>
-            <strong className="text-xl font-black text-emerald-400 font-mono tabular-nums">
-              {totalOccupied} <span className="text-xs text-slate-400 font-normal">/ {totalCapacity}</span>
-            </strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Inscritos / Aforo Total"
+          value={totalOccupied}
+          valueSuffix={`/ ${totalCapacity}`}
+          icon={Users}
+          badge="RESERVAS"
+          description="Asientos confirmados por alumnos"
+          progress={occupancyRate}
+          colorVariant="emerald"
+        />
 
-        <div className="p-3.5 rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 shadow-md flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold truncate">Tasa de Ocupación</span>
-            <strong className="text-xl font-black text-cyan-400 font-mono tabular-nums">
-              {totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0}%
-            </strong>
-          </div>
-          <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-            <CheckCircle2 className="w-4 h-4" />
-          </div>
-        </div>
+        <AdminStatCard
+          label="Disponibilidad Restante"
+          value={availableSeats}
+          valueSuffix="cupos libres"
+          icon={CheckCircle2}
+          badge={`${occupancyRate}% OCUPADO`}
+          description="Margen de inscripción disponible"
+          subDetail="Monitoreo de aforo en tiempo real"
+          colorVariant={occupancyRate > 85 ? "amber" : "cyan"}
+        />
       </div>
 
       {/* Main Events Manager with Filter, Tabs, Grid/Table and Pagination */}
