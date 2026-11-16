@@ -74,77 +74,67 @@ export function AdminStatCard({
 
   return (
     <MotionFadeIn
-      className={`relative overflow-hidden rounded-2xl bg-[#0b0e14]/90 border border-slate-800/80 p-4 shadow-md backdrop-blur-sm transition-all flex flex-col justify-between ${scheme.glowHover} ${className}`}
+      className={`relative overflow-hidden rounded-xl bg-[#0b0e14]/90 border border-slate-800/80 p-3 sm:p-3.5 shadow-sm backdrop-blur-sm transition-all flex flex-col justify-between ${scheme.glowHover} ${className}`}
     >
-      {/* Top Header: Badge and Icon */}
-      <div className="flex items-center justify-between gap-2">
-        {badge ? (
-          <span
-            className={`inline-flex items-center px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider border ${scheme.badgeBg}`}
-          >
-            {badge}
+      {/* Top Header: Label + Badge on left, Compact Icon box on right */}
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="text-xs font-bold text-slate-300 tracking-wide truncate" title={label}>
+            {label}
           </span>
-        ) : (
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">
-            Métrica
-          </span>
-        )}
-
-        <div
-          className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${scheme.iconBox}`}
-        >
-          <Icon className="w-4 h-4" />
-        </div>
-      </div>
-
-      {/* Primary Value & Label */}
-      <div className="mt-3 min-w-0">
-        <div className="flex items-baseline gap-1">
-          <span
-            className={`text-2xl font-black font-mono tracking-tight tabular-nums ${scheme.valueText}`}
-          >
-            {value}
-          </span>
-          {valueSuffix && (
-            <span className="text-xs font-normal text-slate-400 font-mono">
-              {valueSuffix}
+          {badge && (
+            <span
+              className={`inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase tracking-wider border shrink-0 ${scheme.badgeBg}`}
+            >
+              {badge}
             </span>
           )}
         </div>
 
-        <h4 className="text-xs font-bold text-slate-200 tracking-wide mt-0.5 truncate" title={label}>
-          {label}
-        </h4>
+        <div
+          className={`w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 shadow-xs ${scheme.iconBox}`}
+        >
+          <Icon className="w-3.5 h-3.5" />
+        </div>
+      </div>
 
-        {description && (
-          <p className="text-[11px] text-slate-400 font-medium leading-relaxed mt-0.5 line-clamp-1" title={description}>
-            {description}
-          </p>
+      {/* Main Value Row (Compact) */}
+      <div className="mt-1 flex items-baseline gap-1 min-w-0">
+        <span
+          className={`text-xl sm:text-2xl font-black font-mono tracking-tight tabular-nums ${scheme.valueText}`}
+        >
+          {value}
+        </span>
+        {valueSuffix && (
+          <span className="text-xs font-normal text-slate-400 font-mono">
+            {valueSuffix}
+          </span>
         )}
       </div>
 
-      {/* Bottom Area: Progress Bar or SubDetail */}
-      {(progress !== undefined || subDetail) && (
-        <div className="mt-3 pt-2.5 border-t border-slate-800/60">
-          {progress !== undefined && (
+      {/* Bottom Area: Context Detail or Micro Progress Bar */}
+      {(progress !== undefined || subDetail || description) && (
+        <div className="mt-1.5 pt-1.5 border-t border-slate-800/60 min-w-0">
+          {progress !== undefined ? (
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                <span>Progreso</span>
-                <span className="font-bold text-slate-300">{progress}%</span>
+                <span className="truncate">{subDetail || description || "Progreso"}</span>
+                <span className="font-bold text-slate-300 ml-1 shrink-0">{progress}%</span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-slate-800/90 overflow-hidden">
+              <div className="w-full h-1 rounded-full bg-slate-800/90 overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${scheme.progressBar}`}
                   style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
                 />
               </div>
             </div>
-          )}
-
-          {subDetail && !progress && (
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 truncate" title={subDetail}>
+          ) : (
+            <div
+              className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 truncate"
+              title={subDetail || description}
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
-              <span className="truncate">{subDetail}</span>
+              <span className="truncate">{subDetail || description}</span>
             </div>
           )}
         </div>
