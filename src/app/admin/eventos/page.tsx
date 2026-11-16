@@ -141,7 +141,7 @@ export default async function AdminEventsPage() {
       </div>
 
       {/* Main Events Manager with Filter, Tabs, Grid/Table and Pagination */}
-      <EventsManager initialEvents={serializedEvents} />
+      <EventsManager initialEvents={serializedEvents} userRole={session.role} />
     </div>
   );
 }
