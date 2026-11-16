@@ -395,23 +395,23 @@ export function AdminLayoutClient({
               <button
                 type="button"
                 onClick={() => toggleSection(section.title)}
-                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl transition-all group cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all group cursor-pointer ${
                   hasActiveItem
                     ? "bg-cyan-950/40 text-cyan-300 border border-cyan-800/40"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent"
                 }`}
                 aria-expanded={isSectionOpen}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-3 min-w-0">
                   <SectionIcon
-                    className={`w-3.5 h-3.5 shrink-0 transition-colors ${
+                    className={`w-[18px] h-[18px] shrink-0 transition-colors ${
                       hasActiveItem ? "text-cyan-400" : "text-slate-500 group-hover:text-cyan-400"
                     }`}
                   />
-                  <span className="text-[11px] font-mono font-bold tracking-wider uppercase truncate">
+                  <span className="text-xs font-mono font-bold tracking-wider uppercase truncate">
                     {section.title}
                   </span>
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono bg-slate-900 border border-slate-800 text-slate-400 shrink-0">
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 shrink-0">
                     {section.items.length}
                   </span>
                 </div>
@@ -421,7 +421,7 @@ export function AdminLayoutClient({
                   transition={{ duration: 0.2, ease: "easeInOut" }}
                   className="shrink-0"
                 >
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
+                  <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-300" />
                 </motion.div>
               </button>
 
@@ -434,7 +434,7 @@ export function AdminLayoutClient({
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.24, ease: [0.04, 0.62, 0.23, 0.98] }}
-                    className="overflow-hidden space-y-1 pl-1"
+                    className="overflow-hidden space-y-1.5 pl-1.5 pt-1"
                   >
                     {section.items.map((item) => {
                       const Icon = item.icon;
@@ -449,7 +449,7 @@ export function AdminLayoutClient({
                           key={item.href}
                           href={item.href}
                           {...linkProps}
-                          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] font-semibold transition-all whitespace-nowrap group ${
+                          className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-semibold transition-all whitespace-nowrap group ${
                             isActive
                               ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30 shadow-xs shadow-cyan-500/10"
                               : "text-slate-300 hover:text-white hover:bg-slate-900/90 border border-transparent"
