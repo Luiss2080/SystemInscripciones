@@ -388,34 +388,6 @@ export function AdminLayoutClient({
       </div>
     </div>
   );
-          <span className="text-slate-400 text-[9px] uppercase tracking-wider">Producción</span>
-        </div>
-
-        <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/90 border border-slate-800">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${roleMeta.avatarGrad} flex items-center justify-center font-bold text-white text-xs shrink-0 shadow-sm`}>
-              {adminInitial}
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">{adminName}</p>
-              <p className="text-[10px] text-slate-400 font-mono truncate" title={adminEmail}>
-                {adminEmail}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleLogout}
-            title="Cerrar sesión"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 flex overflow-x-hidden">
@@ -537,30 +509,6 @@ export function AdminLayoutClient({
               onClick={handleLogout}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-semibold transition-all cursor-pointer shadow-xs"
               title="Cerrar sesión"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Salir</span>
-            </button>
-          </div>
-        </header>
-            </div>
-
-            {/* Public Link */}
-            <Link
-              href="/"
-              target="_blank"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold transition-all shadow-xs"
-              title="Abrir Web Pública en nueva pestaña"
-            >
-              <span>Web</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </Link>
-
-            {/* Quick Logout Button */}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold transition-all cursor-pointer shadow-xs"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Salir</span>
