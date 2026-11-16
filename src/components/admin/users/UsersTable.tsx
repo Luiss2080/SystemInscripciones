@@ -63,6 +63,7 @@ const ROLE_PERMISSIONS: Record<string, { desc: string; color: string; badge: str
 
 export function UsersTable({ initialUsers }: UsersTableProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [users, setUsers] = useState<UserRecord[]>(initialUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("ALL");
@@ -73,12 +74,24 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   // Modals & Operation States
   const [selectedUser, setSelectedUser] = useState<UserRecord | null>(null);
   const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+  const [isRbacModalOpen, setIsRbacModalOpen] = useState(false);
   const [newUserRole, setNewUserRole] = useState("STAFF");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isUpdatingRoleId, setIsUpdatingRoleId] = useState<string | null>(null);
   const [isSubmittingNewUser, setIsSubmittingNewUser] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Handle URL searchParams e.g. ?tab=roles or ?role=ADMIN
+  useEffect(() => {
+    if (searchParams.get("tab") === "roles") {
+      setIsRbacModalOpen(true);
+    }
+    const roleParam = searchParams.get("role");
+    if (roleParam && ["ADMIN", "SPEAKER", "STAFF"].includes(roleParam)) {
+      setRoleFilter(roleParam);
+    }
+  }, [searchParams]);
 
   const showToast = (msg: string) => {
     setFeedbackMsg(msg);
@@ -287,6 +300,16 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
           countLabel="USUARIOS"
           actions={
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsRbacModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700/80 text-xs font-bold transition-all cursor-pointer shadow-xs"
+                title="Ver Matriz de Roles y Permisos"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Matriz RBAC</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setIsNewUserModalOpen(true)}
@@ -726,6 +749,70 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
               className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 text-xs font-black uppercase tracking-wider transition-all shadow-md cursor-pointer"
             >
               Aplicar Filtros
+            </button>
+          </div>
+        </div>
+      </AdminModal>
+
+      {/* RBAC Roles Matrix Modal */}
+      <AdminModal
+        isOpen={isRbacModalOpen}
+        onClose={() => setIsRbacModalOpen(false)}
+        title="Matriz de Privilegios y Roles (RBAC)"
+        subtitle="Alcance y permisos del sistema en PostgreSQL"
+        icon={ShieldCheck}
+        maxWidth="max-w-2xl"
+      >
+        <div className="space-y-4">
+          <p className="text-xs text-slate-400">
+            El sistema implementa Control de Acceso Basado en Roles (RBAC) con tokens JWT HttpOnly y verificación criptográfica por middleware.
+          </p>
+
+          <div className="space-y-3">
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-800/40">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60">
+                  ADMIN • SUPERUSUARIO
+                </span>
+                <span className="text-[10px] font-mono text-cyan-400 font-bold">NIVEL ROOT</span>
+              </div>
+              <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                Control total del sistema: alta, modificación y baja de talleres, aprobación de pagos bancarios, emisión masiva de certificados y gestión integral de identidades y roles.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-indigo-800/40">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-800/60">
+                  SPEAKER • DOCENTE
+                </span>
+                <span className="text-[10px] font-mono text-indigo-400 font-bold">PORTAL CÁTEDRA</span>
+              </div>
+              <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                Gestión académica restringida a sus cursos asignados: consulta de temarios, padrón de alumnos de sus cátedras y seguimiento de asistencia.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-emerald-800/40">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800/60">
+                  STAFF • LOGÍSTICA
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400 font-bold">OPERACIONES CAMPO</span>
+              </div>
+              <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                Módulo táctico de campo: acceso al lector óptico QR y acreditación manual por código #TCK para control de aforo y asistencia en puerta.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2 border-t border-slate-800/60">
+            <button
+              type="button"
+              onClick={() => setIsRbacModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white transition-all cursor-pointer"
+            >
+              Cerrar Matriz
             </button>
           </div>
         </div>
