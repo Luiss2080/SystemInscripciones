@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("admin@ingeniero.tech");
+  const [email, setEmail] = useState("admin@hagamostech.com");
   const [password, setPassword] = useState("");
   const [demoFilled, setDemoFilled] = useState(false);
 
@@ -39,8 +39,8 @@ export default function AdminLoginPage() {
     {
       role: "ADMIN",
       label: "Admin General",
-      email: "admin@ingeniero.tech",
-      pass: "AdminPassword2026!",
+      email: "admin@hagamostech.com",
+      pass: "password",
       color: "border-cyan-500/50 text-cyan-300 bg-cyan-950/60",
     },
     {
@@ -251,7 +251,7 @@ export default function AdminLoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@ingeniero.tech"
+                  placeholder="admin@hagamostech.com"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950/90 border border-slate-700/80 text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 text-sm transition-all"
                 />
               </div>
