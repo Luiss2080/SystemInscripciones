@@ -10,7 +10,7 @@ ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/sistema_inscripc
 ENV JWT_SECRET="demo-jwt-secret-hagamostech-inscripciones-2026"
 ENV INITIAL_ADMIN_EMAIL="admin@hagamostech.com"
 ENV INITIAL_ADMIN_PASSWORD="password"
-ENV NEXT_PUBLIC_APP_URL="https://inscripciones-demo.onrender.com"
+ENV NEXT_PUBLIC_APP_URL="https://systeminscripciones.onrender.com"
 RUN chmod +x docker/demo-build.sh docker/demo-entrypoint.sh && ./docker/demo-build.sh
 ENV PORT=10000
 EXPOSE 10000
